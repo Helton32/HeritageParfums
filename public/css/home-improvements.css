@@ -11,37 +11,41 @@
 
 /* --- Base --- */
 body.home-page {
-    overflow: hidden;
+    overflow-x: hidden; /* Changé de overflow: hidden à overflow-x: hidden */
+    overflow-y: hidden;
     margin: 0;
     padding: 0;
     background-color: var(--deep-black);
     color: var(--off-white);
     font-family: var(--modern-font);
+    font-size: 16px; /* Taille de base */
 }
 
 .fullscreen-carousel {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
+    max-width: 100vw; /* Empêche le débordement horizontal */
 }
 
 /* --- Slides --- */
 .carousel-slide {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
     opacity: 0;
-    transform: scale(0.98);
-    transition: all 0.8s ease-in-out;
+    transform: scale(0.95); /* Réduit légèrement l'effet de scale */
+    transition: all 0.6s ease-in-out; /* Transition plus rapide */
     background-color: var(--deep-black);
-    padding: 2rem;
+    padding: 1rem; /* Réduit le padding */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .carousel-slide.active {
@@ -50,143 +54,183 @@ body.home-page {
     z-index: 2;
 }
 
-/* --- Image --- */
+/* --- Layout responsive --- */
+.carousel-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 3rem; /* Augmenté pour plus d'espace */
+    padding: 2rem; /* Augmenté */
+    flex-wrap: wrap;
+    max-width: 1600px; /* Augmenté */
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Image à gauche */
 .product-image-zone {
-    max-width: 400px;
-    margin-bottom: 2rem;
-    width: 100%;
+    flex: 1 1 400px; /* Augmenté */
+    max-width: 500px; /* Augmenté */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 .product-image {
     width: 100%;
+    max-width: 450px; /* Augmenté significativement */
     height: auto;
-    border-radius: 20px;
+    border-radius: 20px; /* Restauré */
     object-fit: cover;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); /* Augmenté */
 }
 
-/* --- Contenu texte --- */
+/* Texte à droite */
 .content-zone {
-    text-align: center;
-    max-width: 700px;
-    padding: 0 1rem;
+    flex: 1 1 400px; /* Augmenté */
+    max-width: 600px; /* Augmenté */
+    text-align: left;
+    padding: 2rem; /* Augmenté */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .signature-text {
-    font-size: 0.95rem;
+    font-size: 1rem; /* Augmenté */
     font-weight: 600;
     color: var(--soft-gray);
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 2px; /* Restauré */
     margin-bottom: 1rem;
 }
 
 .product-title {
-    font-size: 2.8rem;
+    font-size: 2.8rem; /* Restauré à la taille originale */
     font-weight: 700;
     font-family: var(--luxury-font);
     color: var(--gold);
     margin-bottom: 1rem;
     letter-spacing: 1px;
+    line-height: 1.2;
 }
 
 .product-subtitle {
     font-style: italic;
-    font-size: 1.1rem;
+    font-size: 1.2rem; /* Augmenté */
     color: var(--off-white);
-    margin-bottom: 2rem;
+    margin-bottom: 2rem; /* Augmenté */
+    line-height: 1.4;
 }
 
 /* --- Boutons --- */
 .buttons-container {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
+    justify-content: flex-start; /* Aligne à gauche au lieu du centre */
+    gap: 1.5rem; /* Augmenté */
     flex-wrap: wrap;
+    margin-top: 1.5rem; /* Augmenté */
 }
 
 .discover-button, .order-button {
     background: transparent;
     border: 2px solid var(--gold);
     color: var(--gold);
-    padding: 0.75rem 2rem;
-    border-radius: 30px;
+    padding: 0.8rem 2rem; /* Augmenté */
+    border-radius: 30px; /* Restauré */
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1rem; /* Augmenté */
     cursor: pointer;
     transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 1px; /* Ajouté pour plus d'élégance */
 }
 
 .discover-button:hover, .order-button:hover {
     background: var(--gold);
     color: var(--deep-black);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(201, 160, 108, 0.3); /* Effet d'ombre au hover */
 }
 
 /* --- Navigation dots --- */
 .carousel-nav {
     position: fixed;
-    right: 2rem;
+    right: 2rem; /* Restauré à la distance originale */
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    z-index: 50; /* S'assurer qu’elle n’est pas trop élevée */
+    gap: 15px; /* Augmenté */
+    z-index: 50;
     pointer-events: auto;
-    background: none; /* Supprime tout fond */
-    backdrop-filter: none !important; /* Supprime le flou si appliqué */
-    box-shadow: none; /* Supprime tout effet d’ombre */
+    /* SUPPRESSION COMPLÈTE DE TOUS LES EFFETS DE FLOU */
+    background: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-
 .nav-dot {
-    width: 12px;
-    height: 12px;
+    width: 14px; /* Augmenté */
+    height: 14px; /* Augmenté */
     border-radius: 50%;
-    background-color: var(--soft-gray);
+    background-color: rgba(191, 191, 191, 0.7); /* Semi-transparent pour être visible */
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Bordure pour plus de visibilité */
 }
 
 .nav-dot.active {
     background-color: var(--gold);
-    transform: scale(1.3);
+    border-color: var(--gold);
+    transform: scale(1.4); /* Augmenté */
+    box-shadow: 0 0 10px rgba(201, 160, 108, 0.5); /* Effet de lueur */
 }
 
 /* --- Footer --- */
 .footer-slide {
     background-color: #111;
     color: var(--off-white);
-    padding: 4rem 2rem;
+    padding: 3rem 1.5rem; /* Réduit le padding */
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100vh;
+    box-sizing: border-box;
 }
 
 .footer-content {
     max-width: 1200px;
     margin: auto;
+    width: 100%;
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Réduit la taille minimum */
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .footer-content h5 {
     font-family: var(--luxury-font);
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* Réduit la taille */
     color: var(--gold);
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .footer-content p,
 .footer-links li a {
     color: var(--soft-gray);
-    font-size: 0.95rem;
+    font-size: 0.9rem; /* Réduit la taille */
+    line-height: 1.4;
 }
 
 .footer-links {
@@ -196,7 +240,7 @@ body.home-page {
 }
 
 .footer-links li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .footer-links a {
@@ -212,8 +256,8 @@ body.home-page {
 
 .social-links a {
     color: var(--off-white);
-    font-size: 1.2rem;
-    margin-right: 1rem;
+    font-size: 1.1rem; /* Réduit la taille */
+    margin-right: 0.8rem;
     transition: color 0.3s ease;
 }
 
@@ -223,40 +267,43 @@ body.home-page {
 
 .footer-bottom {
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--soft-gray);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333;
 }
 
 /* --- Scroll indicator --- */
 #scroll-indicator {
     position: fixed;
-    bottom: 2rem;
+    bottom: 1.5rem; /* Réduit la distance du bas */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     color: var(--soft-gray);
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* Réduit la taille */
     animation: bounce 2s infinite;
     cursor: pointer;
     z-index: 5;
 }
 
 #scroll-indicator i {
-    font-size: 1.2rem;
-    margin-top: 0.3rem;
+    font-size: 1rem; /* Réduit la taille */
+    margin-top: 0.2rem;
     display: block;
 }
 
 @keyframes bounce {
     0%, 100% { transform: translate(-50%, 0); }
-    50% { transform: translate(-50%, -8px); }
+    50% { transform: translate(-50%, -6px); }
 }
 
 /* --- Effet fade-in --- */
 .fade-in {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 1.2s ease;
+    transform: translateY(20px); /* Réduit l'effet */
+    transition: all 1s ease; /* Transition plus rapide */
 }
 
 .fade-in.show {
@@ -264,9 +311,77 @@ body.home-page {
     transform: translateY(0);
 }
 
-.delay-1 { transition-delay: 0.2s; }
-.delay-2 { transition-delay: 0.4s; }
-.delay-3 { transition-delay: 0.6s; }
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+
+/* --- Responsive design --- */
+@media (max-width: 768px) {
+    .carousel-content-wrapper {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0.5rem;
+        text-align: center;
+    }
+    
+    .content-zone {
+        text-align: center;
+        max-width: 100%;
+    }
+    
+    .product-title {
+        font-size: 1.8rem;
+    }
+    
+    .product-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .product-image-zone {
+        max-width: 280px;
+    }
+    
+    .buttons-container {
+        justify-content: center;
+        gap: 0.8rem;
+    }
+    
+    .discover-button, .order-button {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .carousel-nav {
+        right: 1rem;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-slide {
+        padding: 0.5rem;
+    }
+    
+    .product-title {
+        font-size: 1.6rem;
+    }
+    
+    .product-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .signature-text {
+        font-size: 0.75rem;
+    }
+    
+    .product-image-zone {
+        max-width: 250px;
+    }
+}
 
 /* --- Toasts notifications --- */
 .toast-success {
@@ -275,41 +390,4 @@ body.home-page {
 
 .toast-error {
     background: linear-gradient(135deg, #dc3545, #e74c3c);
-}
-.carousel-content-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    gap: 4rem;
-    padding: 2rem;
-    flex-wrap: wrap;
-}
-
-/* Image à gauche */
-.product-image-zone {
-    flex: 1 1 400px;
-    max-width: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.product-image {
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-    object-fit: cover;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-}
-
-/* Texte à droite */
-.content-zone {
-    flex: 1 1 400px;
-    max-width: 600px;
-    text-align: left;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
