@@ -3,7 +3,7 @@
 @section('title', 'Connexion Administration - Heritage Parfums')
 
 @section('content')
-<div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">
+<div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: linear-gradient(135deg, #adafa0 0%, #a6aaaf 100%);">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
@@ -51,7 +51,7 @@
                                            id="username" 
                                            name="username" 
                                            value="{{ old('username') }}"
-                                           placeholder="marouanehirch"
+                                           placeholder="admin"
                                            required 
                                            autofocus>
                                 </div>
@@ -95,16 +95,7 @@
                             </div>
                         </form>
 
-                        <!-- Informations de connexion pour la démo -->
-                        <div class="mt-4 p-3 bg-light rounded">
-                            <h6 class="text-muted mb-2">
-                                <i class="fas fa-info-circle me-2"></i>Informations de connexion
-                            </h6>
-                            <small class="text-muted">
-                                <strong>Utilisateur :</strong> marouanehirch<br>
-                                <strong>Mot de passe :</strong> test123
-                            </small>
-                        </div>
+                      
 
                         <!-- Lien retour -->
                         <div class="text-center mt-4">
@@ -153,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .btn-primary {
-    background-color: #0d0d0d;
+    background-color: #971c1c;
     border-color: #0d0d0d;
 }
 
