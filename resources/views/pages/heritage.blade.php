@@ -156,13 +156,7 @@
 @endpush
 
 @section('content')
-<!-- Hero Section -->
-<section class="heritage-hero">
-    <div class="container">
-        <h1 class="display-2 mb-4">Heritage Parfums</h1>
-        <p class="lead">Un siècle de passion pour l'art olfactif français</p>
-    </div>
-</section>
+
 
 <!-- Contenu Principal -->
 <section class="heritage-content">

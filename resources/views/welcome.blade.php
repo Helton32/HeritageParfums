@@ -5,6 +5,8 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/home-improvements.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 /* Classe spéciale pour la page d'accueil - désactive le scroll normal */
 body.home-page {
@@ -33,57 +35,61 @@ body.home-page {
 <div class="fullscreen-carousel" id="fullscreen-carousel">
     <!-- Navigation points -->
     <div class="carousel-nav">
-        @foreach($featuredProducts as $index => $product)
+        @foreach($allActiveProducts as $index => $product)
         <div class="nav-dot {{ $index === 0 ? 'active' : '' }}" 
              onclick="goToSlide({{ $index }})" 
              data-slide="{{ $index }}"></div>
         @endforeach
         <!-- Point pour le footer -->
         <div class="nav-dot" 
-             onclick="goToSlide({{ $featuredProducts->count() }})" 
-             data-slide="{{ $featuredProducts->count() }}"></div>
+             onclick="goToSlide({{ $allActiveProducts->count() }})" 
+             data-slide="{{ $allActiveProducts->count() }}"></div>
     </div>
 
     <!-- Slides des produits -->
-    @foreach($featuredProducts as $index => $product)
-    <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}" data-slide="{{ $index }}">
-        <!-- Zone image produit -->
-        <div class="product-image-zone">
-            <img src="{{ $product->main_image }}" 
-                 alt="{{ $product->name }}" 
-                 class="product-image">
+    @foreach($allActiveProducts as $index => $product)
+    <div class="carousel-slide active">
+       <div class="carousel-content-wrapper">
+    <!-- Image à gauche -->
+    <div class="product-image-zone">
+        <img src="{{ $product->main_image }}"
+             alt="{{ $product->name }}"
+             class="product-image">
+    </div>
+
+    <!-- Texte à droite -->
+    <div class="content-zone">
+        <div class="signature-text fade-in">
+            Parfum d'Exception
         </div>
 
-        <!-- Zone contenu texte -->
-        <div class="content-zone">
-            <div class="signature-text fade-in">
-                Parfum d'Exception
-            </div>
-            
-            <h1 class="product-title fade-in delay-1">
-                {{ strtoupper($product->name) }}
-            </h1>
-            
-            <p class="product-subtitle fade-in delay-2">
-                {{ $product->short_description ?? 'Une création unique' }}
-            </p>
-            
-            <div class="buttons-container fade-in delay-3">
-                <a href="{{ route('product.show', $product->slug) }}" 
-                   class="discover-button">
-                    Découvrir
-                </a>
-                <button class="order-button" 
-                        data-product-id="{{ $product->id }}"
-                        onclick="addToCartFromCarousel(this)">
-                    Commander maintenant
-                </button>
-            </div>
+        <h1 class="product-title fade-in delay-1">
+            {{ strtoupper($product->name) }}
+        </h1>
+
+        <p class="product-subtitle fade-in delay-2">
+            {{ $product->short_description ?? 'Une création unique' }}
+        </p>
+
+        <div class="buttons-container fade-in delay-3">
+            <a href="{{ route('product.show', $product->slug) }}" class="discover-button">
+                Découvrir
+            </a>
+            <button class="order-button"
+                    data-product-id="{{ $product->id }}"
+                    onclick="addToCartFromCarousel(this)">
+                Commander maintenant
+            </button>
         </div>
     </div>
+</div>
+</div>
+
+
+    
     @endforeach
     <!-- Footer comme slide final -->
-    <div class="carousel-slide footer-slide" data-slide="{{ $featuredProducts->count() }}">
+    <div class="carousel-slide footer-slide" data-slide="{{ $allActiveProducts->count() }}">
         <div class="footer-content">
             <div class="footer-grid">
                 <div>
@@ -372,7 +378,6 @@ function showNotification(message, type = 'success') {
         padding: 1rem 1.5rem;
         border-radius: 10px;
         box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        backdrop-filter: blur(10px);
         transform: translateX(100%);
         transition: transform 0.3s ease;
     `;

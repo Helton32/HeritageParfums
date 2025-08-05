@@ -7,11 +7,10 @@
 <style>
     /* Contact Page - Style Guerlain */
     .contact-hero {
-        background: linear-gradient(rgba(13, 13, 13, 0.6), rgba(13, 13, 13, 0.6)), 
-                    url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+        
         background-size: cover;
         background-position: center;
-        height: 70vh;
+        height: 20vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -166,7 +165,7 @@
         color: var(--guerlain-text-gray);
         font-family: 'Montserrat', sans-serif;
         font-weight: 300;
-    }
+    
         font-size: 1rem;
         transition: border-color 0.3s ease;
     }

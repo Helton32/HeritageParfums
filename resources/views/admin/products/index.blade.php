@@ -25,6 +25,48 @@
         min-height: calc(100vh - 200px);
     }
 
+    /* Messages d'alerte */
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid transparent;
+        border-radius: 0.375rem;
+        border-left: 5px solid #28a745;
+    }
+
+    .alert-success .alert-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .alert-success .alert-actions {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #c3e6cb;
+    }
+
+    .alert-success .btn-view-homepage {
+        background: #28a745;
+        border-color: #28a745;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        text-decoration: none;
+        border-radius: 0.25rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .alert-success .btn-view-homepage:hover {
+        background: #218838;
+        border-color: #1e7e34;
+        color: white;
+        text-decoration: none;
+    }
+
     .product-card {
         background: var(--guerlain-white);
         border: 1px solid var(--guerlain-border);
@@ -145,6 +187,39 @@
 @endpush
 
 @section('content')
+<!-- Messages d'alerte -->
+@if(session('success'))
+    <div class="container mt-4">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert-title">
+                <i class="fas fa-check-circle me-2"></i>Produit créé avec succès !
+            </div>
+            <div>
+                {{ session('success') }}
+            </div>
+            <div class="alert-actions">
+                <a href="{{ url('/') }}" class="btn btn-view-homepage me-3" target="_blank">
+                    <i class="fas fa-home me-2"></i>Voir sur la page d'accueil
+                </a>
+                <button type="button" class="btn btn-outline-success" onclick="location.reload()">
+                    <i class="fas fa-sync me-2"></i>Actualiser la liste
+                </button>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="container mt-4">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
+
 <!-- Admin Header -->
 <section class="admin-header">
     <div class="container">

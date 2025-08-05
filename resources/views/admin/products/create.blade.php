@@ -72,16 +72,51 @@
         margin-bottom: 0.5rem;
     }
 
+    .form-label.required::after {
+        content: ' *';
+        color: #dc3545;
+        font-weight: bold;
+    }
+
     .form-control, .form-select {
         border: 1px solid var(--guerlain-border);
         padding: 0.75rem 1rem;
         font-family: 'Montserrat', sans-serif;
         font-weight: 300;
+        transition: border-color 0.3s ease;
     }
 
     .form-control:focus, .form-select:focus {
         border-color: var(--guerlain-gold);
         box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+    }
+
+    .form-control.is-invalid, .form-select.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .form-control.is-valid, .form-select.is-valid {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: #dc3545;
+        font-weight: 500;
+    }
+
+    .valid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: #28a745;
+        font-weight: 500;
     }
 
     .btn-guerlain {
@@ -100,6 +135,13 @@
         background: var(--guerlain-black);
         border-color: var(--guerlain-black);
         color: var(--guerlain-white);
+    }
+
+    .btn-guerlain:disabled {
+        background: #6c757d;
+        border-color: #6c757d;
+        color: var(--guerlain-white);
+        cursor: not-allowed;
     }
 
     .btn-secondary {
@@ -150,10 +192,106 @@
         font-weight: 300;
         color: var(--guerlain-text-gray);
     }
+
+    /* Messages d'alerte */
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    /* Chargement */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .loading-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--guerlain-gold);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
 @endpush
 
 @section('content')
+<!-- Messages d'alerte -->
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
+@if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <strong>Erreurs détectées :</strong>
+        <ul class="mb-0 mt-2">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
+<!-- Overlay de chargement -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <h5>Création du produit en cours...</h5>
+        <p>Veuillez patienter, sauvegarde en base de données...</p>
+    </div>
+</div>
+
 <!-- Admin Header -->
 <section class="admin-header">
     <div class="container">
@@ -174,7 +312,7 @@
 <!-- Admin Content -->
 <section class="admin-content">
     <div class="container">
-        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="productForm" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
             
             <div class="form-card">
@@ -184,28 +322,30 @@
                     
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label for="name" class="form-label">Nom du Produit *</label>
+                            <label for="name" class="form-label required">Nom du Produit</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
                                    id="name" name="name" value="{{ old('name') }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="invalid-feedback" id="name-error">Veuillez remplir ce champ</div>
                         </div>
                         
                         <div class="col-md-4 mb-3">
-                            <label for="price" class="form-label">Prix (€) *</label>
+                            <label for="price" class="form-label required">Prix (€)</label>
                             <input type="number" step="0.01" min="0" 
                                    class="form-control @error('price') is-invalid @enderror" 
                                    id="price" name="price" value="{{ old('price') }}" required>
                             @error('price')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="invalid-feedback" id="price-error">Veuillez remplir ce champ</div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="category" class="form-label">Catégorie *</label>
+                            <label for="category" class="form-label required">Catégorie</label>
                             <select class="form-select @error('category') is-invalid @enderror" 
                                     id="category" name="category" required>
                                 <option value="">Sélectionner une catégorie</option>
@@ -218,10 +358,11 @@
                             @error('category')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="invalid-feedback" id="category-error">Veuillez sélectionner une catégorie</div>
                         </div>
                         
                         <div class="col-md-4 mb-3">
-                            <label for="type" class="form-label">Type *</label>
+                            <label for="type" class="form-label required">Type</label>
                             <select class="form-select @error('type') is-invalid @enderror" 
                                     id="type" name="type" required>
                                 <option value="">Sélectionner un type</option>
@@ -234,28 +375,31 @@
                             @error('type')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="invalid-feedback" id="type-error">Veuillez sélectionner un type</div>
                         </div>
                         
                         <div class="col-md-4 mb-3">
-                            <label for="size" class="form-label">Taille *</label>
+                            <label for="size" class="form-label required">Taille</label>
                             <input type="text" class="form-control @error('size') is-invalid @enderror" 
                                    id="size" name="size" value="{{ old('size') }}" 
                                    placeholder="ex: 50ml, 100ml" required>
                             @error('size')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="invalid-feedback" id="size-error">Veuillez remplir ce champ</div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="stock" class="form-label">Stock *</label>
+                            <label for="stock" class="form-label required">Stock</label>
                             <input type="number" min="0" 
                                    class="form-control @error('stock') is-invalid @enderror" 
                                    id="stock" name="stock" value="{{ old('stock', 0) }}" required>
                             @error('stock')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="invalid-feedback" id="stock-error">Veuillez remplir ce champ</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
@@ -285,13 +429,14 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description Complète *</label>
+                        <label for="description" class="form-label required">Description Complète</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
                                   id="description" name="description" rows="6" 
                                   placeholder="Description détaillée du parfum" required>{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="invalid-feedback" id="description-error">Veuillez remplir ce champ</div>
                     </div>
                 </div>
 
@@ -369,7 +514,7 @@
 
                 <!-- Options -->
                 <div class="form-section">
-                    <h3 class="section-title">Options</h3>
+                    <h3 class="section-title">Options d'Affichage</h3>
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -377,7 +522,8 @@
                                 <input class="form-check-input" type="checkbox" id="is_active" 
                                        name="is_active" {{ old('is_active', true) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="is_active">
-                                    Produit actif
+                                    <strong>Produit actif</strong>
+                                    <br><small>Si coché, le produit apparaîtra sur la page d'accueil</small>
                                 </label>
                             </div>
                         </div>
@@ -387,7 +533,8 @@
                                 <input class="form-check-input" type="checkbox" id="is_featured" 
                                        name="is_featured" {{ old('is_featured') ? 'checked' : '' }}>
                                 <label class="form-check-label" for="is_featured">
-                                    Produit en vedette
+                                    <strong>Produit en vedette</strong>
+                                    <br><small>Si coché, le produit s'affichera EN PREMIER sur l'accueil</small>
                                 </label>
                             </div>
                         </div>
@@ -396,7 +543,7 @@
 
                 <!-- Boutons d'action -->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-guerlain me-3">
+                    <button type="submit" class="btn btn-guerlain me-3" id="submitBtn">
                         <i class="fas fa-save me-2"></i>Créer le Produit
                     </button>
                     <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
@@ -409,6 +556,132 @@
 </section>
 
 <script>
+// Variables globales
+let isSubmitting = false;
+
+// Validation en temps réel
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('productForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
+    // Champs obligatoires
+    const requiredFields = {
+        'name': 'Le nom du produit est obligatoire',
+        'price': 'Le prix est obligatoire',
+        'category': 'La catégorie est obligatoire',
+        'type': 'Le type est obligatoire',
+        'size': 'La taille est obligatoire',
+        'stock': 'Le stock est obligatoire',
+        'description': 'La description complète est obligatoire'
+    };
+    
+    // Ajouter validation en temps réel
+    Object.keys(requiredFields).forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        if (field) {
+            field.addEventListener('blur', () => validateField(field, requiredFields[fieldName]));
+            field.addEventListener('input', () => clearFieldError(field));
+        }
+    });
+    
+    // Soumission du formulaire
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (isSubmitting) return;
+        
+        // Validation complète avant soumission
+        if (validateForm()) {
+            isSubmitting = true;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Création en cours...';
+            loadingOverlay.style.display = 'flex';
+            
+            // Soumettre le formulaire
+            form.submit();
+        } else {
+            // Scroll vers la première erreur
+            const firstError = document.querySelector('.is-invalid');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+        }
+    });
+    
+    function validateField(field, message) {
+        const value = field.value.trim();
+        const isValid = value !== '' && value !== null;
+        
+        if (isValid) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+            return true;
+        } else {
+            field.classList.remove('is-valid');
+            field.classList.add('is-invalid');
+            const errorId = field.id + '-error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            return false;
+        }
+    }
+    
+    function clearFieldError(field) {
+        if (field.value.trim() !== '') {
+            field.classList.remove('is-invalid');
+            const errorId = field.id + '-error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+        }
+    }
+    
+    function validateForm() {
+        let isValid = true;
+        
+        // Valider tous les champs obligatoires
+        Object.keys(requiredFields).forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (field && !validateField(field, requiredFields[fieldName])) {
+                isValid = false;
+            }
+        });
+        
+        // Validation spécifique du prix
+        const priceField = document.getElementById('price');
+        if (priceField) {
+            const price = parseFloat(priceField.value);
+            if (isNaN(price) || price <= 0) {
+                priceField.classList.add('is-invalid');
+                document.getElementById('price-error').textContent = 'Le prix doit être un nombre positif';
+                document.getElementById('price-error').style.display = 'block';
+                isValid = false;
+            }
+        }
+        
+        // Validation spécifique du stock
+        const stockField = document.getElementById('stock');
+        if (stockField) {
+            const stock = parseInt(stockField.value);
+            if (isNaN(stock) || stock < 0) {
+                stockField.classList.add('is-invalid');
+                document.getElementById('stock-error').textContent = 'Le stock doit être un nombre positif ou zéro';
+                document.getElementById('stock-error').style.display = 'block';
+                isValid = false;
+            }
+        }
+        
+        return isValid;
+    }
+});
+
+// Fonctions pour les notes et images
 function addNote() {
     const notesList = document.getElementById('notes-list');
     const newNote = document.createElement('div');

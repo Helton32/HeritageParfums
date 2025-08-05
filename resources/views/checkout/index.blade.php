@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Commande - Heritage Parfums')
 @section('description', 'Finalisez votre commande Heritage Parfums en toute sécurité avec Stripe.')

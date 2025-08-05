@@ -1,123 +1,315 @@
-/* Heritage Parfums - Améliorations Carrousel */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap');
 
-/* Optimisation de l'espacement navbar-carrousel */
+:root {
+    --gold: #c9a06c;
+    --deep-black: #1a1a1a;
+    --off-white: #f7f4ef;
+    --soft-gray: #bfbfbf;
+    --luxury-font: 'Playfair Display', serif;
+    --modern-font: 'Open Sans', sans-serif;
+}
+
+/* --- Base --- */
+body.home-page {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: var(--deep-black);
+    color: var(--off-white);
+    font-family: var(--modern-font);
+}
+
 .fullscreen-carousel {
     position: relative;
-    /* Suppression de l'espace mort entre navbar et carrousel */
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* Amélioration : Effet de profondeur pour les slides */
+/* --- Slides --- */
 .carousel-slide {
-    /* Ajout d'un léger gradient pour plus de profondeur */
-    background: 
-        linear-gradient(135deg, var(--guerlain-black) 0%, #1a1a1a 100%);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: scale(0.98);
+    transition: all 0.8s ease-in-out;
+    background-color: var(--deep-black);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Amélioration : Navigation dots avec effet glassmorphism */
+.carousel-slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+}
+
+/* --- Image --- */
+.product-image-zone {
+    max-width: 400px;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Contenu texte --- */
+.content-zone {
+    text-align: center;
+    max-width: 700px;
+    padding: 0 1rem;
+}
+
+.signature-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--soft-gray);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+.product-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    font-family: var(--luxury-font);
+    color: var(--gold);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.product-subtitle {
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--off-white);
+    margin-bottom: 2rem;
+}
+
+/* --- Boutons --- */
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.discover-button, .order-button {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.discover-button:hover, .order-button:hover {
+    background: var(--gold);
+    color: var(--deep-black);
+}
+
+/* --- Navigation dots --- */
+.carousel-nav {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 50; /* S'assurer qu’elle n’est pas trop élevée */
+    pointer-events: auto;
+    background: none; /* Supprime tout fond */
+    backdrop-filter: none !important; /* Supprime le flou si appliqué */
+    box-shadow: none; /* Supprime tout effet d’ombre */
+}
+
+
 .nav-dot {
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.nav-dot:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.3);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--soft-gray);
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .nav-dot.active {
-    background: var(--guerlain-white);
-    box-shadow: 
-        0 0 15px rgba(255, 255, 255, 0.5),
-        0 0 30px rgba(212, 175, 55, 0.3);
-    transform: scale(1.2);
+    background-color: var(--gold);
+    transform: scale(1.3);
 }
 
-/* Amélioration : Buttons avec effet de hover plus sophistiqué */
-.discover-button, .order-button {
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
+/* --- Footer --- */
+.footer-slide {
+    background-color: #111;
+    color: var(--off-white);
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
 }
 
-.discover-button::before, .order-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-    z-index: -1;
+.footer-content {
+    max-width: 1200px;
+    margin: auto;
 }
 
-.discover-button:hover::before, .order-button:hover::before {
-    left: 100%;
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
-/* Amélioration : Image produit avec effet parallax subtil */
-.product-image {
-    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+.footer-content h5 {
+    font-family: var(--luxury-font);
+    font-size: 1.2rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
 }
 
-.carousel-slide.active .product-image {
-    animation: floatAnimation 6s ease-in-out infinite;
+.footer-content p,
+.footer-links li a {
+    color: var(--soft-gray);
+    font-size: 0.95rem;
 }
 
-@keyframes floatAnimation {
-    0%, 100% { 
-        transform: translateY(0px) scale(1); 
-    }
-    50% { 
-        transform: translateY(-10px) scale(1.02);
-    }
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-/* Amélioration : Texte avec effet de fade-in séquentiel optimisé */
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: var(--soft-gray);
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+    text-decoration: underline;
+}
+
+.social-links a {
+    color: var(--off-white);
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--gold);
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--soft-gray);
+}
+
+/* --- Scroll indicator --- */
+#scroll-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: var(--soft-gray);
+    font-size: 0.9rem;
+    animation: bounce 2s infinite;
+    cursor: pointer;
+    z-index: 5;
+}
+
+#scroll-indicator i {
+    font-size: 1.2rem;
+    margin-top: 0.3rem;
+    display: block;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, -8px); }
+}
+
+/* --- Effet fade-in --- */
 .fade-in {
     opacity: 0;
-    transform: translateY(40px);
-    animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    transform: translateY(30px);
+    transition: all 1.2s ease;
 }
 
-.fade-in.delay-1 { animation-delay: 0.3s; }
-.fade-in.delay-2 { animation-delay: 0.6s; }
-.fade-in.delay-3 { animation-delay: 0.9s; }
-
-/* Amélioration : Scroll indicator plus interactif */
-.scroll-indicator {
-    transition: all 0.3s ease;
-    cursor: pointer;
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.scroll-indicator:hover {
-    color: rgba(255, 255, 255, 0.9);
-    transform: translateX(-50%) translateY(-5px);
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }
+.delay-3 { transition-delay: 0.6s; }
+
+/* --- Toasts notifications --- */
+.toast-success {
+    background: linear-gradient(135deg, #28a745, #20c997);
 }
 
-/* Amélioration : Responsive ultra-optimisé */
-@media (max-width: 480px) {
-    .fullscreen-carousel {
-        margin-top: 40px !important;
-        height: calc(100vh - 40px) !important;
-    }
-    
-    .product-title {
-        font-size: 1.8rem !important;
-        line-height: 1.2;
-    }
-    
-    .content-zone {
-        padding: 0 !important;
-    }
-    
-    .carousel-nav {
-        bottom: 0.8rem !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        flex-direction: row !important;
-    }
+.toast-error {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+}
+.carousel-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 4rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+}
+
+/* Image à gauche */
+.product-image-zone {
+    flex: 1 1 400px;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Texte à droite */
+.content-zone {
+    flex: 1 1 400px;
+    max-width: 600px;
+    text-align: left;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

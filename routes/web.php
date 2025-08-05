@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminContactController;
@@ -13,20 +12,28 @@ use App\Models\Product;
 
 // Page d'accueil - Style Guerlain avec carousel
 Route::get('/', function () {
-    // Récupérer les produits en vedette pour le carousel
+    // NOUVELLE LOGIQUE: Afficher TOUS les produits actifs
+    // 1. D'abord les produits en vedette ET actifs (priorité)
     $featuredProducts = Product::where('is_featured', true)
                               ->where('is_active', true)
-                              ->take(6)
+                              ->orderBy('created_at', 'desc')
                               ->get();
     
-    // Si pas de produits en vedette, prendre les premiers produits actifs
-    if ($featuredProducts->isEmpty()) {
-        $featuredProducts = Product::where('is_active', true)
-                                  ->take(6)
-                                  ->get();
+    // 2. Puis les produits actifs mais NON en vedette (pour compléter)
+    $activeProducts = Product::where('is_active', true)
+                            ->where('is_featured', false)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+    
+    // 3. Combiner : vedettes en premier, puis actifs, limité à 6 produits
+    $allActiveProducts = $featuredProducts->concat($activeProducts)->take(6);
+    
+    // 4. Si aucun produit actif, afficher un produit par défaut pour éviter une page vide
+    if ($allActiveProducts->isEmpty()) {
+        $allActiveProducts = Product::orderBy('created_at', 'desc')->take(1)->get();
     }
     
-    return view('welcome', compact('featuredProducts'));
+    return view('welcome', compact('allActiveProducts'));
 })->name('home');
 
 // Route pour afficher un produit unique
@@ -72,7 +79,6 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::post('/shipping/options', [App\Http\Controllers\ShippingApiController::class, 'getShippingOptions'])->name('shipping.options');
     Route::post('/shipping/relay-points', [App\Http\Controllers\ShippingApiController::class, 'searchRelayPoints'])->name('shipping.relay-points');
     Route::post('/shipping/calculate', [App\Http\Controllers\ShippingApiController::class, 'calculateShippingPrice'])->name('shipping.calculate');
-    Route::get('/shipping/carrier-methods', [ShippingController::class, 'getCarrierMethods'])->name('shipping.carrier-methods');
 });
 
 // Démonstration du système d'expédition
@@ -123,13 +129,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Gestion des expéditions
         Route::prefix('shipping')->name('shipping.')->group(function () {
-            Route::get('/', [ShippingController::class, 'index'])->name('index');
-            Route::get('/statistics', [ShippingController::class, 'statistics'])->name('statistics');
-            Route::get('/{order}', [ShippingController::class, 'show'])->name('show');
-            Route::post('/{order}/assign-carrier', [ShippingController::class, 'assignCarrier'])->name('assign-carrier');
-            Route::post('/{order}/generate-label', [ShippingController::class, 'generateLabel'])->name('generate-label');
-            Route::get('/{order}/download-label', [ShippingController::class, 'downloadLabel'])->name('download-label');
-            Route::post('/{order}/mark-shipped', [ShippingController::class, 'markAsShipped'])->name('mark-shipped');
+            Route::get('/', [App\Http\Controllers\ShippingController::class, 'index'])->name('index');
+            Route::get('/statistics', [App\Http\Controllers\ShippingController::class, 'statistics'])->name('statistics');
+            Route::get('/{order}', [App\Http\Controllers\ShippingController::class, 'show'])->name('show');
+            Route::post('/{order}/assign-carrier', [App\Http\Controllers\ShippingController::class, 'assignCarrier'])->name('assign-carrier');
+            Route::post('/{order}/generate-label', [App\Http\Controllers\ShippingController::class, 'generateLabel'])->name('generate-label');
+            Route::get('/{order}/download-label', [App\Http\Controllers\ShippingController::class, 'downloadLabel'])->name('download-label');
+            Route::post('/{order}/mark-shipped', [App\Http\Controllers\ShippingController::class, 'markAsShipped'])->name('mark-shipped');
         });
     });
 });
