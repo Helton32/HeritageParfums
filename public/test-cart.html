@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="test-token">
+    <title>Test Ajout Panier</title>
+</head>
+<body>
+    <h1>Test de l'ajout au panier</h1>
+    <button id="test-button" onclick="testAddToCart()">Tester l'ajout au panier</button>
+    <div id="console-output"></div>
+
+    <script>
+        function log(message) {
+            console.log(message);
+            document.getElementById('console-output').innerHTML += '<p>' + message + '</p>';
+        }
+
+        function testAddToCart() {
+            log('=== Test de l\'ajout au panier ===');
+            
+            // Vérifier le token CSRF
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                log('❌ Token CSRF manquant');
+                return;
+            }
+            
+            log('✅ Token CSRF trouvé: ' + csrfToken.getAttribute('content'));
+            
+            // D'abord, récupérer un vrai token CSRF depuis la page d'accueil
+            fetch('http://127.0.0.1:8002/', {
+                method: 'GET',
+                credentials: 'same-origin'
+            })
+            .then(response => response.text())
+            .then(html => {
+                // Parser le HTML pour extraire le token CSRF
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const token = doc.querySelector('meta[name="csrf-token"]');
+                
+                if (!token) {
+                    log('❌ Impossible de récupérer le token CSRF');
+                    return;
+                }
+                
+                const csrfValue = token.getAttribute('content');
+                log('✅ Token CSRF récupéré: ' + csrfValue);
+                
+                // Maintenant tester l'ajout au panier
+                return fetch('http://127.0.0.1:8002/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfValue,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        quantity: 1
+                    })
+                });
+            })
+            .then(response => {
+                log('📡 Statut de réponse: ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                log('📨 Réponse reçue: ' + JSON.stringify(data, null, 2));
+                
+                if (data.success) {
+                    log('✅ Succès! Produit ajouté au panier');
+                } else {
+                    log('❌ Échec: ' + data.message);
+                }
+            })
+            .catch(error => {
+                log('❌ Erreur: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>

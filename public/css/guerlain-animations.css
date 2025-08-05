@@ -1,0 +1,207 @@
+/* 
+ * GUERLAIN PREMIUM ANIMATIONS & EFFECTS
+ * Animations et effets pour Heritage Parfums - Style Guerlain
+ */
+
+/* Animations d'entrée élégantes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animation de révélation en cascade */
+@keyframes cascadeReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Animation flottante subtile pour produits */
+@keyframes gentleFloat {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+    }
+    25% { 
+        transform: translateY(-8px) rotate(0.5deg); 
+    }
+    75% { 
+        transform: translateY(-4px) rotate(-0.5deg); 
+    }
+}
+
+/* Animation de pulsation dorée */
+@keyframes goldPulse {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 0 20px rgba(212, 175, 55, 0);
+        transform: scale(1.02);
+    }
+}
+
+/* Animation de bordure dorée */
+@keyframes goldBorder {
+    0% {
+        border-color: #d8d8d8;
+    }
+    50% {
+        border-color: #d4af37;
+    }
+    100% {
+        border-color: #d8d8d8;
+    }
+}
+
+/* Classes d'animation réutilisables */
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-fade-in-left {
+    animation: fadeInLeft 0.8s ease-out forwards;
+}
+
+.animate-fade-in-right {
+    animation: fadeInRight 0.8s ease-out forwards;
+}
+
+.animate-cascade {
+    animation: cascadeReveal 0.6s ease-out forwards;
+}
+
+.animate-float {
+    animation: gentleFloat 6s ease-in-out infinite;
+}
+
+.animate-gold-pulse {
+    animation: goldPulse 2s infinite;
+}
+
+.animate-gold-border {
+    animation: goldBorder 3s ease-in-out infinite;
+}
+
+/* Délais en cascade pour animations multiples */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Effets de survol premium */
+.hover-lift {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-lift:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+}
+
+.hover-glow {
+    transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    border-color: #d4af37;
+}
+
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Animation de chargement élégante */
+.loading-dots::after {
+    content: '...';
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% {
+        color: rgba(212, 175, 55, 0);
+        text-shadow: 0.25em 0 0 rgba(212, 175, 55, 0),
+                     0.5em 0 0 rgba(212, 175, 55, 0);
+    }
+    40% {
+        color: #d4af37;
+        text-shadow: 0.25em 0 0 rgba(212, 175, 55, 0),
+                     0.5em 0 0 rgba(212, 175, 55, 0);
+    }
+    60% {
+        text-shadow: 0.25em 0 0 #d4af37,
+                     0.5em 0 0 rgba(212, 175, 55, 0);
+    }
+    80%, 100% {
+        text-shadow: 0.25em 0 0 #d4af37,
+                     0.5em 0 0 #d4af37;
+    }
+}
+
+/* Responsive animations */
+@media (max-width: 768px) {
+    .animate-fade-in-up,
+    .animate-fade-in-left,
+    .animate-fade-in-right,
+    .animate-cascade {
+        animation-duration: 0.5s;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-5px);
+    }
+    
+    .hover-scale:hover {
+        transform: scale(1.02);
+    }
+}
+
+/* Préférences d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

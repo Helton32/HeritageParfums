@@ -1,0 +1,103 @@
+{
+  "name": "Heritage Parfums - Éternelle Rose",
+  "short_name": "Heritage Parfums",
+  "description": "Parfum de luxe français - Éternelle Rose, fragrance d'exception depuis 1925",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#d4af37",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "fr",
+  "categories": ["lifestyle", "shopping", "beauty"],
+  "icons": [
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/heritage-icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/heritage-icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/heritage-icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Boutique",
+      "short_name": "Boutique",
+      "description": "Découvrir nos parfums",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/images/shortcut-boutique.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Notre Histoire",
+      "short_name": "Histoire",
+      "description": "L'histoire de Heritage Parfums",
+      "url": "/about",
+      "icons": [
+        {
+          "src": "/images/shortcut-histoire.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Nous contacter",
+      "url": "/contact",
+      "icons": [
+        {
+          "src": "/images/shortcut-contact.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshot-mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Page d'accueil Heritage Parfums"
+    },
+    {
+      "src": "/images/screenshot-desktop-1.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Boutique Heritage Parfums"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "dir": "ltr",
+  "iarc_rating_id": "",
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
+}
