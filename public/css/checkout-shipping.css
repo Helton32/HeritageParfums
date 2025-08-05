@@ -1,0 +1,578 @@
+/* Heritage Parfums - Checkout Shipping Styles */
+
+/* === PAGE HEADER === */
+.page-header {
+    background: var(--guerlain-light-gray);
+    padding: 6rem 0 3rem;
+    margin-top: 80px;
+}
+
+/* === CHECKOUT SECTIONS === */
+.checkout-section {
+    background: var(--guerlain-white);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--guerlain-border);
+}
+
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--guerlain-gold);
+    border-bottom: 2px solid var(--guerlain-gold);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+/* === FORM CONTROLS === */
+.form-control {
+    border: 1px solid var(--guerlain-border);
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+}
+
+.form-control:focus {
+    border-color: var(--guerlain-gold);
+    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--guerlain-black);
+    margin-bottom: 0.5rem;
+}
+
+/* === SHIPPING SECTION === */
+.shipping-section {
+    position: relative;
+}
+
+.shipping-loading {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--guerlain-text-gray);
+}
+
+.shipping-options {
+    display: grid;
+    gap: 1rem;
+}
+
+/* === SHIPPING OPTION CARDS === */
+.shipping-option {
+    border: 2px solid var(--guerlain-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    background: var(--guerlain-white);
+}
+
+.shipping-option:hover {
+    border-color: var(--guerlain-gold);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+}
+
+.shipping-option.selected {
+    border-color: var(--guerlain-gold);
+    background: rgba(212, 175, 55, 0.02);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15);
+}
+
+.option-content {
+    margin-bottom: 1rem;
+}
+
+.option-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.carrier-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.carrier-logo {
+    width: 60px;
+    height: 40px;
+    object-fit: contain;
+    background: var(--guerlain-light-gray);
+    border-radius: 6px;
+    padding: 5px;
+}
+
+.carrier-details {
+    flex: 1;
+}
+
+.carrier-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--guerlain-black);
+    margin-bottom: 0.25rem;
+}
+
+.method-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--guerlain-text-gray);
+    margin: 0;
+}
+
+.option-price {
+    text-align: right;
+}
+
+.price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--guerlain-gold);
+    display: block;
+}
+
+.delivery-time {
+    font-size: 0.85rem;
+    color: var(--guerlain-text-gray);
+    margin-top: 0.25rem;
+}
+
+.method-description {
+    color: var(--guerlain-text-gray);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+/* === METHOD FEATURES === */
+.method-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.feature-tag {
+    background: var(--guerlain-light-gray);
+    color: var(--guerlain-text-gray);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.feature-tag.express {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ff6b35;
+}
+
+.feature-tag.point_relais {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.feature-tag.signature {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+/* === OPTION SELECTOR === */
+.option-selector {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.option-selector input[type="radio"] {
+    display: none;
+}
+
+.option-selector label {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--guerlain-border);
+    border-radius: 50%;
+    background: var(--guerlain-white);
+    cursor: pointer;
+    position: relative;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.option-selector label::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--guerlain-gold);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s ease;
+}
+
+.option-selector input[type="radio"]:checked + label {
+    border-color: var(--guerlain-gold);
+}
+
+.option-selector input[type="radio"]:checked + label::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+/* === RELAY POINTS SECTION === */
+.relay-points-section {
+    background: var(--guerlain-light-gray);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.relay-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--guerlain-black);
+    margin-bottom: 1rem;
+}
+
+.relay-search {
+    margin-bottom: 1rem;
+}
+
+.relay-results {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* === RELAY POINT CARDS === */
+.relay-point {
+    background: var(--guerlain-white);
+    border: 2px solid var(--guerlain-border);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.relay-point:hover {
+    border-color: var(--guerlain-gold);
+    box-shadow: 0 3px 10px rgba(212, 175, 55, 0.1);
+}
+
+.relay-point.selected {
+    border-color: var(--guerlain-gold);
+    background: rgba(212, 175, 55, 0.02);
+}
+
+.relay-content {
+    margin-right: 2.5rem;
+}
+
+.relay-info {
+    margin-bottom: 0.75rem;
+}
+
+.relay-name {
+    font-weight: 500;
+    color: var(--guerlain-black);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.relay-address {
+    color: var(--guerlain-text-gray);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.relay-distance {
+    color: var(--guerlain-gold);
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.relay-hours {
+    font-size: 0.8rem;
+    color: var(--guerlain-text-gray);
+}
+
+.relay-selector {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.relay-selector input[type="radio"] {
+    display: none;
+}
+
+.relay-selector label {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--guerlain-border);
+    border-radius: 50%;
+    background: var(--guerlain-white);
+    cursor: pointer;
+    position: relative;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.relay-selector label::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--guerlain-gold);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s ease;
+}
+
+.relay-selector input[type="radio"]:checked + label {
+    border-color: var(--guerlain-gold);
+}
+
+.relay-selector input[type="radio"]:checked + label::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* === ORDER SUMMARY === */
+.order-summary {
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.order-item {
+    border-bottom: 1px solid var(--guerlain-border);
+    padding: 1rem 0;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.price-summary {
+    border-top: 1px solid var(--guerlain-border);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    color: var(--guerlain-text-gray);
+}
+
+.price-row.shipping-row {
+    padding: 0.5rem 0;
+    background: rgba(212, 175, 55, 0.05);
+    border-radius: 5px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.price-row.total {
+    border-top: 2px solid var(--guerlain-gold);
+    padding-top: 1rem;
+    margin-top: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: var(--guerlain-black);
+}
+
+/* === PAYMENT BUTTON === */
+.btn-pay {
+    background: linear-gradient(135deg, var(--guerlain-gold), var(--guerlain-dark-gold));
+    border: none;
+    color: var(--guerlain-white);
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.btn-pay:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+    color: var(--guerlain-white);
+}
+
+.btn-pay:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--guerlain-text-gray);
+    transform: none;
+    box-shadow: none;
+}
+
+.loading-spinner {
+    display: none;
+    margin-left: 10px;
+}
+
+/* === SECURITY BADGES === */
+.security-badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--guerlain-border);
+    flex-wrap: wrap;
+}
+
+.security-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--guerlain-text-gray);
+    font-size: 0.85rem;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 992px) {
+    .order-summary {
+        position: static;
+        max-height: none;
+    }
+    
+    .checkout-section {
+        padding: 1.5rem;
+    }
+    
+    .page-header {
+        padding: 4rem 0 2rem;
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkout-section {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .option-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .option-price {
+        text-align: left;
+    }
+    
+    .carrier-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .method-features {
+        justify-content: center;
+    }
+    
+    .security-badges {
+        gap: 1rem;
+    }
+    
+    .security-badge {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .relay-content {
+        margin-right: 2rem;
+    }
+    
+    .carrier-logo {
+        width: 50px;
+        height: 35px;
+    }
+    
+    .shipping-option,
+    .relay-point {
+        padding: 1rem;
+    }
+    
+    .option-selector,
+    .relay-selector {
+        top: 0.75rem;
+        right: 0.75rem;
+    }
+    
+    .btn-pay {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.shipping-options,
+.relay-results {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* === CUSTOM SCROLLBAR === */
+.relay-results::-webkit-scrollbar {
+    width: 6px;
+}
+
+.relay-results::-webkit-scrollbar-track {
+    background: var(--guerlain-light-gray);
+    border-radius: 3px;
+}
+
+.relay-results::-webkit-scrollbar-thumb {
+    background: var(--guerlain-gold);
+    border-radius: 3px;
+}
+
+.relay-results::-webkit-scrollbar-thumb:hover {
+    background: var(--guerlain-dark-gold);
+}

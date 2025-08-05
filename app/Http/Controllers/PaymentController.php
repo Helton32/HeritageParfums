@@ -42,6 +42,10 @@ class PaymentController extends Controller
             'billing_city' => 'required|string|max:255',
             'billing_postal_code' => 'required|string|max:10',
             'billing_country' => 'required|string|max:2',
+            'shipping_carrier' => 'required|string',
+            'shipping_method' => 'required|string',
+            'shipping_amount' => 'required|numeric|min:0',
+            'relay_point_id' => 'nullable|string'
         ]);
 
         $cartController = new CartController();
@@ -50,6 +54,12 @@ class PaymentController extends Controller
         if (empty($cartData['items'])) {
             return response()->json(['error' => 'Panier vide'], 400);
         }
+
+        // Recalculate totals with selected shipping
+        $subtotal = $cartData['subtotal'];
+        $taxAmount = $cartData['tax_amount'];
+        $shippingAmount = $request->shipping_amount;
+        $total = $subtotal + $taxAmount + $shippingAmount;
 
         try {
             // Create order
@@ -70,10 +80,18 @@ class PaymentController extends Controller
                 'shipping_city' => $request->billing_city,
                 'shipping_postal_code' => $request->billing_postal_code,
                 'shipping_country' => $request->billing_country,
-                'subtotal' => $cartData['subtotal'],
-                'tax_amount' => $cartData['tax_amount'],
-                'shipping_amount' => $cartData['shipping_amount'],
-                'total_amount' => $cartData['total'],
+                'shipping_carrier' => $request->shipping_carrier,
+                'shipping_method' => $request->shipping_method,
+                'carrier_options' => [
+                    'relay_point_id' => $request->relay_point_id,
+                    'selected_at' => now()->toDateTimeString()
+                ],
+                'shipping_weight' => $this->calculatePackageWeight($cartData['items']),
+                'package_dimensions' => $this->getPackageDimensions($cartData['items']),
+                'subtotal' => $subtotal,
+                'tax_amount' => $taxAmount,
+                'shipping_amount' => $shippingAmount,
+                'total_amount' => $total,
                 'currency' => 'EUR',
             ]);
 
@@ -245,5 +263,46 @@ class PaymentController extends Controller
         }
 
         return response('Success', 200);
+    }
+
+    /**
+     * Calculate package weight based on items
+     */
+    private function calculatePackageWeight($items)
+    {
+        $weight = 0;
+        foreach ($items as $item) {
+            // Poids standard d'un parfum : 150g pour 30ml, 200g pour 50ml, 300g pour 100ml
+            $productWeight = match($item['size']) {
+                '30ml' => 0.15,
+                '50ml' => 0.2,
+                '75ml' => 0.25,
+                '100ml' => 0.3,
+                default => 0.2
+            };
+            $weight += $productWeight * $item['quantity'];
+        }
+        
+        // Ajouter le poids de l'emballage (100g)
+        $weight += 0.1;
+        
+        return round($weight, 3);
+    }
+
+    /**
+     * Get package dimensions based on items
+     */
+    private function getPackageDimensions($items)
+    {
+        // Dimensions standard pour nos parfums
+        $itemCount = array_sum(array_column($items, 'quantity'));
+        
+        if ($itemCount == 1) {
+            return ['length' => 15, 'width' => 10, 'height' => 8]; // cm
+        } elseif ($itemCount <= 3) {
+            return ['length' => 20, 'width' => 15, 'height' => 10];
+        } else {
+            return ['length' => 25, 'width' => 20, 'height' => 12];
+        }
     }
 }

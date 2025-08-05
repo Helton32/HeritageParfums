@@ -49,6 +49,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
     Route::post('/update', [CartController::class, 'update'])->name('update');
+    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
     Route::post('/clear', [CartController::class, 'clear'])->name('clear');
     Route::get('/count', [CartController::class, 'count'])->name('count');
 });
@@ -68,8 +69,10 @@ Route::prefix('payment')->name('payment.')->group(function () {
 // API Routes pour AJAX
 Route::prefix('api')->name('api.')->group(function () {
     Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
+    Route::post('/shipping/options', [App\Http\Controllers\ShippingApiController::class, 'getShippingOptions'])->name('shipping.options');
+    Route::post('/shipping/relay-points', [App\Http\Controllers\ShippingApiController::class, 'searchRelayPoints'])->name('shipping.relay-points');
+    Route::post('/shipping/calculate', [App\Http\Controllers\ShippingApiController::class, 'calculateShippingPrice'])->name('shipping.calculate');
     Route::get('/shipping/carrier-methods', [ShippingController::class, 'getCarrierMethods'])->name('shipping.carrier-methods');
-    Route::get('/shipping/relay-points', [ShippingController::class, 'searchRelayPoints'])->name('shipping.relay-points');
 });
 
 // Démonstration du système d'expédition

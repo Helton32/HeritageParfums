@@ -73,10 +73,11 @@ body.home-page {
                    class="discover-button">
                     Découvrir
                 </a>
-                <a href="{{ route('cart') }}" 
-                   class="order-button">
+                <button class="order-button" 
+                        data-product-id="{{ $product->id }}"
+                        onclick="addToCartFromCarousel(this)">
                     Commander maintenant
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -297,5 +298,107 @@ document.addEventListener('DOMContentLoaded', function() {
         newImg.src = img.src;
     });
 });
+
+// Fonction pour ajouter au panier depuis le carrousel
+function addToCartFromCarousel(button) {
+    const productId = button.dataset.productId;
+    
+    // Animation du bouton
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ajout...';
+    
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            product_id: productId,
+            quantity: 1
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update cart count
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = data.cart_count;
+                cartCount.style.display = 'flex';
+            }
+            
+            // Animation de succès
+            button.innerHTML = '<i class="fas fa-check"></i> Ajouté !';
+            button.style.background = '#28a745';
+            button.style.borderColor = '#28a745';
+            
+            // Notification toast
+            showNotification(data.message || 'Produit ajouté au panier !', 'success');
+            
+            // Restaurer le bouton après 3 secondes
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+                button.style.borderColor = '';
+                button.disabled = false;
+            }, 3000);
+        } else {
+            showNotification(data.message || 'Erreur lors de l\'ajout', 'error');
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Erreur lors de l\'ajout au panier', 'error');
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+}
+
+// Fonction pour afficher les notifications
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `position-fixed`;
+    notification.style.cssText = `
+        top: 100px; 
+        right: 20px; 
+        z-index: 9999; 
+        min-width: 350px;
+        background: ${type === 'success' ? 'linear-gradient(135deg, #28a745, #20c997)' : 'linear-gradient(135deg, #dc3545, #e74c3c)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        backdrop-filter: blur(10px);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    
+    notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}" style="font-size: 1.2rem;"></i>
+            <span style="flex: 1;">${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer; padding: 0;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animation d'entrée
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Auto hide après 4 secondes
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
 </script>
 @endpush

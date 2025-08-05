@@ -1,0 +1,912 @@
+/* Heritage Parfums - Product Detail Page */
+
+/* === HERO SECTION === */
+.product-hero {
+    padding: 2rem 0;
+    margin-top: 80px;
+    background: var(--guerlain-white);
+}
+
+/* === PRODUCT GALLERY === */
+.product-gallery {
+    position: relative;
+}
+
+.main-image-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.main-image {
+    position: relative;
+    height: 500px;
+    background: var(--guerlain-cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.main-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.6s ease;
+}
+
+.main-image:hover img {
+    transform: scale(1.05);
+}
+
+.product-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 10;
+}
+
+/* Image Navigation */
+.image-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: all;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn:hover {
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    transform: scale(1.1);
+}
+
+.nav-btn i {
+    font-size: 1.2rem;
+}
+/* Thumbnail Images */
+.thumbnail-container {
+    margin-top: 1rem;
+}
+
+.thumbnail-wrapper {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+}
+
+.thumbnail {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.thumbnail.active {
+    border-color: var(--guerlain-gold);
+    box-shadow: 0 0 0 1px var(--guerlain-gold);
+}
+
+.thumbnail:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* === PRODUCT INFO === */
+.product-info {
+    padding: 0 2rem;
+}
+
+.product-breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    color: var(--guerlain-text-gray);
+}
+
+.product-breadcrumb a {
+    color: var(--guerlain-text-gray);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.product-breadcrumb a:hover {
+    color: var(--guerlain-gold);
+}
+
+.product-breadcrumb span {
+    margin: 0 0.5rem;
+}
+
+.product-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--guerlain-black);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.product-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.product-type,
+.product-size {
+    background: var(--guerlain-light-gray);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--guerlain-text-gray);
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.stars {
+    color: var(--guerlain-gold);
+}
+
+.rating-text {
+    font-size: 0.9rem;
+    color: var(--guerlain-text-gray);
+}
+
+.product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--guerlain-gold);
+    margin-bottom: 1.5rem;
+}
+/* Stock Info */
+.stock-info {
+    margin-bottom: 2rem;
+}
+
+.stock-available {
+    color: #28a745;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stock-low {
+    color: #ffc107;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stock-out {
+    color: #dc3545;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Quantity Section */
+.quantity-section {
+    margin-bottom: 2rem;
+}
+
+.quantity-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--guerlain-black);
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.qty-btn {
+    width: 45px;
+    height: 45px;
+    border: 2px solid var(--guerlain-gold);
+    background: var(--guerlain-white);
+    color: var(--guerlain-gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.qty-btn:hover {
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    transform: translateY(-1px);
+}
+
+.qty-input {
+    width: 80px;
+    height: 45px;
+    text-align: center;
+    border: 2px solid var(--guerlain-border);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    background: var(--guerlain-white);
+    color: var(--guerlain-black);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-add-cart {
+    flex: 1;
+    background: linear-gradient(135deg, var(--guerlain-gold), var(--guerlain-dark-gold));
+    border: none;
+    color: var(--guerlain-white);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-add-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+}
+
+.btn-add-cart.success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.btn-add-cart i {
+    margin-right: 0.5rem;
+}
+
+.btn-wishlist {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--guerlain-border);
+    background: var(--guerlain-white);
+    color: var(--guerlain-text-gray);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-wishlist:hover,
+.btn-wishlist.active {
+    border-color: var(--guerlain-gold);
+    color: var(--guerlain-gold);
+    transform: translateY(-1px);
+}
+
+.btn-unavailable {
+    flex: 1;
+    background: var(--guerlain-text-gray);
+    border: none;
+    color: var(--guerlain-white);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+/* Product Features */
+.product-features {
+    border-top: 1px solid var(--guerlain-border);
+    padding-top: 2rem;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.feature i {
+    color: var(--guerlain-gold);
+    font-size: 1.2rem;
+    width: 20px;
+}
+
+.feature strong {
+    font-weight: 500;
+    color: var(--guerlain-black);
+}
+
+.feature small {
+    color: var(--guerlain-text-gray);
+    display: block;
+}
+
+/* === PRODUCT TABS === */
+.product-tabs-section {
+    padding: 4rem 0;
+    background: var(--guerlain-light-gray);
+}
+
+.product-tabs {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tab-nav {
+    display: flex;
+    border-bottom: 2px solid var(--guerlain-border);
+    margin-bottom: 3rem;
+    gap: 0;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--guerlain-text-gray);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    position: relative;
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+    color: var(--guerlain-gold);
+    border-bottom-color: var(--guerlain-gold);
+}
+
+.tab-content {
+    min-height: 400px;
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Description Tab */
+.description-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--guerlain-text-gray);
+}
+
+.product-highlights {
+    background: var(--guerlain-white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.product-highlights h5 {
+    color: var(--guerlain-gold);
+    margin-bottom: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.product-highlights ul {
+    list-style: none;
+    padding: 0;
+}
+
+.product-highlights li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--guerlain-text-gray);
+}
+
+.product-highlights li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--guerlain-gold);
+    font-weight: bold;
+}
+/* Notes Tab - Fragrance Pyramid */
+.fragrance-pyramid {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.pyramid-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.pyramid-layer {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    position: relative;
+}
+
+.pyramid-layer.top {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 2px solid #f1c40f;
+}
+
+.pyramid-layer.middle {
+    background: linear-gradient(135deg, #ffecd1, #fcb69f);
+    border: 2px solid #e67e22;
+    margin: 0 1rem;
+}
+
+.pyramid-layer.bottom {
+    background: linear-gradient(135deg, #d1c4e9, #b39ddb);
+    border: 2px solid #8e24aa;
+    margin: 0 2rem;
+}
+
+.pyramid-layer h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--guerlain-black);
+}
+
+.notes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.note-tag {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--guerlain-black);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.note-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Details Tab */
+.product-specs {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--guerlain-white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.product-specs tr {
+    border-bottom: 1px solid var(--guerlain-border);
+}
+
+.product-specs tr:last-child {
+    border-bottom: none;
+}
+
+.product-specs td {
+    padding: 1rem;
+}
+
+.product-specs td:first-child {
+    font-weight: 500;
+    color: var(--guerlain-black);
+    background: var(--guerlain-light-gray);
+    width: 40%;
+}
+
+.care-instructions {
+    background: var(--guerlain-white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.care-instructions h5 {
+    color: var(--guerlain-gold);
+    margin-bottom: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.care-instructions ul {
+    list-style: none;
+    padding: 0;
+}
+
+.care-instructions li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--guerlain-text-gray);
+}
+
+.care-instructions li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--guerlain-gold);
+    font-weight: bold;
+}
+/* Reviews Tab */
+.reviews-summary {
+    background: var(--guerlain-white);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.rating-overview {
+    text-align: center;
+}
+
+.average-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rating-number {
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--guerlain-gold);
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.total-reviews {
+    color: var(--guerlain-text-gray);
+    font-size: 0.9rem;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.review-item {
+    background: var(--guerlain-white);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reviewer-name {
+    font-weight: 500;
+    color: var(--guerlain-black);
+}
+
+.review-rating {
+    color: var(--guerlain-gold);
+}
+
+.review-date {
+    color: var(--guerlain-text-gray);
+    font-size: 0.9rem;
+}
+
+.review-text {
+    color: var(--guerlain-text-gray);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* === RELATED PRODUCTS === */
+.related-products-section {
+    padding: 4rem 0;
+    background: var(--guerlain-white);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--guerlain-black);
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: var(--guerlain-text-gray);
+    font-size: 1.1rem;
+}
+
+.products-carousel {
+    overflow: hidden;
+}
+
+.products-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-card {
+    background: var(--guerlain-white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.1);
+}
+
+.product-image .badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.quick-add,
+.quick-view {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: var(--guerlain-white);
+    color: var(--guerlain-black);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-add:hover,
+.quick-view:hover {
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    transform: scale(1.1);
+}
+
+.product-card .product-info {
+    padding: 1.5rem;
+}
+
+.product-card .product-info h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--guerlain-black);
+    margin-bottom: 0.5rem;
+}
+
+.product-category {
+    color: var(--guerlain-text-gray);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-card .product-rating {
+    margin-bottom: 1rem;
+}
+
+.product-card .product-price {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--guerlain-gold);
+    font-family: 'Cormorant Garamond', serif;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 992px) {
+    .product-hero {
+        margin-top: 60px;
+    }
+    
+    .product-info {
+        padding: 2rem 0 0 0;
+    }
+    
+    .product-title {
+        font-size: 2.2rem;
+    }
+    
+    .product-price {
+        font-size: 2rem;
+    }
+    
+    .main-image {
+        height: 400px;
+    }
+    
+    .products-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .product-title {
+        font-size: 1.8rem;
+    }
+    
+    .product-price {
+        font-size: 1.8rem;
+    }
+    
+    .main-image {
+        height: 300px;
+    }
+    
+    .tab-nav {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        min-width: calc(50% - 0.5rem);
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .products-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .pyramid-layer.middle {
+        margin: 0 0.5rem;
+    }
+    
+    .pyramid-layer.bottom {
+        margin: 0 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-info {
+        padding: 1rem 0 0 0;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn-wishlist {
+        width: 100%;
+        height: 50px;
+    }
+    
+    .thumbnail-wrapper {
+        justify-content: center;
+    }
+    
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .image-nav {
+        padding: 0 10px;
+    }
+}

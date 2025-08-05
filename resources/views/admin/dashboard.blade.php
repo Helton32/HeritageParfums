@@ -3,230 +3,11 @@
 @section('title', 'Dashboard Administration - Heritage Parfums')
 
 @push('styles')
-<style>
-    /* Dashboard Admin - Style Guerlain */
-    .admin-header {
-        background: var(--guerlain-black);
-        color: var(--guerlain-white);
-        padding: 2rem 0;
-        margin-top: 80px;
-    }
-
-    .admin-header h1 {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 3rem;
-        font-weight: 300;
-        margin-bottom: 0.5rem;
-        color: var(--guerlain-gold);
-    }
-
-    .admin-header .lead {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 300;
-        opacity: 0.9;
-    }
-
-    .admin-content {
-        padding: 4rem 0;
-        background: var(--guerlain-light-gray);
-        min-height: calc(100vh - 200px);
-    }
-
-    .admin-sidebar {
-        background: var(--guerlain-white);
-        border-radius: 0;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-        border: 1px solid var(--guerlain-border);
-        height: fit-content;
-        position: sticky;
-        top: 120px;
-    }
-
-    .admin-sidebar .card-header {
-        background: var(--guerlain-black);
-        color: var(--guerlain-white);
-        border-radius: 0;
-        border: none;
-        padding: 2rem 1.5rem;
-    }
-
-    .admin-sidebar .card-header h5 {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.5rem;
-        font-weight: 300;
-        margin-bottom: 0;
-    }
-
-    .admin-user-profile {
-        padding: 2rem 1.5rem;
-        text-align: center;
-        border-bottom: 1px solid var(--guerlain-border);
-    }
-
-    .admin-avatar {
-        width: 70px;
-        height: 70px;
-        background: var(--guerlain-gold);
-        color: var(--guerlain-white);
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        border: 3px solid var(--guerlain-white);
-        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
-    }
-
-    .admin-username {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.3rem;
-        font-weight: 400;
-        color: var(--guerlain-black);
-        margin-bottom: 0.5rem;
-    }
-
-    .admin-role {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 0.85rem;
-        font-weight: 300;
-        color: var(--guerlain-text-gray);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .stat-card {
-        background: var(--guerlain-white);
-        border: 1px solid var(--guerlain-border);
-        border-radius: 0;
-        padding: 2.5rem 2rem;
-        margin-bottom: 2rem;
-        transition: all 0.3s ease;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    }
-
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: var(--guerlain-gold);
-    }
-
-    .stat-card.border-left-warning::before {
-        background: var(--guerlain-gold);
-    }
-
-    .stat-card.border-left-success::before {
-        background: #1cc88a;
-    }
-
-    .stat-card.border-left-info::before {
-        background: #36b9cc;
-    }
-
-    .stat-card.border-left-primary::before {
-        background: var(--guerlain-black);
-    }
-
-    .stat-icon {
-        font-size: 2.5rem;
-        color: var(--guerlain-gold);
-        margin-bottom: 1rem;
-    }
-
-    .stat-value {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 3rem;
-        font-weight: 300;
-        color: var(--guerlain-black);
-        margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 300;
-        color: var(--guerlain-text-gray);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.9rem;
-    }
-
-    .recent-activity {
-        background: var(--guerlain-white);
-        border: 1px solid var(--guerlain-border);
-        border-radius: 0;
-        padding: 2rem;
-    }
-
-    .activity-header {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.8rem;
-        font-weight: 400;
-        color: var(--guerlain-black);
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-
-    .activity-item {
-        padding: 1rem 0;
-        border-bottom: 1px solid var(--guerlain-border);
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 300;
-        color: var(--guerlain-text-gray);
-    }
-
-    .activity-item:last-child {
-        border-bottom: none;
-    }
-
-    .activity-time {
-        font-size: 0.85rem;
-        color: var(--guerlain-gold);
-        float: right;
-    }
-
-    .quick-actions {
-        background: var(--guerlain-white);
-        border: 1px solid var(--guerlain-border);
-        border-radius: 0;
-        padding: 2rem;
-        margin-top: 2rem;
-    }
-
-    .action-button {
-        background: var(--guerlain-light-gray);
-        border: 1px solid var(--guerlain-border);
-        color: var(--guerlain-black);
-        padding: 1rem 1.5rem;
-        margin-bottom: 1rem;
-        width: 100%;
-        text-align: left;
-        transition: all 0.3s ease;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 300;
-    }
-
-    .action-button:hover {
-        background: var(--guerlain-gold);
-        color: var(--guerlain-white);
-        border-color: var(--guerlain-gold);
-        transform: translateX(5px);
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}">
 @endpush
 
 @section('content')
-<<!-- Admin Header -->
+<!-- Admin Header -->
 <section class="admin-header">
     <div class="container">
         <div class="text-center">
@@ -309,7 +90,7 @@
                 <!-- Cartes de statistiques -->
                 <div class="row mb-4">
                     <!-- Commandes en attente -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-4">
                         <div class="stat-card border-left-warning">
                             <div class="stat-icon">
                                 <i class="fas fa-clock"></i>
@@ -320,7 +101,7 @@
                     </div>
 
                     <!-- Produits actifs -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-4">
                         <div class="stat-card border-left-primary">
                             <div class="stat-icon">
                                 <i class="fas fa-bottle-droplet"></i>
@@ -332,19 +113,19 @@
                     </div>
 
                     <!-- Messages non lus -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-4">
                         <div class="stat-card border-left-danger">
                             <div class="stat-icon">
                                 <i class="fas fa-envelope"></i>
                             </div>
                             @php $unreadMessages = \App\Models\Contact::where('is_read', false)->count(); @endphp
-                            <div class="stat-value text-danger">{{ $unreadMessages }}</div>
+                            <div class="stat-value">{{ $unreadMessages }}</div>
                             <div class="stat-label">Messages non lus</div>
                         </div>
                     </div>
 
                     <!-- Total expédié -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-4">
                         <div class="stat-card border-left-success">
                             <div class="stat-icon">
                                 <i class="fas fa-shipping-fast"></i>
@@ -355,7 +136,7 @@
                     </div>
 
                     <!-- Revenus du mois -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-4">
                         <div class="stat-card border-left-info">
                             <div class="stat-icon">
                                 <i class="fas fa-euro-sign"></i>
@@ -366,7 +147,7 @@
                     </div>
 
                     <!-- Flacons vendus -->
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-4">
                         <div class="stat-card border-left-primary">
                             <div class="stat-icon">
                                 <i class="fas fa-shopping-cart"></i>
@@ -448,6 +229,10 @@
                             <a href="{{ route('home') }}" class="action-button">
                                 <i class="fas fa-store me-2"></i>
                                 Retour à la boutique
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -462,50 +247,4 @@ function generateTestOrders() {
     }
 }
 </script>
-
-<style>
-.border-left-warning {
-    border-left: 4px solid #f6c23e !important;
-}
-
-.border-left-success {
-    border-left: 4px solid #1cc88a !important;
-}
-
-.border-left-info {
-    border-left: 4px solid #36b9cc !important;
-}
-
-.border-left-primary {
-    border-left: 4px solid #4e73df !important;
-}
-
-.text-xs {
-    font-size: 0.7rem;
-}
-
-.avatar {
-    border: 3px solid #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.card {
-    border-radius: 10px;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-}
-
-.btn {
-    border-radius: 8px;
-}
-
-.list-group-item {
-    border: none;
-    border-radius: 0;
-}
-
-.list-group-item.active {
-    background-color: #4e73df;
-    border-color: #4e73df;
-}
-</style>
 @endsection

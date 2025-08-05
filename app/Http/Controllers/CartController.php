@@ -8,40 +8,23 @@ use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
-    // ID du produit unique "Éternelle Rose"
-    private $productId = 1;
-
     public function index()
     {
-        $cart = $this->getCart();
-        $product = Product::find($this->productId);
+        $cartData = $this->getCartData();
         
-        if (!$product) {
-            return redirect('/')->with('error', 'Produit introuvable.');
-        }
-
-        $cartData = [
-            'product' => $product,
-            'quantity' => $cart['quantity'] ?? 0,
-            'subtotal' => ($cart['quantity'] ?? 0) * $product->price,
-            'tax_amount' => (($cart['quantity'] ?? 0) * $product->price) * 0.20,
-            'shipping_amount' => (($cart['quantity'] ?? 0) * $product->price) >= 150 ? 0 : 9.90,
-        ];
-
-        $cartData['total'] = $cartData['subtotal'] + $cartData['tax_amount'] + $cartData['shipping_amount'];
-
         return view('cart.index', compact('cartData'));
     }
 
     public function add(Request $request)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1|max:5' // Limite pour édition limitée
+            'product_id' => 'required|integer|exists:products,id',
+            'quantity' => 'required|integer|min:1|max:10'
         ]);
 
-        $product = Product::find($this->productId);
+        $product = Product::findOrFail($request->product_id);
         
-        if (!$product || !$product->isInStock()) {
+        if (!$product->is_active || !$product->isInStock()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Ce produit n\'est plus disponible.'
@@ -51,49 +34,96 @@ class CartController extends Controller
         $quantity = $request->quantity;
         $cart = $this->getCart();
 
-        // Pour un produit unique, on remplace la quantité
-        $cart = [
-            'product_id' => $this->productId,
-            'quantity' => $quantity,
-            'added_at' => now()->toDateTimeString()
-        ];
+        // Si le produit existe déjà dans le panier, on ajoute à la quantité existante
+        if (isset($cart[$product->id])) {
+            $newQuantity = $cart[$product->id]['quantity'] + $quantity;
+            
+            // Vérifier les limites de stock et quantité max
+            if ($newQuantity > $product->stock) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Stock insuffisant. Seulement {$product->stock} unités disponibles."
+                ]);
+            }
+            
+            if ($newQuantity > 10) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Quantité maximale de 10 unités par produit.'
+                ]);
+            }
+            
+            $cart[$product->id]['quantity'] = $newQuantity;
+        } else {
+            // Nouveau produit dans le panier
+            $cart[$product->id] = [
+                'product_id' => $product->id,
+                'quantity' => $quantity,
+                'added_at' => now()->toDateTimeString()
+            ];
+        }
 
         $this->saveCart($cart);
 
         return response()->json([
             'success' => true,
-            'message' => 'Éternelle Rose ajouté au panier !',
-            'cart_count' => $quantity
+            'message' => "{$product->name} ajouté au panier !",
+            'cart_count' => $this->getCartCount()
         ]);
     }
-
     public function update(Request $request)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:0|max:5'
+            'product_id' => 'required|integer|exists:products,id',
+            'quantity' => 'required|integer|min:0|max:10'
         ]);
 
+        $productId = $request->product_id;
         $quantity = $request->quantity;
+        $cart = $this->getCart();
 
         if ($quantity == 0) {
-            $this->clear();
-            return response()->json([
-                'success' => true,
-                'cart_count' => 0
-            ]);
-        }
+            // Supprimer le produit du panier
+            unset($cart[$productId]);
+        } else {
+            // Vérifier le stock
+            $product = Product::findOrFail($productId);
+            if ($quantity > $product->stock) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Stock insuffisant. Seulement {$product->stock} unités disponibles."
+                ]);
+            }
 
-        $cart = [
-            'product_id' => $this->productId,
-            'quantity' => $quantity,
-            'updated_at' => now()->toDateTimeString()
-        ];
+            if (isset($cart[$productId])) {
+                $cart[$productId]['quantity'] = $quantity;
+                $cart[$productId]['updated_at'] = now()->toDateTimeString();
+            }
+        }
 
         $this->saveCart($cart);
 
         return response()->json([
             'success' => true,
-            'cart_count' => $quantity
+            'cart_count' => $this->getCartCount()
+        ]);
+    }
+
+    public function remove(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|integer'
+        ]);
+
+        $productId = $request->product_id;
+        $cart = $this->getCart();
+
+        unset($cart[$productId]);
+        $this->saveCart($cart);
+
+        return response()->json([
+            'success' => true,
+            'cart_count' => $this->getCartCount()
         ]);
     }
 
@@ -106,13 +136,10 @@ class CartController extends Controller
             'cart_count' => 0
         ]);
     }
-
     public function count()
     {
-        $cart = $this->getCart();
-        
         return response()->json([
-            'count' => $cart['quantity'] ?? 0
+            'count' => $this->getCartCount()
         ]);
     }
 
@@ -129,9 +156,8 @@ class CartController extends Controller
     public function getCartData()
     {
         $cart = $this->getCart();
-        $product = Product::find($this->productId);
-
-        if (!$product || !isset($cart['quantity'])) {
+        
+        if (empty($cart)) {
             return [
                 'items' => [],
                 'subtotal' => 0,
@@ -142,22 +168,45 @@ class CartController extends Controller
             ];
         }
 
-        $quantity = $cart['quantity'];
-        $subtotal = $product->price * $quantity;
-        $taxAmount = $subtotal * 0.20;
+        $items = [];
+        $subtotal = 0;
+        $totalQuantity = 0;
+
+        foreach ($cart as $productId => $cartItem) {
+            $product = Product::find($productId);
+            
+            if (!$product || !$product->is_active) {
+                // Supprimer les produits invalides du panier
+                unset($cart[$productId]);
+                continue;
+            }
+
+            $quantity = $cartItem['quantity'];
+            $itemTotal = $product->price * $quantity;
+            
+            $items[] = [
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'type' => $product->type,
+                'size' => $product->size,
+                'price' => $product->price,
+                'quantity' => $quantity,
+                'total' => $itemTotal,
+                'image' => $product->main_image,
+                'category' => $product->category
+            ];
+
+            $subtotal += $itemTotal;
+            $totalQuantity += $quantity;
+        }
+
+        // Sauvegarder le panier nettoyé s'il y a eu des suppressions
+        $this->saveCart($cart);
+
+        $taxAmount = $subtotal * 0.20; // TVA 20%
         $shippingAmount = $subtotal >= 150 ? 0 : 9.90;
         $total = $subtotal + $taxAmount + $shippingAmount;
-
-        $items = [[
-            'product_id' => $product->id,
-            'name' => $product->name,
-            'type' => $product->type,
-            'size' => $product->size,
-            'price' => $product->price,
-            'quantity' => $quantity,
-            'total' => $subtotal,
-            'image' => $product->main_image
-        ]];
 
         return [
             'items' => $items,
@@ -165,13 +214,19 @@ class CartController extends Controller
             'tax_amount' => $taxAmount,
             'shipping_amount' => $shippingAmount,
             'total' => $total,
-            'count' => $quantity
+            'count' => $totalQuantity
         ];
     }
 
     public function getCartCount()
     {
         $cart = $this->getCart();
-        return $cart['quantity'] ?? 0;
+        $totalQuantity = 0;
+
+        foreach ($cart as $cartItem) {
+            $totalQuantity += $cartItem['quantity'];
+        }
+
+        return $totalQuantity;
     }
 }

@@ -4,265 +4,165 @@
 @section('description', $product->short_description)
 
 @push('styles')
-<style>
-    .product-hero {
-        padding: 8rem 0 4rem;
-        margin-top: 80px;
-    }
-
-    .product-image-main {
-        width: 100%;
-        height: 500px;
-        background-size: cover;
-        background-position: center;
-        border-radius: 15px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .product-badge {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        background: var(--primary-gold);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 25px;
-        font-weight: 500;
-    }
-
-    .product-info {
-        padding-left: 3rem;
-    }
-
-    .product-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 3rem;
-        color: var(--primary-gold);
-        margin-bottom: 1rem;
-    }
-
-    .product-type {
-        color: #666;
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-    }
-
-    .product-price {
-        font-size: 2.5rem;
-        font-weight: 600;
-        color: var(--deep-black);
-        margin-bottom: 2rem;
-    }
-
-    .notes-section {
-        background: var(--cream);
-        border-radius: 15px;
-        padding: 2rem;
-        margin: 2rem 0;
-    }
-
-    .note-category {
-        margin-bottom: 1.5rem;
-    }
-
-    .note-title {
-        font-weight: 600;
-        color: var(--primary-gold);
-        margin-bottom: 0.5rem;
-    }
-
-    .note-list {
-        color: #666;
-    }
-
-    .quantity-selector {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-
-    .quantity-input {
-        width: 80px;
-        text-align: center;
-        border: 2px solid var(--primary-gold);
-        border-radius: 8px;
-        padding: 10px;
-    }
-
-    .btn-quantity {
-        background: var(--primary-gold);
-        border: none;
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .btn-quantity:hover {
-        background: var(--dark-gold);
-        color: white;
-    }
-
-    .btn-add-cart {
-        background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
-        border: none;
-        color: white;
-        padding: 15px 40px;
-        font-size: 1.2rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-add-cart:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(184, 134, 11, 0.3);
-        color: white;
-    }
-
-    .stock-info {
-        margin-bottom: 2rem;
-    }
-
-    .stock-available {
-        color: #28a745;
-    }
-
-    .stock-low {
-        color: #ffc107;
-    }
-
-    .stock-out {
-        color: #dc3545;
-    }
-
-    .related-products {
-        background: var(--light-gray);
-        padding: 4rem 0;
-    }
-
-    .related-card {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .related-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .related-image {
-        height: 200px;
-        background-size: cover;
-        background-position: center;
-    }
-
-    @media (max-width: 768px) {
-        .product-info {
-            padding-left: 0;
-            margin-top: 2rem;
-        }
-        
-        .product-title {
-            font-size: 2rem;
-        }
-        
-        .product-price {
-            font-size: 2rem;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/product-detail.css') }}">
 @endpush
 
 @section('content')
 <!-- Product Details -->
 <section class="product-hero">
     <div class="container">
-        <div class="row align-items-center">
-            <!-- Product Image -->
-            <div class="col-lg-6">
-                <div class="product-image-main" style="background-image: url('{{ $product->main_image }}');">
-                    @if($product->badge)
-                        <div class="product-badge">{{ $product->badge }}</div>
-                    @endif
+        <div class="row">
+            <!-- Product Images Gallery -->
+            <div class="col-lg-7">
+                <div class="product-gallery">
+                    <!-- Main Image -->
+                    <div class="main-image-container">
+                        <div class="main-image" id="mainImage">
+                            <img src="{{ $product->main_image }}" alt="{{ $product->name }}" class="img-fluid">
+                            @if($product->badge)
+                                <div class="product-badge">{{ $product->badge }}</div>
+                            @endif
+                        </div>
+                        
+                        <!-- Image Navigation -->
+                        <div class="image-nav">
+                            <button class="nav-btn prev-btn" id="prevBtn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="nav-btn next-btn" id="nextBtn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Thumbnail Images -->
+                    <div class="thumbnail-container">
+                        <div class="thumbnail-wrapper">
+                            @php
+                                $allImages = array_merge([$product->main_image], $product->images ?? []);
+                                $allImages = array_unique($allImages);
+                            @endphp
+                            
+                            @foreach($allImages as $index => $image)
+                            <div class="thumbnail {{ $index === 0 ? 'active' : '' }}" 
+                                 data-index="{{ $index }}" 
+                                 onclick="changeMainImage('{{ $image }}', {{ $index }})">
+                                <img src="{{ $image }}" alt="{{ $product->name }} - Image {{ $index + 1 }}">
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <!-- Product Info -->
-            <div class="col-lg-6">
+            <div class="col-lg-5">
                 <div class="product-info">
+                    <!-- Breadcrumb -->
+                    <nav class="product-breadcrumb">
+                        <a href="/">Accueil</a>
+                        <span>/</span>
+                        <span>{{ $product->category_label }}</span>
+                        <span>/</span>
+                        <span>{{ $product->name }}</span>
+                    </nav>
+                    
                     <h1 class="product-title">{{ $product->name }}</h1>
-                    <p class="product-type">{{ $product->type }} - {{ $product->size }}</p>
-                    <p class="product-price">{{ $product->formatted_price }}</p>
+                    <div class="product-meta">
+                        <span class="product-type">{{ $product->type }}</span>
+                        <span class="product-size">{{ $product->size }}</span>
+                    </div>
+                    
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="rating-text">(4.9/5 - 127 avis)</span>
+                    </div>
+                    
+                    <div class="product-price">{{ $product->formatted_price }}</div>
                     
                     <!-- Stock Info -->
                     <div class="stock-info">
                         @if($product->stock > 10)
                             <span class="stock-available">
-                                <i class="fas fa-check-circle me-1"></i>En stock
+                                <i class="fas fa-check-circle"></i>En stock
                             </span>
                         @elseif($product->stock > 0)
                             <span class="stock-low">
-                                <i class="fas fa-exclamation-triangle me-1"></i>Stock limité ({{ $product->stock }} restants)
+                                <i class="fas fa-exclamation-triangle"></i>Stock limité ({{ $product->stock }} restants)
                             </span>
                         @else
                             <span class="stock-out">
-                                <i class="fas fa-times-circle me-1"></i>Rupture de stock
+                                <i class="fas fa-times-circle"></i>Rupture de stock
                             </span>
                         @endif
-                    </div>
-                    
+                    </div>                    
                     @if($product->isInStock())
                         <!-- Quantity Selector -->
-                        <div class="quantity-selector">
-                            <label for="quantity">Quantité:</label>
-                            <button type="button" class="btn btn-quantity" onclick="decrementQuantity()">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="{{ min($product->stock, 10) }}">
-                            <button type="button" class="btn btn-quantity" onclick="incrementQuantity()">
-                                <i class="fas fa-plus"></i>
-                            </button>
+                        <div class="quantity-section">
+                            <label>Quantité:</label>
+                            <div class="quantity-controls">
+                                <button type="button" class="qty-btn minus" onclick="decrementQuantity()">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="quantity" class="qty-input" value="1" 
+                                       min="1" max="{{ min($product->stock, 10) }}" readonly>
+                                <button type="button" class="qty-btn plus" onclick="incrementQuantity()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
                         </div>
                         
-                        <!-- Add to Cart Button -->
-                        <button class="btn btn-add-cart me-3" id="add-to-cart-btn" data-product-id="{{ $product->id }}">
-                            <i class="fas fa-shopping-bag me-2"></i>Ajouter au Panier
-                        </button>
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button class="btn-add-cart" id="addToCartBtn" data-product-id="{{ $product->id }}">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span>Ajouter au Panier</span>
+                            </button>
+                            <button class="btn-wishlist" onclick="toggleWishlist({{ $product->id }})">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
                     @else
-                        <button class="btn btn-secondary" disabled>
-                            <i class="fas fa-times me-2"></i>Produit Indisponible
+                        <button class="btn-unavailable" disabled>
+                            <i class="fas fa-times"></i>Produit Indisponible
                         </button>
                     @endif
                     
-                    <!-- Services -->
-                    <div class="mt-4">
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="fas fa-truck me-2 text-gold"></i>
-                            <span>Livraison gratuite dès 150€</span>
+                    <!-- Product Features -->
+                    <div class="product-features">
+                        <div class="feature">
+                            <i class="fas fa-truck"></i>
+                            <div>
+                                <strong>Livraison Express</strong>
+                                <small>Gratuite dès 150€</small>
+                            </div>
                         </div>
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="fas fa-gift me-2 text-gold"></i>
-                            <span>Emballage cadeau offert</span>
+                        <div class="feature">
+                            <i class="fas fa-gift"></i>
+                            <div>
+                                <strong>Emballage Cadeau</strong>
+                                <small>Offert sur demande</small>
+                            </div>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-undo me-2 text-gold"></i>
-                            <span>Retours gratuits sous 30 jours</span>
+                        <div class="feature">
+                            <i class="fas fa-undo"></i>
+                            <div>
+                                <strong>Retours Gratuits</strong>
+                                <small>Sous 30 jours</small>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-certificate"></i>
+                            <div>
+                                <strong>Authenticité</strong>
+                                <small>100% Garantie</small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -270,91 +170,220 @@
         </div>
     </div>
 </section>
-
-<!-- Product Description -->
-<section class="py-5">
+<!-- Product Tabs -->
+<section class="product-tabs-section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <h3 class="font-playfair text-gold mb-4">Description</h3>
-                <p class="lead">{{ $product->short_description }}</p>
-                <p>{{ $product->description }}</p>
-                
-                @if($product->notes)
-                    <div class="notes-section">
-                        <h4 class="font-playfair text-gold mb-4">Notes Olfactives</h4>
-                        
-                        @if(isset($product->notes['head']))
-                            <div class="note-category">
-                                <div class="note-title">Notes de Tête</div>
-                                <div class="note-list">{{ implode(', ', $product->notes['head']) }}</div>
-                            </div>
-                        @endif
-                        
-                        @if(isset($product->notes['heart']))
-                            <div class="note-category">
-                                <div class="note-title">Notes de Cœur</div>
-                                <div class="note-list">{{ implode(', ', $product->notes['heart']) }}</div>
-                            </div>
-                        @endif
-                        
-                        @if(isset($product->notes['base']))
-                            <div class="note-category">
-                                <div class="note-title">Notes de Fond</div>
-                                <div class="note-list">{{ implode(', ', $product->notes['base']) }}</div>
-                            </div>
-                        @endif
-                    </div>
-                @endif
-            </div>
+        <div class="product-tabs">
+            <nav class="tab-nav">
+                <button class="tab-btn active" data-tab="description">Description</button>
+                <button class="tab-btn" data-tab="notes">Notes Olfactives</button>
+                <button class="tab-btn" data-tab="details">Détails</button>
+                <button class="tab-btn" data-tab="reviews">Avis (127)</button>
+            </nav>
             
-            <div class="col-lg-4">
-                <div class="bg-light p-4 rounded">
-                    <h5 class="font-playfair text-gold mb-3">Informations Produit</h5>
-                    <div class="mb-2">
-                        <strong>Catégorie:</strong> {{ $product->category_label }}
+            <div class="tab-content">
+                <!-- Description Tab -->
+                <div class="tab-pane active" id="description">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <p class="lead">{{ $product->short_description }}</p>
+                            <div class="description-text">
+                                {!! nl2br(e($product->description)) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="product-highlights">
+                                <h5>Points Forts</h5>
+                                <ul>
+                                    <li>Création artisanale française</li>
+                                    <li>Ingrédients de haute qualité</li>
+                                    <li>Longue tenue (8-12h)</li>
+                                    <li>Sillage exceptionnel</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <strong>Type:</strong> {{ $product->type }}
+                </div>
+                
+                <!-- Notes Tab -->
+                <div class="tab-pane" id="notes">
+                    @if($product->notes)
+                        <div class="fragrance-pyramid">
+                            <div class="pyramid-visual">
+                                <div class="pyramid-layer top">
+                                    <h4>Notes de Tête</h4>
+                                    <div class="notes-list">
+                                        @if(isset($product->notes['head']))
+                                            @foreach($product->notes['head'] as $note)
+                                            <span class="note-tag">{{ $note }}</span>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                <div class="pyramid-layer middle">
+                                    <h4>Notes de Cœur</h4>
+                                    <div class="notes-list">
+                                        @if(isset($product->notes['heart']))
+                                            @foreach($product->notes['heart'] as $note)
+                                            <span class="note-tag heart">{{ $note }}</span>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                <div class="pyramid-layer bottom">
+                                    <h4>Notes de Fond</h4>
+                                    <div class="notes-list">
+                                        @if(isset($product->notes['base']))
+                                            @foreach($product->notes['base'] as $note)
+                                            <span class="note-tag base">{{ $note }}</span>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <p class="text-muted">Informations sur les notes olfactives non disponibles.</p>
+                    @endif
+                </div>                
+                <!-- Details Tab -->
+                <div class="tab-pane" id="details">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="product-specs">
+                                <tr>
+                                    <td>Marque</td>
+                                    <td>Heritage Parfums</td>
+                                </tr>
+                                <tr>
+                                    <td>Catégorie</td>
+                                    <td>{{ $product->category_label }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>{{ $product->type }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Contenance</td>
+                                    <td>{{ $product->size }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Concentration</td>
+                                    <td>Eau de Parfum (15-20%)</td>
+                                </tr>
+                                <tr>
+                                    <td>Origine</td>
+                                    <td>France</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="care-instructions">
+                                <h5>Conseils d'utilisation</h5>
+                                <ul>
+                                    <li>Vaporiser sur les points de pulsation</li>
+                                    <li>Éviter de frotter après application</li>
+                                    <li>Conserver à l'abri de la lumière</li>
+                                    <li>Température idéale : 15-20°C</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <strong>Contenance:</strong> {{ $product->size }}
-                    </div>
-                    <div class="mb-2">
-                        <strong>Stock:</strong> 
-                        @if($product->stock > 10)
-                            Disponible
-                        @elseif($product->stock > 0)
-                            {{ $product->stock }} unités
-                        @else
-                            Rupture de stock
-                        @endif
+                </div>
+                
+                <!-- Reviews Tab -->
+                <div class="tab-pane" id="reviews">
+                    <div class="reviews-section">
+                        <div class="reviews-summary">
+                            <div class="rating-overview">
+                                <div class="average-rating">
+                                    <span class="rating-number">4.9</span>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="total-reviews">127 avis</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="reviews-list">
+                            <!-- Sample Review -->
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <span class="reviewer-name">Marie L.</span>
+                                        <div class="review-rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <span class="review-date">Il y a 2 jours</span>
+                                </div>
+                                <p class="review-text">
+                                    "Parfum absolument sublime ! La tenue est exceptionnelle et le sillage parfait. 
+                                    Je le recommande vivement pour les occasions spéciales."
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 <!-- Related Products -->
 @if($relatedProducts->count() > 0)
-<section class="related-products">
+<section class="related-products-section">
     <div class="container">
-        <h3 class="font-playfair text-gold text-center mb-5">Produits Similaires</h3>
+        <div class="section-header">
+            <h2>Vous pourriez aussi aimer</h2>
+            <p>Découvrez d'autres créations de la même collection</p>
+        </div>
         
-        <div class="row g-4">
-            @foreach($relatedProducts as $relatedProduct)
-            <div class="col-lg-3 col-md-6">
-                <a href="/product/{{ $relatedProduct->slug }}" class="related-card d-block">
-                    <div class="related-image" style="background-image: url('{{ $relatedProduct->main_image }}');"></div>
-                    <div class="p-3">
-                        <h6 class="font-playfair text-gold mb-1">{{ $relatedProduct->name }}</h6>
-                        <p class="text-muted small mb-1">{{ $relatedProduct->type }}</p>
-                        <p class="fw-bold mb-0">{{ $relatedProduct->formatted_price }}</p>
+        <div class="products-carousel">
+            <div class="products-wrapper">
+                @foreach($relatedProducts as $relatedProduct)
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ $relatedProduct->main_image }}" alt="{{ $relatedProduct->name }}">
+                        @if($relatedProduct->badge)
+                            <span class="badge">{{ $relatedProduct->badge }}</span>
+                        @endif
+                        <div class="product-overlay">
+                            <button class="quick-add" data-product-id="{{ $relatedProduct->id }}">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                            <button class="quick-view" onclick="window.location.href='/product/{{ $relatedProduct->slug }}'">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
-                </a>
+                    <div class="product-info">
+                        <h4>{{ $relatedProduct->name }}</h4>
+                        <p class="product-category">{{ $relatedProduct->type }}</p>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="product-price">{{ $relatedProduct->formatted_price }}</div>
+                    </div>
+                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
     </div>
 </section>
@@ -363,6 +392,31 @@
 
 @push('scripts')
 <script>
+// Product Gallery
+let currentImageIndex = 0;
+const allImages = @json(array_unique(array_merge([$product->main_image], $product->images ?? [])));
+
+function changeMainImage(imageSrc, index) {
+    currentImageIndex = index;
+    document.querySelector('#mainImage img').src = imageSrc;
+    
+    // Update active thumbnail
+    document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+    document.querySelector(`.thumbnail[data-index="${index}"]`).classList.add('active');
+}
+
+// Image navigation
+document.getElementById('prevBtn').addEventListener('click', () => {
+    currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : allImages.length - 1;
+    changeMainImage(allImages[currentImageIndex], currentImageIndex);
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+    currentImageIndex = currentImageIndex < allImages.length - 1 ? currentImageIndex + 1 : 0;
+    changeMainImage(allImages[currentImageIndex], currentImageIndex);
+});
+
+// Quantity controls
 function incrementQuantity() {
     const input = document.getElementById('quantity');
     const currentValue = parseInt(input.value);
@@ -382,91 +436,183 @@ function decrementQuantity() {
         input.value = currentValue - 1;
     }
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const addToCartBtn = document.getElementById('add-to-cart-btn');
-    
-    if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', function() {
-            const productId = this.dataset.productId;
-            const quantity = document.getElementById('quantity').value;
-            
-            // Disable button temporarily
-            this.disabled = true;
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Ajout en cours...';
-            
-            fetch('/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    product_id: productId,
-                    quantity: parseInt(quantity)
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update cart count
-                    const cartCount = document.querySelector('.cart-count');
-                    if (cartCount) {
-                        cartCount.textContent = data.cart_count;
-                    }
-                    
-                    // Show success message
-                    this.innerHTML = '<i class="fas fa-check me-2"></i>Ajouté au Panier !';
-                    this.classList.add('btn-success');
-                    this.classList.remove('btn-add-cart');
-                    
-                    // Show notification
-                    showNotification(data.message, 'success');
-                    
-                    setTimeout(() => {
-                        this.innerHTML = originalText;
-                        this.classList.remove('btn-success');
-                        this.classList.add('btn-add-cart');
-                        this.disabled = false;
-                    }, 3000);
-                } else {
-                    showNotification(data.message, 'error');
-                    this.innerHTML = originalText;
-                    this.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Erreur lors de l\'ajout au panier', 'error');
-                this.innerHTML = originalText;
-                this.disabled = false;
-            });
-        });
-    }
+// Tabs functionality
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
+        
+        // Remove active from all tabs and panes
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        
+        // Add active to clicked tab and corresponding pane
+        btn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    });
 });
 
+// Add to cart functionality
+document.getElementById('addToCartBtn').addEventListener('click', function() {
+    const productId = this.dataset.productId;
+    const quantity = document.getElementById('quantity').value;
+    
+    // Button animation
+    const originalText = this.innerHTML;
+    this.disabled = true;
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Ajout en cours...</span>';
+    
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            product_id: parseInt(productId),
+            quantity: parseInt(quantity)
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update cart count
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = data.cart_count;
+                cartCount.style.display = 'flex';
+            }
+            
+            // Success animation
+            this.innerHTML = '<i class="fas fa-check"></i><span>Ajouté au Panier !</span>';
+            this.classList.add('success');
+            
+            // Show notification
+            showNotification(data.message, 'success');
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.classList.remove('success');
+                this.disabled = false;
+            }, 3000);
+        } else {
+            showNotification(data.message, 'error');
+            this.innerHTML = originalText;
+            this.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Erreur lors de l\'ajout au panier', 'error');
+        this.innerHTML = originalText;
+        this.disabled = false;
+    });
+});
+
+// Quick add to cart from related products
+document.querySelectorAll('.quick-add').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const productId = this.dataset.productId;
+        
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                product_id: parseInt(productId),
+                quantity: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    cartCount.textContent = data.cart_count;
+                    cartCount.style.display = 'flex';
+                }
+                
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                showNotification(data.message, 'success');
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-shopping-bag"></i>';
+                }, 2000);
+            } else {
+                showNotification(data.message, 'error');
+                this.innerHTML = '<i class="fas fa-shopping-bag"></i>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Erreur lors de l\'ajout', 'error');
+            this.innerHTML = '<i class="fas fa-shopping-bag"></i>';
+        });
+    });
+});
+
+// Wishlist toggle (placeholder)
+function toggleWishlist(productId) {
+    const btn = document.querySelector('.btn-wishlist');
+    const icon = btn.querySelector('i');
+    
+    if (icon.classList.contains('far')) {
+        icon.classList.replace('far', 'fas');
+        btn.classList.add('active');
+        showNotification('Ajouté aux favoris !', 'success');
+    } else {
+        icon.classList.replace('fas', 'far');
+        btn.classList.remove('active');
+        showNotification('Retiré des favoris', 'info');
+    }
+}
+
+// Notification function
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
-    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} position-fixed`;
-    notification.style.cssText = 'top: 100px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.className = 'notification';
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 350px;
+        background: ${type === 'success' ? 'linear-gradient(135deg, #28a745, #20c997)' : 
+                     type === 'error' ? 'linear-gradient(135deg, #dc3545, #e74c3c)' :
+                     'linear-gradient(135deg, #17a2b8, #20c997)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    
     notification.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
-        ${message}
-        <button type="button" class="btn-close float-end" aria-label="Close"></button>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                              type === 'error' ? 'exclamation-circle' : 'info-circle'}" 
+               style="font-size: 1.2rem;"></i>
+            <span style="flex: 1;">${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" 
+                    style="background: none; border: none; color: white; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
     `;
     
     document.body.appendChild(notification);
     
-    // Auto hide after 4 seconds
+    setTimeout(() => notification.style.transform = 'translateX(0)', 100);
     setTimeout(() => {
-        notification.remove();
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 300);
     }, 4000);
-    
-    // Close button functionality
-    notification.querySelector('.btn-close').addEventListener('click', () => {
-        notification.remove();
-    });
 }
 </script>
 @endpush
