@@ -4,268 +4,33 @@
 @section('description', 'Découvrez notre collection de parfums d\'exception. Des créations uniques inspirées du savoir-faire français.')
 
 @push('styles')
+<link rel="stylesheet" href="{{ asset('css/home-improvements.css') }}">
 <style>
-    /* Variables CSS pour les couleurs Guerlain */
-    :root {
-        --guerlain-black: #000000;
-        --guerlain-white: #ffffff;
-        --guerlain-gold: #d4af37;
-        --guerlain-gold-dark: #b8941f;
-    }
+/* Classe spéciale pour la page d'accueil - désactive le scroll normal */
+body.home-page {
+    overflow-y: hidden;
+}
 
-    /* Style général pour la page */
-    body {
-        overflow-x: hidden;
-    }
+/* Amélioration : Transition smooth entre navbar et carrousel */
+.fullscreen-carousel {
+    animation: slideInFromTop 0.8s ease-out;
+}
 
-    /* Section hero plein écran - ajustée pour la navbar */
-    .hero-section {
-        height: calc(100vh - 120px); /* Hauteur ajustée pour la navbar */
-        width: 100vw;
-        background: var(--guerlain-black);
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        margin-top: 120px; /* Espace pour la navbar centrée */
-    }
-
-    @media (max-width: 991px) {
-        .hero-section {
-            height: calc(100vh - 80px);
-            margin-top: 80px;
-        }
-    }
-
-    /* Container principal du carousel */
-    .carousel-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-    }
-
-    /* Slide individual */
-    .carousel-slide {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+@keyframes slideInFromTop {
+    from {
         opacity: 0;
-        transition: opacity 1s ease-in-out;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 8rem;
+        transform: translateY(-20px);
     }
-
-    .carousel-slide.active {
+    to {
         opacity: 1;
+        transform: translateY(0);
     }
-
-    /* Zone de l'image produit */
-    .product-image-zone {
-        flex: 1;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
-
-    /* Styling de l'image produit */
-    .product-image {
-        max-height: 70vh;
-        max-width: 100%;
-        object-fit: contain;
-        filter: drop-shadow(0 20px 40px rgba(212, 175, 55, 0.3));
-        transition: transform 0.8s ease-in-out;
-    }
-
-    .product-image:hover {
-        transform: scale(1.05);
-    }
-
-    /* Zone de contenu texte */
-    .content-zone {
-        flex: 1;
-        padding: 0 0 0 4rem;
-        color: var(--guerlain-white);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        height: 100%;
-    }
-
-    /* Texte signature en haut */
-    .signature-text {
-        font-size: 0.875rem;
-        letter-spacing: 0.2em;
-        margin-bottom: 1.5rem;
-        color: var(--guerlain-gold);
-        text-transform: uppercase;
-        font-weight: 300;
-    }
-
-    /* Titre principal */
-    .product-title {
-        font-size: 3.5rem;
-        font-weight: 300;
-        line-height: 1.1;
-        margin-bottom: 1rem;
-        letter-spacing: 0.05em;
-        font-family: 'Playfair Display', serif;
-    }
-
-    /* Sous-titre */
-    .product-subtitle {
-        font-size: 1.125rem;
-        font-weight: 300;
-        letter-spacing: 0.1em;
-        margin-bottom: 3rem;
-        color: rgba(255, 255, 255, 0.8);
-        text-transform: uppercase;
-    }
-
-    /* Bouton Découvrir */
-    .discover-button {
-        background: transparent;
-        border: 2px solid var(--guerlain-white);
-        color: var(--guerlain-white);
-        padding: 1rem 2.5rem;
-        font-size: 0.875rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        font-weight: 400;
-    }
-
-    .discover-button:hover {
-        background: var(--guerlain-white);
-        color: var(--guerlain-black);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
-    }
-
-    /* Navigation points (carousel indicators) */
-    .carousel-nav {
-        position: absolute;
-        left: 3rem;
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        z-index: 10;
-    }
-
-    .nav-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        background: transparent;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .nav-dot.active {
-        background: var(--guerlain-white);
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-    }
-
-    .nav-dot:hover {
-        border-color: var(--guerlain-white);
-        transform: scale(1.2);
-    }
-
-    /* Effets de fond pour le luxe */
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: 
-            radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
-        pointer-events: none;
-    }
-
-    /* Animation de fade-in pour le contenu */
-    .fade-in {
-        opacity: 0;
-        transform: translateY(30px);
-        animation: fadeInUp 1s ease-out forwards;
-    }
-
-    .fade-in.delay-1 { animation-delay: 0.2s; }
-    .fade-in.delay-2 { animation-delay: 0.4s; }
-    .fade-in.delay-3 { animation-delay: 0.6s; }
-
-    @keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-        .carousel-slide {
-            flex-direction: column;
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        .product-image-zone {
-            flex: none;
-            height: 50%;
-        }
-        
-        .content-zone {
-            flex: none;
-            padding: 2rem 0 0 0;
-            align-items: center;
-        }
-        
-        .product-title {
-            font-size: 2.5rem;
-        }
-        
-        .carousel-nav {
-            left: 1rem;
-            bottom: 2rem;
-            top: auto;
-            transform: none;
-            flex-direction: row;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .product-title {
-            font-size: 2rem;
-        }
-        
-        .product-subtitle {
-            font-size: 1rem;
-        }
-        
-        .discover-button {
-            padding: 0.875rem 2rem;
-            font-size: 0.75rem;
-        }
-    }
+}
 </style>
 @endpush
 
 @section('content')
-<section class="hero-section">
+<div class="fullscreen-carousel" id="fullscreen-carousel">
     <!-- Navigation points -->
     <div class="carousel-nav">
         @foreach($featuredProducts as $index => $product)
@@ -273,67 +38,121 @@
              onclick="goToSlide({{ $index }})" 
              data-slide="{{ $index }}"></div>
         @endforeach
+        <!-- Point pour le footer -->
+        <div class="nav-dot" 
+             onclick="goToSlide({{ $featuredProducts->count() }})" 
+             data-slide="{{ $featuredProducts->count() }}"></div>
     </div>
 
-    <!-- Container du carousel -->
-    <div class="carousel-container">
-        @foreach($featuredProducts as $index => $product)
-        <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}" data-slide="{{ $index }}">
-            <!-- Zone image produit -->
-            <div class="product-image-zone">
-                <img src="{{ $product->main_image }}" 
-                     alt="{{ $product->name }}" 
-                     class="product-image">
-            </div>
+    <!-- Slides des produits -->
+    @foreach($featuredProducts as $index => $product)
+    <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}" data-slide="{{ $index }}">
+        <!-- Zone image produit -->
+        <div class="product-image-zone">
+            <img src="{{ $product->main_image }}" 
+                 alt="{{ $product->name }}" 
+                 class="product-image">
+        </div>
 
-            <!-- Zone contenu texte -->
-            <div class="content-zone">
-                <div class="signature-text fade-in">
-                    Parfum d'Exception
-                </div>
-                
-                <h1 class="product-title fade-in delay-1">
-                    {{ strtoupper($product->name) }}
-                </h1>
-                
-                <p class="product-subtitle fade-in delay-2">
-                    {{ $product->short_description ?? 'Une création unique' }}
-                </p>
-                
+        <!-- Zone contenu texte -->
+        <div class="content-zone">
+            <div class="signature-text fade-in">
+                Parfum d'Exception
+            </div>
+            
+            <h1 class="product-title fade-in delay-1">
+                {{ strtoupper($product->name) }}
+            </h1>
+            
+            <p class="product-subtitle fade-in delay-2">
+                {{ $product->short_description ?? 'Une création unique' }}
+            </p>
+            
+            <div class="buttons-container fade-in delay-3">
                 <a href="{{ route('product.show', $product->slug) }}" 
-                   class="discover-button fade-in delay-3">
+                   class="discover-button">
                     Découvrir
+                </a>
+                <a href="{{ route('cart') }}" 
+                   class="order-button">
+                    Commander maintenant
                 </a>
             </div>
         </div>
-        @endforeach
     </div>
-</section>
-
-<!-- Section suivante (optionnelle) -->
-<section class="bg-white py-20">
-    <div class="container mx-auto px-6">
-        <div class="text-center">
-            <h2 class="text-4xl font-light text-gray-900 mb-6">Notre Savoir-Faire</h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                Depuis des générations, nous perpétuons l'art de la parfumerie française. 
-                Chaque création Heritage Parfums est une œuvre d'art olfactive, 
-                née de la passion et du respect des traditions ancestrales.
-            </p>
+    @endforeach
+    <!-- Footer comme slide final -->
+    <div class="carousel-slide footer-slide" data-slide="{{ $featuredProducts->count() }}">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div>
+                    <h5>Heritage Parfums</h5>
+                    <p>Depuis 1925, nous créons des parfums d'exception qui capturent l'essence de l'élégance française et l'art de la parfumerie traditionnelle.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h5>Navigation</h5>
+                    <ul class="footer-links">
+                        <li><a href="/">Accueil</a></li>
+                        <li><a href="{{ route('heritage') }}">Heritage Parfums</a></li>
+                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                        <li><a href="{{ route('expedition') }}">Expédition</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5>Services</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Livraison Express</a></li>
+                        <li><a href="#">Retours Gratuits</a></li>
+                        <li><a href="#">Support Client</a></li>
+                        <li><a href="#">Personnalisation</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5>Newsletter</h5>
+                    <p>Restez informé de nos actualités exclusives</p>
+                    <form class="d-flex flex-column">
+                        <input type="email" class="form-control mb-2" placeholder="Votre email" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;">
+                        <button type="submit" class="discover-button">S'inscrire</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Heritage Parfums. Tous droits réservés.</p>
+            </div>
         </div>
     </div>
-</section>
-@endsection
 
+    <!-- Indicateur de scroll -->
+    <div class="scroll-indicator" id="scroll-indicator">
+        <span>Scroll</span>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</div>
+@endsection
 @push('scripts')
 <script>
 let currentSlide = 0;
 const slides = document.querySelectorAll('.carousel-slide');
 const dots = document.querySelectorAll('.nav-dot');
 const totalSlides = slides.length;
+const scrollIndicator = document.getElementById('scroll-indicator');
+let isScrolling = false;
 
 // Fonction pour aller à un slide spécifique
 function goToSlide(slideIndex) {
+    if (slideIndex < 0) slideIndex = 0;
+    if (slideIndex >= totalSlides) slideIndex = totalSlides - 1;
+    
     // Retirer la classe active de tous les slides et dots
     slides.forEach(slide => slide.classList.remove('active'));
     dots.forEach(dot => dot.classList.remove('active'));
@@ -343,44 +162,140 @@ function goToSlide(slideIndex) {
     dots[slideIndex].classList.add('active');
     
     currentSlide = slideIndex;
-}
-
-// Auto-rotation du carousel (optionnel)
-function autoRotate() {
-    const nextSlide = (currentSlide + 1) % totalSlides;
-    goToSlide(nextSlide);
-}
-
-// Démarrer l'auto-rotation (toutes les 8 secondes)
-setInterval(autoRotate, 8000);
-
-// Navigation au clavier
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowLeft') {
-        const prevSlide = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1;
-        goToSlide(prevSlide);
-    } else if (e.key === 'ArrowRight') {
-        const nextSlide = (currentSlide + 1) % totalSlides;
-        goToSlide(nextSlide);
+    
+    // Masquer l'indicateur de scroll au dernier slide (footer)
+    if (slideIndex === totalSlides - 1) {
+        scrollIndicator.style.opacity = '0';
+    } else {
+        scrollIndicator.style.opacity = '1';
     }
-});
+}
 
-// Animation des éléments au chargement
+// Gestion du scroll pour navigation entre slides
+function handleScroll(e) {
+    if (isScrolling) return;
+    
+    isScrolling = true;
+    
+    // Détecter la direction du scroll
+    const delta = e.deltaY || e.detail || e.wheelDelta;
+    
+    if (delta > 0) {
+        // Scroll vers le bas - slide suivant
+        if (currentSlide < totalSlides - 1) {
+            goToSlide(currentSlide + 1);
+        }
+    } else {
+        // Scroll vers le haut - slide précédent
+        if (currentSlide > 0) {
+            goToSlide(currentSlide - 1);
+        }
+    }
+    
+    // Débounce pour éviter les scrolls trop rapides
+    setTimeout(() => {
+        isScrolling = false;
+    }, 800);
+}
+// Navigation au clavier
+function handleKeyboard(e) {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        if (currentSlide > 0) {
+            goToSlide(currentSlide - 1);
+        }
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        if (currentSlide < totalSlides - 1) {
+            goToSlide(currentSlide + 1);
+        }
+    }
+}
+
+// Gestion du scroll tactile (mobile)
+let touchStartY = 0;
+let touchEndY = 0;
+
+function handleTouchStart(e) {
+    touchStartY = e.changedTouches[0].screenY;
+}
+
+function handleTouchEnd(e) {
+    if (isScrolling) return;
+    
+    touchEndY = e.changedTouches[0].screenY;
+    const difference = touchStartY - touchEndY;
+    
+    if (Math.abs(difference) > 50) { // Seuil minimum pour déclencher le changement
+        isScrolling = true;
+        
+        if (difference > 0) {
+            // Swipe vers le haut - slide suivant
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        } else {
+            // Swipe vers le bas - slide précédent
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+        
+        setTimeout(() => {
+            isScrolling = false;
+        }, 800);
+    }
+}
+
+// Initialisation
 document.addEventListener('DOMContentLoaded', function() {
+    // Ajouter la classe spéciale au body pour la page d'accueil
+    document.body.classList.add('home-page');
+    
+    // Event listeners pour le scroll
+    document.addEventListener('wheel', handleScroll, { passive: false });
+    document.addEventListener('DOMMouseScroll', handleScroll, { passive: false }); // Firefox
+    
+    // Event listeners pour le clavier
+    document.addEventListener('keydown', handleKeyboard);
+    
+    // Event listeners pour le tactile
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    
+    // Amélioration : Rendre l'indicateur de scroll cliquable
+    const scrollIndicator = document.getElementById('scroll-indicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', function() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        });
+    }
+    
+    // Animation des éléments au chargement
     const fadeElements = document.querySelectorAll('.fade-in');
     fadeElements.forEach(element => {
         element.style.opacity = '0';
         element.style.transform = 'translateY(30px)';
     });
     
-    // Déclencher les animations
+    // Déclencher les animations avec un délai plus court
     setTimeout(() => {
         fadeElements.forEach(element => {
-            element.style.transition = 'all 1s ease-out';
+            element.style.transition = 'all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             element.style.opacity = '1';
             element.style.transform = 'translateY(0)';
         });
-    }, 100);
+    }, 200); // Réduit de 100ms à 200ms pour un effet plus fluide
+    
+    // Initialiser le premier slide
+    goToSlide(0);
+    
+    // Amélioration : Préchargement des images pour une navigation plus fluide
+    const images = document.querySelectorAll('.product-image');
+    images.forEach(img => {
+        const newImg = new Image();
+        newImg.src = img.src;
+    });
 });
 </script>
 @endpush

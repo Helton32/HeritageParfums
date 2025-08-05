@@ -33,9 +33,13 @@ Route::get('/', function () {
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 // Pages statiques
-Route::get('/about', function () {
-    return view('pages.about');
-})->name('about');
+Route::get('/heritage', function () {
+    return view('pages.heritage');
+})->name('heritage');
+
+Route::get('/expedition', function () {
+    return view('pages.expedition');
+})->name('expedition');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -144,3 +148,5 @@ Route::get('/products/{any}', function () {
 Route::get('/search', function () {
     return redirect('/')->with('info', 'Découvrez Éternelle Rose, notre parfum signature unique.');
 });
+
+
