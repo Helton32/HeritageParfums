@@ -94,6 +94,8 @@ class AdminProductController extends Controller
             'eau_de_toilette' => 'Eau de Toilette',
             'parfum' => 'Parfum',
             'eau_fraiche' => 'Eau Fraîche',
+            'eau_de_cologne' => 'Eau de Cologne',
+            'extrait_de_parfum' => 'Extrait de Parfum',
         ];
 
         $cosmetiqueTypes = [
@@ -103,6 +105,8 @@ class AdminProductController extends Controller
             'gel' => 'Gel',
             'baume' => 'Baume',
             'huile' => 'Huile',
+            'masque' => 'Masque',
+            'savon' => 'Savon',
         ];
 
         return view('admin.products.create', compact(
@@ -126,6 +130,10 @@ class AdminProductController extends Controller
                 'description' => 'required|string|min:10',
                 'short_description' => 'required|string|max:500|min:5',
                 'price' => 'required|numeric|min:0.01',
+                'promotion_price' => 'nullable|numeric|min:0.01|lt:price',
+                'promotion_start_date' => 'nullable|date',
+                'promotion_end_date' => 'nullable|date|after_or_equal:promotion_start_date',
+                'promotion_description' => 'nullable|string|max:500',
                 'product_type' => 'required|string|in:parfum,cosmetique',
                 'category' => 'required|string',
                 'type' => 'required|string',
@@ -174,6 +182,7 @@ class AdminProductController extends Controller
             // Gérer les checkboxes - importantes pour l'affichage sur l'accueil !
             $validated['is_active'] = $request->has('is_active') ? true : false;
             $validated['is_featured'] = $request->has('is_featured') ? true : false;
+            $validated['is_on_promotion'] = $request->has('is_on_promotion') ? true : false;
             
             // Traiter les notes olfactives structurées
             $structuredNotes = [];
@@ -300,6 +309,9 @@ class AdminProductController extends Controller
             'eau_de_toilette' => 'Eau de Toilette',
             'parfum' => 'Parfum',
             'eau_fraiche' => 'Eau Fraîche',
+            'eau_de_cologne' => 'Eau de Cologne',
+            'extrait_de_parfum' => 'Extrait de Parfum',
+
         ];
 
         $cosmetiqueTypes = [
@@ -309,6 +321,9 @@ class AdminProductController extends Controller
             'gel' => 'Gel',
             'baume' => 'Baume',
             'huile' => 'Huile',
+            'masque' => 'Masque',
+            'savon' => 'Savon',
+
         ];
 
         return view('admin.products.edit', compact(
@@ -333,6 +348,10 @@ class AdminProductController extends Controller
                 'description' => 'required|string|min:10',
                 'short_description' => 'required|string|max:500|min:5',
                 'price' => 'required|numeric|min:0.01',
+                'promotion_price' => 'nullable|numeric|min:0.01|lt:price',
+                'promotion_start_date' => 'nullable|date',
+                'promotion_end_date' => 'nullable|date|after_or_equal:promotion_start_date',
+                'promotion_description' => 'nullable|string|max:500',
                 'product_type' => 'required|string|in:parfum,cosmetique',
                 'category' => 'required|string',
                 'type' => 'required|string',
@@ -377,6 +396,7 @@ class AdminProductController extends Controller
             // Gérer les checkboxes correctement
             $validated['is_active'] = $request->has('is_active') ? true : false;
             $validated['is_featured'] = $request->has('is_featured') ? true : false;
+            $validated['is_on_promotion'] = $request->has('is_on_promotion') ? true : false;
             
             // Traiter les notes olfactives structurées
             $structuredNotes = [];

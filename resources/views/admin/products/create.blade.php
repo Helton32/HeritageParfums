@@ -351,6 +351,64 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+
+    /* Styles pour les promotions */
+    .promotion-preview {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border: 2px solid #ffc107;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .promotion-preview h6 {
+        color: #856404;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .price-display {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .original-price {
+        font-size: 1.2rem;
+        color: #dc3545;
+        text-decoration: line-through;
+        font-weight: 300;
+    }
+
+    .promotion-price {
+        font-size: 1.8rem;
+        color: #28a745;
+        font-weight: 700;
+    }
+
+    .discount-badge {
+        background: #dc3545;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .promotion-text {
+        font-style: italic;
+        color: #856404;
+        margin-top: 0.5rem;
+    }
+
+    #promotion-fields {
+        border-left: 4px solid #ffc107;
+        padding-left: 1rem;
+        margin-top: 1rem;
+    }
 </style>
 @endpush
 
@@ -531,6 +589,92 @@
                             @error('badge')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promotions -->
+                <div class="form-section">
+                    <h3 class="section-title">🎯 Promotions et Prix Spécial</h3>
+                    <p class="text-muted mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Configurez une promotion avec prix barré pour attirer les clients
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="is_on_promotion" 
+                                       name="is_on_promotion" {{ old('is_on_promotion') ? 'checked' : '' }}
+                                       onchange="togglePromotionFields()">
+                                <label class="form-check-label" for="is_on_promotion">
+                                    <strong>🏷️ Activer la promotion</strong>
+                                    <br><small>Si coché, affichera le prix original barré et le prix promotion</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="promotion-fields" style="display: {{ old('is_on_promotion') ? 'block' : 'none' }};">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="promotion_price" class="form-label">💰 Prix en Promotion (€)</label>
+                                <input type="number" step="0.01" min="0" 
+                                       class="form-control @error('promotion_price') is-invalid @enderror" 
+                                       id="promotion_price" name="promotion_price" value="{{ old('promotion_price') }}"
+                                       placeholder="Prix réduit">
+                                @error('promotion_price')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Doit être inférieur au prix normal</small>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="promotion_start_date" class="form-label">📅 Date de Début</label>
+                                <input type="date" 
+                                       class="form-control @error('promotion_start_date') is-invalid @enderror" 
+                                       id="promotion_start_date" name="promotion_start_date" 
+                                       value="{{ old('promotion_start_date') }}">
+                                @error('promotion_start_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Optionnel - laissez vide pour démarrer immédiatement</small>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="promotion_end_date" class="form-label">📅 Date de Fin</label>
+                                <input type="date" 
+                                       class="form-control @error('promotion_end_date') is-invalid @enderror" 
+                                       id="promotion_end_date" name="promotion_end_date" 
+                                       value="{{ old('promotion_end_date') }}">
+                                @error('promotion_end_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Optionnel - laissez vide pour une promotion permanente</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="promotion_description" class="form-label">📝 Description de la Promotion</label>
+                                <textarea class="form-control @error('promotion_description') is-invalid @enderror" 
+                                          id="promotion_description" name="promotion_description" rows="2" 
+                                          placeholder="ex: Offre spéciale Saint-Valentin, Liquidation de stock, etc.">{{ old('promotion_description') }}</textarea>
+                                @error('promotion_description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Aperçu de la promotion -->
+                        <div class="promotion-preview" id="promotion-preview" style="display: none;">
+                            <h6><i class="fas fa-eye me-2"></i>Aperçu de l'affichage</h6>
+                            <div class="price-display">
+                                <span class="original-price" id="preview-original">0,00 €</span>
+                                <span class="promotion-price" id="preview-promotion">0,00 €</span>
+                                <span class="discount-badge" id="preview-discount">-0%</span>
+                            </div>
+                            <div class="promotion-text" id="preview-description"></div>
                         </div>
                     </div>
                 </div>
@@ -1118,5 +1262,62 @@ function removeImage(button) {
         button.closest('.image-input').remove();
     }
 }
+
+// Fonctions pour les promotions
+function togglePromotionFields() {
+    const isOnPromotion = document.getElementById('is_on_promotion').checked;
+    const promotionFields = document.getElementById('promotion-fields');
+    
+    if (isOnPromotion) {
+        promotionFields.style.display = 'block';
+        updatePromotionPreview();
+    } else {
+        promotionFields.style.display = 'none';
+        document.getElementById('promotion-preview').style.display = 'none';
+    }
+}
+
+function updatePromotionPreview() {
+    const price = parseFloat(document.getElementById('price').value) || 0;
+    const promotionPrice = parseFloat(document.getElementById('promotion_price').value) || 0;
+    const promotionDescription = document.getElementById('promotion_description').value;
+    const isOnPromotion = document.getElementById('is_on_promotion').checked;
+    
+    const preview = document.getElementById('promotion-preview');
+    const originalPreview = document.getElementById('preview-original');
+    const promotionPreview = document.getElementById('preview-promotion');
+    const discountPreview = document.getElementById('preview-discount');
+    const descriptionPreview = document.getElementById('preview-description');
+    
+    if (isOnPromotion && price > 0 && promotionPrice > 0 && promotionPrice < price) {
+        preview.style.display = 'block';
+        
+        // Mettre à jour les prix
+        originalPreview.textContent = price.toFixed(2) + ' €';
+        promotionPreview.textContent = promotionPrice.toFixed(2) + ' €';
+        
+        // Calculer le pourcentage de réduction
+        const discountPercent = Math.round(((price - promotionPrice) / price) * 100);
+        discountPreview.textContent = '-' + discountPercent + '%';
+        
+        // Afficher la description
+        descriptionPreview.textContent = promotionDescription || '';
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+// Ajouter des event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Event listeners existants...
+    
+    // Event listeners pour les promotions
+    document.getElementById('price').addEventListener('input', updatePromotionPreview);
+    document.getElementById('promotion_price').addEventListener('input', updatePromotionPreview);
+    document.getElementById('promotion_description').addEventListener('input', updatePromotionPreview);
+    
+    // Initialiser l'état des champs de promotion
+    togglePromotionFields();
+});
 </script>
 @endsection

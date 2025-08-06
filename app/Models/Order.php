@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Events\OrderPaid;
+use App\Events\OrderShipped;
 
 class Order extends Model
 {
@@ -131,6 +133,9 @@ class Order extends Model
         $this->payment_status = 'paid';
         $this->status = 'processing';
         $this->save();
+        
+        // Déclencher l'événement pour l'envoi de l'email de confirmation
+        event(new OrderPaid($this));
     }
 
     public function markAsShipped()
@@ -138,6 +143,9 @@ class Order extends Model
         $this->status = 'shipped';
         $this->shipped_at = now();
         $this->save();
+        
+        // Déclencher l'événement pour l'envoi de l'email d'expédition
+        event(new OrderShipped($this));
     }
 
     public function markAsDelivered()
@@ -217,6 +225,29 @@ class Order extends Model
     public function hasTrackingNumber()
     {
         return !empty($this->tracking_number);
+    }
+
+
+    /**
+     * Méthode spécifique pour Hostinger
+     * Force l'envoi direct des emails si les queues ne fonctionnent pas
+     */
+    public function markAsShippedHostinger()
+    {
+        $this->status = 'shipped';
+        $this->shipped_at = now();
+        $this->save();
+        
+        // Sur Hostinger, envoyer directement l'email
+        try {
+            \Mail::to($this->customer_email)
+                ->send(new \App\Mail\OrderShipped($this));
+        } catch (\Exception $e) {
+            \Log::error('Erreur envoi email expédition: ' . $e->getMessage());
+        }
+        
+        // Déclencher aussi l'événement normal
+        event(new \App\Events\OrderShipped($this));
     }
 
     public function getCarrierNameAttribute()

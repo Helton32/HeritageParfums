@@ -16,6 +16,11 @@ class Product extends Model
         'description',
         'short_description',
         'price',
+        'is_on_promotion',
+        'promotion_price',
+        'promotion_start_date',
+        'promotion_end_date',
+        'promotion_description',
         'category',
         'product_type',
         'type',
@@ -30,8 +35,12 @@ class Product extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
+        'promotion_price' => 'decimal:2',
+        'promotion_start_date' => 'date',
+        'promotion_end_date' => 'date',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
+        'is_on_promotion' => 'boolean',
     ];
 
     // Mutators pour s'assurer que les arrays contiennent bien des strings
@@ -188,5 +197,58 @@ class Product extends Model
     public function incrementStock($quantity = 1)
     {
         $this->increment('stock', $quantity);
+    }
+
+    // Méthodes pour les promotions
+    public function isOnValidPromotion()
+    {
+        if (!$this->is_on_promotion || !$this->promotion_price) {
+            return false;
+        }
+
+        $now = now()->toDateString();
+        
+        // Vérifier les dates si elles sont définies
+        if ($this->promotion_start_date && $now < $this->promotion_start_date->toDateString()) {
+            return false;
+        }
+        
+        if ($this->promotion_end_date && $now > $this->promotion_end_date->toDateString()) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    public function getCurrentPrice()
+    {
+        return $this->isOnValidPromotion() ? $this->promotion_price : $this->price;
+    }
+
+    public function getDiscountPercentage()
+    {
+        if (!$this->isOnValidPromotion()) {
+            return 0;
+        }
+        
+        return round((($this->price - $this->promotion_price) / $this->price) * 100);
+    }
+
+    public function getFormattedCurrentPriceAttribute()
+    {
+        return number_format($this->getCurrentPrice(), 2) . ' €';
+    }
+
+    public function getFormattedPromotionPriceAttribute()
+    {
+        if (!$this->promotion_price) {
+            return null;
+        }
+        return number_format($this->promotion_price, 2) . ' €';
+    }
+
+    public function hasValidPromotion()
+    {
+        return $this->isOnValidPromotion();
     }
 }

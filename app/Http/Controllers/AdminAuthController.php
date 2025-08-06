@@ -15,7 +15,7 @@ class AdminAuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
-            return redirect()->route('admin.shipping.index');
+            return redirect()->route('admin.dashboard');
         }
 
         return view('admin.auth.login');
@@ -42,7 +42,7 @@ class AdminAuthController extends Controller
         if ($user && Hash::check($password, $user->password)) {
             Auth::login($user, $request->has('remember'));
             
-            return redirect()->intended(route('admin.shipping.index'))
+            return redirect()->intended(route('admin.dashboard'))
                            ->with('success', 'Connexion réussie ! Bienvenue dans l\'administration.');
         }
 
