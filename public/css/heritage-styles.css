@@ -173,7 +173,7 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--guerlain-white);
     border-bottom: 1px solid var(--guerlain-border);
     transition: all 0.5s ease;
-    padding: 50px 0 12px 0; /* Réduit le padding */
+    padding: 50px 0 15px 0; /* Réduit le padding */
     box-shadow: none;
     position: relative;
 }
@@ -996,4 +996,653 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.5rem 1rem;
     border-radius: 15px;
     backdrop-filter: blur(5px);
+}
+
+/* ==============================================
+   MEGA MENUS STYLES
+   ============================================== */
+
+.mega-dropdown {
+    position: static;
+}
+
+.mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--guerlain-white);
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    padding: 3rem 0;
+    margin-top: 0;
+    transform: translateY(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.mega-dropdown:hover .mega-menu,
+.mega-dropdown.show .mega-menu {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.mega-menu-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--guerlain-black);
+    margin-bottom: 1.5rem;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mega-menu-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: var(--guerlain-gold);
+}
+
+.mega-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mega-menu-list li {
+    margin-bottom: 1rem;
+}
+
+.mega-menu-list li:last-child {
+    margin-bottom: 0;
+}
+
+.mega-menu-list a {
+    color: var(--guerlain-text-gray);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+    display: block;
+    padding: 0.3rem 0;
+    position: relative;
+}
+
+.mega-menu-list a:hover {
+    color: var(--guerlain-gold);
+    padding-left: 1rem;
+}
+
+.mega-menu-list a:hover::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--guerlain-gold);
+    font-weight: 600;
+}
+
+.mega-menu-list .view-all a {
+    color: var(--guerlain-gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    margin-top: 1rem;
+    border-top: 1px solid var(--guerlain-border);
+    padding-top: 1rem;
+}
+
+.mega-menu-cta {
+    background: var(--guerlain-light-gray);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid var(--guerlain-border);
+}
+
+.mega-menu-cta .btn {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.8rem 1.5rem;
+}
+
+.mega-menu-cta p {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.btn-outline-gold {
+    border: 2px solid var(--guerlain-gold);
+    color: var(--guerlain-gold);
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-gold:hover {
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    border-color: var(--guerlain-gold);
+}
+
+/* Navigation enhancements */
+.navbar {
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--guerlain-border);
+}
+
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+}
+
+.navbar-nav .nav-link {
+    color: var(--guerlain-black);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--guerlain-gold);
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--guerlain-gold);
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 80%;
+}
+
+/* Responsive mega menu */
+@media (max-width: 991.98px) {
+    .mega-menu {
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        box-shadow: none;
+        padding: 1rem;
+        background: var(--guerlain-light-gray);
+        margin-top: 1rem;
+    }
+    
+    .mega-menu-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .mega-menu-cta {
+        margin-top: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.8rem 1rem;
+    }
+    
+    .navbar-nav .nav-link::after {
+        display: none;
+    }
+}
+
+/* Animation améliorée pour les dropdowns */
+.dropdown-menu {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover effect pour toute la zone mega-menu */
+.mega-dropdown::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -50px;
+    right: -50px;
+    height: 20px;
+    background: transparent;
+    z-index: 999;
+}
+
+
+/* ==============================================
+   ENHANCED MEGA MENUS WITH REAL PRODUCTS
+   ============================================== */
+
+/* Featured section styling */
+.featured-section {
+    background: var(--guerlain-light-gray);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--guerlain-border);
+}
+
+.featured-product {
+    text-align: center;
+}
+
+.featured-image {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.featured-product:hover .featured-image img {
+    transform: scale(1.05);
+}
+
+.featured-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--guerlain-black);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+}
+
+.featured-brand {
+    font-size: 0.85rem;
+    color: var(--guerlain-text-gray);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.featured-price {
+    color: var(--guerlain-gold);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.btn-discover-mini {
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-discover-mini:hover {
+    background: var(--guerlain-dark-gold);
+    color: var(--guerlain-white);
+    transform: translateY(-1px);
+}
+
+/* Enhanced product links in mega menu */
+.mega-menu-list a {
+    color: var(--guerlain-text-gray);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+    display: block;
+    padding: 0.5rem 0;
+    position: relative;
+    border-bottom: 1px solid transparent;
+}
+
+.mega-menu-list a:hover {
+    color: var(--guerlain-gold);
+    padding-left: 1rem;
+    border-bottom-color: rgba(212, 175, 55, 0.2);
+}
+
+.mega-menu-list a:hover::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--guerlain-gold);
+    font-weight: 600;
+}
+
+.mega-menu-list a small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--guerlain-text-gray);
+    font-style: italic;
+    margin-top: 0.2rem;
+}
+
+/* Product badges in mega menu */
+.mega-menu-list .product-badge {
+    background: var(--guerlain-gold);
+    color: var(--guerlain-white);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* View all links styling */
+.mega-menu-list .view-all {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--guerlain-border);
+}
+
+.mega-menu-list .view-all a {
+    color: var(--guerlain-gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    padding: 0.5rem 0;
+}
+
+.mega-menu-list .view-all a:hover {
+    color: var(--guerlain-dark-gold);
+    padding-left: 1rem;
+}
+
+/* Enhanced navbar brand spacing */
+.navbar-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--guerlain-black);
+    text-decoration: none;
+    letter-spacing: 1px;
+    margin: 0 3rem; /* Plus d'espacement */
+}
+
+.navbar-brand:hover {
+    color: var(--guerlain-gold);
+}
+
+/* Mega menu responsive enhancements */
+@media (max-width: 991.98px) {
+    .featured-section {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .featured-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .featured-name {
+        font-size: 1rem;
+    }
+    
+    .mega-menu-list a {
+        padding: 0.4rem 0;
+        font-size: 0.9rem;
+    }
+    
+    .mega-menu-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.8rem;
+        margin: 0 1rem;
+    }
+}
+
+/* Loading states for dynamic content */
+.mega-menu-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    color: var(--guerlain-text-gray);
+}
+
+.mega-menu-loading::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--guerlain-border);
+    border-top: 2px solid var(--guerlain-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty state for categories without products */
+.mega-menu-empty {
+    color: var(--guerlain-text-gray);
+    font-style: italic;
+    font-size: 0.9rem;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* Enhanced hover effects for the entire mega menu */
+.mega-dropdown:hover .mega-menu {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==============================================
+   MEGA MENU ENHANCEMENTS WITH MINI NOTES
+   ============================================== */
+
+/* Amélioration des liens produits dans les mega menus */
+.mega-menu-list a {
+    color: var(--guerlain-text-gray);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+    display: block;
+    padding: 0.8rem 0;
+    position: relative;
+    border-bottom: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.mega-menu-list a:hover {
+    color: var(--guerlain-gold);
+    padding-left: 1rem;
+    border-bottom-color: rgba(212, 175, 55, 0.2);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.mega-menu-list a:hover::before {
+    content: '→';
+    position: absolute;
+    left: 0.3rem;
+    color: var(--guerlain-gold);
+    font-weight: 600;
+}
+
+/* Styles pour les informations produit dans le mega menu */
+.mega-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.mega-product-name {
+    font-weight: 500;
+    color: inherit;
+}
+
+.mega-product-brand {
+    font-size: 0.75rem;
+    color: var(--guerlain-text-gray);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* Adaptation des mini-notes pour les mega menus */
+.mega-menu-list .mini-olfactory-preview {
+    margin-top: 0.3rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.mega-menu-list a:hover .mini-olfactory-preview {
+    opacity: 1;
+}
+
+.mega-menu-list .mini-note {
+    width: 18px;
+    height: 18px;
+}
+
+.mega-menu-list .mini-note-image {
+    width: 14px;
+    height: 14px;
+}
+
+.mega-menu-list .more-notes {
+    font-size: 0.6rem;
+}
+
+/* Responsive pour les mega menus */
+@media (max-width: 991.98px) {
+    .mega-menu-list .mini-olfactory-preview {
+        display: none;
+    }
+    
+    .mega-product-info {
+        gap: 0.2rem;
+    }
+}
+
+/* Animation d'apparition pour les mini-notes */
+.mini-olfactory-preview {
+    animation: fadeInScale 0.4s ease;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Tooltip amélioré pour les mini-notes */
+.mini-note {
+    position: relative;
+    cursor: pointer;
+}
+
+.mini-note::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+.mini-note:hover::after {
+    opacity: 1;
+}
+
+/* Indicateur de catégorie pour les notes dans les mega menus */
+.mega-menu-list .mini-category::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 15px;
+    border-radius: 2px;
+}
+
+.mega-menu-list .mini-category[data-category="head"]::before {
+    background: #2196F3;
+}
+
+.mega-menu-list .mini-category[data-category="heart"]::before {
+    background: #E91E63;
+}
+
+.mega-menu-list .mini-category[data-category="base"]::before {
+    background: #FF9800;
 }

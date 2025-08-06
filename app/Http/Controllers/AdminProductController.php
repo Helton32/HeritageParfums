@@ -26,6 +26,10 @@ class AdminProductController extends Controller
             });
         }
 
+        if ($request->filled('product_type')) {
+            $query->where('product_type', $request->product_type);
+        }
+
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
@@ -54,7 +58,16 @@ class AdminProductController extends Controller
             'out_of_stock' => Product::where('stock', '<=', 0)->count(),
         ];
 
-        $categories = Product::distinct('category')->pluck('category', 'category');
+        $categories = [
+            // Parfums
+            'niche' => 'Parfums de Niche',
+            'exclusifs' => 'Collections Exclusives', 
+            'nouveautes' => 'Nouveautés',
+            // Cosmétiques
+            'soins_visage' => 'Soins du Visage',
+            'soins_corps' => 'Soins du Corps',
+            'nouveautes_cosmetiques' => 'Nouveautés Cosmétiques',
+        ];
 
         return view('admin.products.index', compact('products', 'stats', 'categories'));
     }
@@ -64,21 +77,40 @@ class AdminProductController extends Controller
      */
     public function create()
     {
-        $categories = [
-            'femme' => 'Parfums Femme',
-            'homme' => 'Parfums Homme',
+        $parfumCategories = [
+            'niche' => 'Parfums de Niche',
             'exclusifs' => 'Collections Exclusives',
             'nouveautes' => 'Nouveautés',
         ];
 
-        $types = [
+        $cosmetiqueCategories = [
+            'soins_visage' => 'Soins du Visage',
+            'soins_corps' => 'Soins du Corps',
+            'nouveautes_cosmetiques' => 'Nouveautés Cosmétiques',
+        ];
+
+        $parfumTypes = [
             'eau_de_parfum' => 'Eau de Parfum',
             'eau_de_toilette' => 'Eau de Toilette',
             'parfum' => 'Parfum',
             'eau_fraiche' => 'Eau Fraîche',
         ];
 
-        return view('admin.products.create', compact('categories', 'types'));
+        $cosmetiqueTypes = [
+            'creme' => 'Crème',
+            'serum' => 'Sérum',
+            'lotion' => 'Lotion',
+            'gel' => 'Gel',
+            'baume' => 'Baume',
+            'huile' => 'Huile',
+        ];
+
+        return view('admin.products.create', compact(
+            'parfumCategories', 
+            'cosmetiqueCategories', 
+            'parfumTypes', 
+            'cosmetiqueTypes'
+        ));
     }
 
     /**
@@ -90,34 +122,42 @@ class AdminProductController extends Controller
             // Validation des données avec messages personnalisés
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
+                'brand' => 'nullable|string|max:255',
                 'description' => 'required|string|min:10',
-                'short_description' => 'nullable|string|max:500',
+                'short_description' => 'required|string|max:500|min:5',
                 'price' => 'required|numeric|min:0.01',
-                'category' => 'required|string|in:femme,homme,exclusifs,nouveautes',
-                'type' => 'required|string|in:eau_de_parfum,eau_de_toilette,parfum,eau_fraiche',
+                'product_type' => 'required|string|in:parfum,cosmetique',
+                'category' => 'required|string',
+                'type' => 'required|string',
                 'size' => 'required|string|max:50',
                 'stock' => 'required|integer|min:0',
                 'badge' => 'nullable|string|max:50',
                 'notes' => 'nullable|array',
                 'notes.*' => 'string|max:100',
-                'images' => 'nullable|array',
+                'images' => 'required|array|min:1',
                 'images.*' => 'url|max:500',
             ], [
                 'name.required' => 'Le nom du produit est obligatoire.',
                 'name.max' => 'Le nom du produit ne peut pas dépasser 255 caractères.',
+                'brand.max' => 'La marque ne peut pas dépasser 255 caractères.',
                 'description.required' => 'La description complète est obligatoire.',
                 'description.min' => 'La description doit contenir au moins 10 caractères.',
+                'short_description.required' => 'La description courte est obligatoire pour l\'affichage dans le carrousel.',
+                'short_description.min' => 'La description courte doit contenir au moins 5 caractères.',
+                'short_description.max' => 'La description courte ne peut pas dépasser 500 caractères.',
                 'price.required' => 'Le prix est obligatoire.',
                 'price.numeric' => 'Le prix doit être un nombre.',
                 'price.min' => 'Le prix doit être supérieur à 0.',
+                'product_type.required' => 'Le type de produit est obligatoire.',
+                'product_type.in' => 'Le type de produit sélectionné n\'est pas valide.',
                 'category.required' => 'La catégorie est obligatoire.',
-                'category.in' => 'La catégorie sélectionnée n\'est pas valide.',
                 'type.required' => 'Le type est obligatoire.',
-                'type.in' => 'Le type sélectionné n\'est pas valide.',
                 'size.required' => 'La taille est obligatoire.',
                 'stock.required' => 'Le stock est obligatoire.',
                 'stock.integer' => 'Le stock doit être un nombre entier.',
                 'stock.min' => 'Le stock ne peut pas être négatif.',
+                'images.required' => 'Au moins une image est obligatoire.',
+                'images.min' => 'Au moins une image est obligatoire pour l\'affichage dans le carrousel.',
                 'images.*.url' => 'Chaque image doit être une URL valide.',
                 'notes.*.max' => 'Chaque note ne peut pas dépasser 100 caractères.',
             ]);
@@ -135,11 +175,36 @@ class AdminProductController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false;
             $validated['is_featured'] = $request->has('is_featured') ? true : false;
             
-            // Nettoyer les tableaux notes et images
-            $validated['notes'] = array_filter($request->input('notes', []), function($note) {
+            // Traiter les notes olfactives structurées
+            $structuredNotes = [];
+            
+            // Notes de tête
+            $headNotes = array_filter($request->input('head_notes', []), function($note) {
                 return !empty(trim($note));
             });
+            if (!empty($headNotes)) {
+                $structuredNotes['head'] = array_values($headNotes);
+            }
             
+            // Notes de cœur
+            $heartNotes = array_filter($request->input('heart_notes', []), function($note) {
+                return !empty(trim($note));
+            });
+            if (!empty($heartNotes)) {
+                $structuredNotes['heart'] = array_values($heartNotes);
+            }
+            
+            // Notes de fond
+            $baseNotes = array_filter($request->input('base_notes', []), function($note) {
+                return !empty(trim($note));
+            });
+            if (!empty($baseNotes)) {
+                $structuredNotes['base'] = array_values($baseNotes);
+            }
+            
+            $validated['notes'] = !empty($structuredNotes) ? $structuredNotes : null;
+            
+            // Nettoyer le tableau images
             $validated['images'] = array_filter($request->input('images', []), function($image) {
                 return !empty(trim($image)) && filter_var($image, FILTER_VALIDATE_URL);
             });
@@ -218,21 +283,41 @@ class AdminProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = [
-            'femme' => 'Parfums Femme',
-            'homme' => 'Parfums Homme',
+        $parfumCategories = [
+            'niche' => 'Parfums de Niche',
             'exclusifs' => 'Collections Exclusives',
             'nouveautes' => 'Nouveautés',
         ];
 
-        $types = [
+        $cosmetiqueCategories = [
+            'soins_visage' => 'Soins du Visage',
+            'soins_corps' => 'Soins du Corps',
+            'nouveautes_cosmetiques' => 'Nouveautés Cosmétiques',
+        ];
+
+        $parfumTypes = [
             'eau_de_parfum' => 'Eau de Parfum',
             'eau_de_toilette' => 'Eau de Toilette',
             'parfum' => 'Parfum',
             'eau_fraiche' => 'Eau Fraîche',
         ];
 
-        return view('admin.products.edit', compact('product', 'categories', 'types'));
+        $cosmetiqueTypes = [
+            'creme' => 'Crème',
+            'serum' => 'Sérum',
+            'lotion' => 'Lotion',
+            'gel' => 'Gel',
+            'baume' => 'Baume',
+            'huile' => 'Huile',
+        ];
+
+        return view('admin.products.edit', compact(
+            'product',
+            'parfumCategories', 
+            'cosmetiqueCategories', 
+            'parfumTypes', 
+            'cosmetiqueTypes'
+        ));
     }
 
     /**
@@ -244,28 +329,36 @@ class AdminProductController extends Controller
             // Validation des données avec messages personnalisés (SANS les checkboxes boolean)
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
+                'brand' => 'nullable|string|max:255',
                 'description' => 'required|string|min:10',
-                'short_description' => 'nullable|string|max:500',
+                'short_description' => 'required|string|max:500|min:5',
                 'price' => 'required|numeric|min:0.01',
-                'category' => 'required|string|in:femme,homme,exclusifs,nouveautes',
-                'type' => 'required|string|in:eau_de_parfum,eau_de_toilette,parfum,eau_fraiche',
+                'product_type' => 'required|string|in:parfum,cosmetique',
+                'category' => 'required|string',
+                'type' => 'required|string',
                 'size' => 'required|string|max:50',
                 'stock' => 'required|integer|min:0',
                 'badge' => 'nullable|string|max:50',
                 'notes' => 'nullable|array',
                 'notes.*' => 'string|max:100',
-                'images' => 'nullable|array',
+                'images' => 'required|array|min:1',
                 'images.*' => 'url|max:500',
             ], [
                 'name.required' => 'Le nom du produit est obligatoire.',
+                'brand.max' => 'La marque ne peut pas dépasser 255 caractères.',
                 'description.required' => 'La description complète est obligatoire.',
                 'description.min' => 'La description doit contenir au moins 10 caractères.',
+                'short_description.required' => 'La description courte est obligatoire pour l\'affichage dans le carrousel.',
+                'short_description.min' => 'La description courte doit contenir au moins 5 caractères.',
                 'price.required' => 'Le prix est obligatoire.',
                 'price.min' => 'Le prix doit être supérieur à 0.',
+                'product_type.required' => 'Le type de produit est obligatoire.',
                 'category.required' => 'La catégorie est obligatoire.',
                 'type.required' => 'Le type est obligatoire.',
                 'size.required' => 'La taille est obligatoire.',
                 'stock.required' => 'Le stock est obligatoire.',
+                'images.required' => 'Au moins une image est obligatoire.',
+                'images.min' => 'Au moins une image est obligatoire pour l\'affichage dans le carrousel.',
             ]);
 
             // Regénérer le slug si le nom a changé
@@ -285,11 +378,36 @@ class AdminProductController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false;
             $validated['is_featured'] = $request->has('is_featured') ? true : false;
             
-            // Nettoyer les tableaux notes et images
-            $validated['notes'] = array_filter($request->input('notes', []), function($note) {
+            // Traiter les notes olfactives structurées
+            $structuredNotes = [];
+            
+            // Notes de tête
+            $headNotes = array_filter($request->input('head_notes', []), function($note) {
                 return !empty(trim($note));
             });
+            if (!empty($headNotes)) {
+                $structuredNotes['head'] = array_values($headNotes);
+            }
             
+            // Notes de cœur
+            $heartNotes = array_filter($request->input('heart_notes', []), function($note) {
+                return !empty(trim($note));
+            });
+            if (!empty($heartNotes)) {
+                $structuredNotes['heart'] = array_values($heartNotes);
+            }
+            
+            // Notes de fond
+            $baseNotes = array_filter($request->input('base_notes', []), function($note) {
+                return !empty(trim($note));
+            });
+            if (!empty($baseNotes)) {
+                $structuredNotes['base'] = array_values($baseNotes);
+            }
+            
+            $validated['notes'] = !empty($structuredNotes) ? $structuredNotes : null;
+            
+            // Nettoyer le tableau images
             $validated['images'] = array_filter($request->input('images', []), function($image) {
                 return !empty(trim($image)) && filter_var($image, FILTER_VALIDATE_URL);
             });

@@ -102,7 +102,7 @@ body.home-page {
     font-size: 1rem; /* Augmenté */
     font-weight: 600;
     color: var(--soft-gray);
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 2px; /* Restauré */
     margin-bottom: 1rem;
 }

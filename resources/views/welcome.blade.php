@@ -48,7 +48,7 @@ body.home-page {
 
     <!-- Slides des produits -->
     @foreach($allActiveProducts as $index => $product)
-    <div class="carousel-slide active">
+    <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}">
        <div class="carousel-content-wrapper">
     <!-- Image à gauche -->
     <div class="product-image-zone">
@@ -64,7 +64,7 @@ body.home-page {
         </div>
 
         <h1 class="product-title fade-in delay-1">
-            {{ strtoupper($product->name) }}
+            {{ mb_strtoupper($product->name, 'UTF-8') }}
         </h1>
 
         <p class="product-subtitle fade-in delay-2">
@@ -93,7 +93,7 @@ body.home-page {
         <div class="footer-content">
             <div class="footer-grid">
                 <div>
-                    <h5>Heritage Parfums</h5>
+                    <h5>Heritage</h5>
                     <p>Depuis 1925, nous créons des parfums d'exception qui capturent l'essence de l'élégance française et l'art de la parfumerie traditionnelle.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-instagram"></i></a>
@@ -109,7 +109,6 @@ body.home-page {
                         <li><a href="/">Accueil</a></li>
                         <li><a href="{{ route('heritage') }}">Heritage Parfums</a></li>
                         <li><a href="{{ route('contact') }}">Contact</a></li>
-                        <li><a href="{{ route('expedition') }}">Expédition</a></li>
                     </ul>
                 </div>
                 

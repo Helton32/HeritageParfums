@@ -11,11 +11,13 @@ class Product extends Model
 
     protected $fillable = [
         'name',
+        'brand',
         'slug',
         'description',
         'short_description',
         'price',
         'category',
+        'product_type',
         'type',
         'size',
         'images',
@@ -101,12 +103,19 @@ class Product extends Model
 
     public function getCategoryLabelAttribute()
     {
-        $labels = [
-            'femme' => 'Parfums Femme',
-            'homme' => 'Parfums Homme',
-            'exclusifs' => 'Collections Exclusives',
-            'nouveautes' => 'Nouveautés',
-        ];
+        if ($this->product_type === 'parfum') {
+            $labels = [
+                'niche' => 'Parfums de Niche',
+                'exclusifs' => 'Collections Exclusives',
+                'nouveautes' => 'Nouveautés',
+            ];
+        } else {
+            $labels = [
+                'soins_visage' => 'Soins du Visage',
+                'soins_corps' => 'Soins du Corps',
+                'nouveautes_cosmetiques' => 'Nouveautés Cosmétiques',
+            ];
+        }
 
         return $labels[$this->category] ?? $this->category;
     }
@@ -130,6 +139,21 @@ class Product extends Model
     public function scopeInStock($query)
     {
         return $query->where('stock', '>', 0);
+    }
+
+    public function scopeParfums($query)
+    {
+        return $query->where('product_type', 'parfum');
+    }
+
+    public function scopeCosmetiques($query)
+    {
+        return $query->where('product_type', 'cosmetique');
+    }
+
+    public function scopeByProductType($query, $productType)
+    {
+        return $query->where('product_type', $productType);
     }
 
     // Methods

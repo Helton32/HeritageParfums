@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="@yield('description', 'Heritage Parfums - Maison de parfums de luxe depuis 1925. Découvrez nos collections exclusives de parfums pour homme et femme.')">
@@ -27,8 +28,8 @@
     <!-- Navigation Élégante Style Guerlain -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <!-- Logo/Titre centré -->
-            <a class="navbar-brand" href="/">
+            <!-- Logo/Titre centré avec plus d'espacement -->
+            <a class="navbar-brand mx-5" href="/">
                 Heritage Parfums
             </a>
             
@@ -47,47 +48,202 @@
                         <div class="dropdown-menu mega-menu">
                             <div class="container">
                                 <div class="row">
-                                    <!-- Section À la une (optionnelle) -->
-                                    @if(isset($featuredProducts) && $featuredProducts->isNotEmpty())
+                                    <!-- Section À la une (produit en vedette) -->
+                                    @if(isset($navbarFeaturedProduct) && $navbarFeaturedProduct)
                                     <div class="col-lg-3 featured-section">
                                         <h6 class="mega-menu-title">À la Une</h6>
-                                        @php $featured = $featuredProducts->first(); @endphp
                                         <div class="featured-product">
                                             <div class="featured-image">
-                                                <img src="{{ $featured->main_image }}" alt="{{ $featured->name }}" class="img-fluid">
+                                                <img src="{{ $navbarFeaturedProduct->main_image }}" alt="{{ $navbarFeaturedProduct->name }}" class="img-fluid">
                                             </div>
-                                            <h6 class="featured-name">{{ $featured->name }}</h6>
-                                            <p class="featured-price">{{ $featured->formatted_price }}</p>
-                                            <a href="{{ route('product.show', $featured->slug) }}" class="btn-discover-mini">Découvrir</a>
+                                            <h6 class="featured-name">{{ $navbarFeaturedProduct->name }}</h6>
+                                            @if($navbarFeaturedProduct->brand)
+                                                <p class="featured-brand">{{ $navbarFeaturedProduct->brand }}</p>
+                                            @endif
+                                            <p class="featured-price">{{ $navbarFeaturedProduct->formatted_price }}</p>
+                                            <a href="{{ route('product.show', $navbarFeaturedProduct->slug) }}" class="btn-discover-mini">Découvrir</a>
                                         </div>
                                     </div>
                                     @endif
                                     
-                                    <!-- Colonnes par catégorie -->
-                                    @if(isset($categories) && isset($productsByCategory))
-                                        @foreach($categories as $categoryKey => $categoryLabel)
-                                        <div class="col-lg-{{ isset($featuredProducts) && $featuredProducts->isNotEmpty() ? '2' : '3' }}">
-                                            <h6 class="mega-menu-title">{{ $categoryLabel }}</h6>
-                                            <ul class="mega-menu-list">
-                                                @if(isset($productsByCategory[$categoryKey]))
-                                                    @foreach($productsByCategory[$categoryKey] as $product)
-                                                    <li>
-                                                        <a href="{{ route('product.show', $product->slug) }}">
-                                                            {{ $product->name }}
-                                                            @if($product->badge)
+                                    <!-- Parfums de Niche -->
+                                    <div class="col-lg-{{ isset($navbarFeaturedProduct) && $navbarFeaturedProduct ? '3' : '4' }}">
+                                        <h6 class="mega-menu-title">Parfums de Niche</h6>
+                                        <ul class="mega-menu-list">
+                                            @if(isset($navbarParfums['niche']))
+                                                @foreach($navbarParfums['niche'] as $product)
+                                                <li>
+                                                    <a href="{{ route('product.show', $product->slug) }}">
+                                                        {{ $product->name }}
+                                                        @if($product->brand)
+                                                            <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->badge)
                                                             <span class="product-badge">{{ $product->badge }}</span>
-                                                            @endif
-                                                        </a>
-                                                    </li>
-                                                    @endforeach
-                                                @endif
-                                                <li class="view-all">
-                                                    <a href="/?category={{ $categoryKey }}">Voir tous les {{ strtolower($categoryLabel) }}</a>
+                                                        @endif
+                                                    </a>
                                                 </li>
-                                            </ul>
+                                                @endforeach
+                                            @endif
+                                            <li class="view-all">
+                                                <a href="{{ route('catalogue', ['product_type' => 'parfum', 'category' => 'niche']) }}">Voir tous les parfums de niche</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Collections Exclusives -->
+                                    <div class="col-lg-{{ isset($navbarFeaturedProduct) && $navbarFeaturedProduct ? '3' : '4' }}">
+                                        <h6 class="mega-menu-title">Collections Exclusives</h6>
+                                        <ul class="mega-menu-list">
+                                            @if(isset($navbarParfums['exclusifs']))
+                                                @foreach($navbarParfums['exclusifs'] as $product)
+                                                <li>
+                                                    <a href="{{ route('product.show', $product->slug) }}">
+                                                        {{ $product->name }}
+                                                        @if($product->brand)
+                                                            <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->badge)
+                                                            <span class="product-badge">{{ $product->badge }}</span>
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            @endif
+                                            <li class="view-all">
+                                                <a href="{{ route('catalogue', ['product_type' => 'parfum', 'category' => 'exclusifs']) }}">Voir toutes les collections exclusives</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Nouveautés -->
+                                    <div class="col-lg-{{ isset($navbarFeaturedProduct) && $navbarFeaturedProduct ? '3' : '4' }}">
+                                        <h6 class="mega-menu-title">Nouveautés</h6>
+                                        <ul class="mega-menu-list">
+                                            @if(isset($navbarParfums['nouveautes']))
+                                                @foreach($navbarParfums['nouveautes'] as $product)
+                                                <li>
+                                                    <a href="{{ route('product.show', $product->slug) }}">
+                                                        {{ $product->name }}
+                                                        @if($product->brand)
+                                                            <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->badge)
+                                                            <span class="product-badge">{{ $product->badge }}</span>
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            @endif
+                                            <li class="view-all">
+                                                <a href="{{ route('catalogue', ['product_type' => 'parfum', 'category' => 'nouveautes']) }}">Voir toutes les nouveautés</a>
+                                            </li>
+                                        </ul>
+                                        
+                                        <!-- Call to action pour voir tout -->
+                                        @if(!isset($navbarFeaturedProduct) || !$navbarFeaturedProduct)
+                                        <div class="mega-menu-cta mt-4">
+                                            <a href="{{ route('catalogue', ['product_type' => 'parfum']) }}" class="btn btn-outline-gold btn-sm w-100">
+                                                Voir tous les parfums
+                                            </a>
                                         </div>
-                                        @endforeach
-                                    @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Les Cosmétiques avec Mega-Menu -->
+                    <li class="nav-item dropdown mega-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Les Cosmétiques
+                        </a>
+                        <div class="dropdown-menu mega-menu">
+                            <div class="container">
+                                <div class="row">
+                                    <!-- Soins du Visage -->
+                                    <div class="col-lg-4">
+                                        <h6 class="mega-menu-title">Soins du Visage</h6>
+                                        <ul class="mega-menu-list">
+                                            @if(isset($navbarCosmetiques['soins_visage']))
+                                                @foreach($navbarCosmetiques['soins_visage'] as $product)
+                                                <li>
+                                                    <a href="{{ route('product.show', $product->slug) }}">
+                                                        {{ $product->name }}
+                                                        @if($product->brand)
+                                                            <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->badge)
+                                                            <span class="product-badge">{{ $product->badge }}</span>
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            @endif
+                                            <li class="view-all">
+                                                <a href="{{ route('catalogue', ['product_type' => 'cosmetique', 'category' => 'soins_visage']) }}">Voir tous les soins du visage</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Soins du Corps -->
+                                    <div class="col-lg-4">
+                                        <h6 class="mega-menu-title">Soins du Corps</h6>
+                                        <ul class="mega-menu-list">
+                                            @if(isset($navbarCosmetiques['soins_corps']))
+                                                @foreach($navbarCosmetiques['soins_corps'] as $product)
+                                                <li>
+                                                    <a href="{{ route('product.show', $product->slug) }}">
+                                                        {{ $product->name }}
+                                                        @if($product->brand)
+                                                            <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->badge)
+                                                            <span class="product-badge">{{ $product->badge }}</span>
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            @endif
+                                            <li class="view-all">
+                                                <a href="{{ route('catalogue', ['product_type' => 'cosmetique', 'category' => 'soins_corps']) }}">Voir tous les soins du corps</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Nouveautés + Call to Action -->
+                                    <div class="col-lg-4">
+                                        <h6 class="mega-menu-title">Nouveautés</h6>
+                                        <ul class="mega-menu-list">
+                                            @if(isset($navbarCosmetiques['nouveautes_cosmetiques']))
+                                                @foreach($navbarCosmetiques['nouveautes_cosmetiques'] as $product)
+                                                <li>
+                                                    <a href="{{ route('product.show', $product->slug) }}">
+                                                        {{ $product->name }}
+                                                        @if($product->brand)
+                                                            <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->badge)
+                                                            <span class="product-badge">{{ $product->badge }}</span>
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            @endif
+                                            <li class="view-all">
+                                                <a href="{{ route('catalogue', ['product_type' => 'cosmetique', 'category' => 'nouveautes_cosmetiques']) }}">Voir toutes les nouveautés</a>
+                                            </li>
+                                        </ul>
+                                        
+                                        <!-- Call to action -->
+                                        <div class="mega-menu-cta mt-4">
+                                            <a href="{{ route('catalogue', ['product_type' => 'cosmetique']) }}" class="btn btn-outline-gold btn-sm w-100">
+                                                Voir tous les cosmétiques
+                                            </a>
+                                            <p class="text-muted small mt-2">Explorez notre gamme de soins de luxe</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -102,10 +258,7 @@
                         <a class="nav-link" href="{{ route('contact') }}">Contact</a>
                     </li>
                     
-                    <!-- Expédition -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('expedition') }}">Expédition</a>
-                    </li>
+                
                 </ul>
             </div>
             

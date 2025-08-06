@@ -105,4 +105,62 @@ class ProductController extends Controller
         return view('search.index', compact('products', 'query'));
     }
 
+    public function catalogue(Request $request)
+    {
+        $query = Product::active();
+
+        // Filter by product type if provided
+        if ($request->has('product_type') && $request->product_type) {
+            $query->where('product_type', $request->product_type);
+        }
+
+        // Filter by category if provided
+        if ($request->has('category') && $request->category) {
+            $query->where('category', $request->category);
+        }
+
+        // Search functionality
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('description', 'LIKE', "%{$search}%")
+                  ->orWhere('short_description', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Sort functionality
+        $sortBy = $request->get('sort', 'name');
+        switch ($sortBy) {
+            case 'price-asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price-desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                $query->orderBy('name', 'asc');
+        }
+
+        $products = $query->paginate(12);
+
+        // Categories for filters
+        $parfumCategories = [
+            'niche' => 'Parfums de Niche',
+            'exclusifs' => 'Collections Exclusives',
+            'nouveautes' => 'Nouveautés',
+        ];
+
+        $cosmetiqueCategories = [
+            'soins_visage' => 'Soins du Visage',
+            'soins_corps' => 'Soins du Corps',
+            'nouveautes_cosmetiques' => 'Nouveautés Cosmétiques',
+        ];
+
+        return view('products.catalogue', compact('products', 'parfumCategories', 'cosmetiqueCategories'));
+    }
+
 }

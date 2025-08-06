@@ -207,46 +207,7 @@
                 
                 <!-- Notes Tab -->
                 <div class="tab-pane" id="notes">
-                    @if($product->notes)
-                        <div class="fragrance-pyramid">
-                            <div class="pyramid-visual">
-                                <div class="pyramid-layer top">
-                                    <h4>Notes de Tête</h4>
-                                    <div class="notes-list">
-                                        @if(isset($product->notes['head']))
-                                            @foreach($product->notes['head'] as $note)
-                                            <span class="note-tag">{{ $note }}</span>
-                                            @endforeach
-                                        @endif
-                                    </div>
-                                </div>
-                                
-                                <div class="pyramid-layer middle">
-                                    <h4>Notes de Cœur</h4>
-                                    <div class="notes-list">
-                                        @if(isset($product->notes['heart']))
-                                            @foreach($product->notes['heart'] as $note)
-                                            <span class="note-tag heart">{{ $note }}</span>
-                                            @endforeach
-                                        @endif
-                                    </div>
-                                </div>
-                                
-                                <div class="pyramid-layer bottom">
-                                    <h4>Notes de Fond</h4>
-                                    <div class="notes-list">
-                                        @if(isset($product->notes['base']))
-                                            @foreach($product->notes['base'] as $note)
-                                            <span class="note-tag base">{{ $note }}</span>
-                                            @endforeach
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <p class="text-muted">Informations sur les notes olfactives non disponibles.</p>
-                    @endif
+                    @include('components.olfactory-notes', ['product' => $product])
                 </div>                
                 <!-- Details Tab -->
                 <div class="tab-pane" id="details">

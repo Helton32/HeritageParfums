@@ -284,6 +284,18 @@
                                value="{{ request('search') }}" placeholder="Nom, description...">
                     </div>
                     <div class="col-md-2 mb-3">
+                        <label for="product_type" class="form-label">Type de Produit</label>
+                        <select class="form-select" id="product_type" name="product_type">
+                            <option value="">Tous</option>
+                            <option value="parfum" {{ request('product_type') === 'parfum' ? 'selected' : '' }}>
+                                Parfums
+                            </option>
+                            <option value="cosmetique" {{ request('product_type') === 'cosmetique' ? 'selected' : '' }}>
+                                Cosmétiques
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3">
                         <label for="category" class="form-label">Catégorie</label>
                         <select class="form-select" id="category" name="category">
                             <option value="">Toutes</option>
@@ -302,13 +314,13 @@
                             <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactifs</option>
                         </select>
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-1 mb-3">
                         <label for="sort" class="form-label">Trier par</label>
                         <select class="form-select" id="sort" name="sort">
-                            <option value="created_at" {{ request('sort') === 'created_at' ? 'selected' : '' }}>Date création</option>
+                            <option value="created_at" {{ request('sort') === 'created_at' ? 'selected' : '' }}>Date</option>
                             <option value="name" {{ request('sort') === 'name' ? 'selected' : '' }}>Nom</option>
                             <option value="price" {{ request('sort') === 'price' ? 'selected' : '' }}>Prix</option>
-                            <option value="stock" {{ request('sort') === 'stock' ? 'selected' : '' }}>Stock</option>
+                            <option value="stock" {{ request('stock') === 'stock' ? 'selected' : '' }}>Stock</option>
                         </select>
                     </div>
                     <div class="col-md-1 mb-3">
@@ -318,9 +330,9 @@
                             <option value="asc" {{ request('order') === 'asc' ? 'selected' : '' }}>↑</option>
                         </select>
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-1 mb-3">
                         <button type="submit" class="btn btn-guerlain w-100">
-                            <i class="fas fa-search me-2"></i>Filtrer
+                            <i class="fas fa-search"></i>
                         </button>
                     </div>
                 </div>
@@ -334,6 +346,7 @@
                     <tr>
                         <th style="width: 80px;">Image</th>
                         <th>Produit</th>
+                        <th>Type</th>
                         <th>Catégorie</th>
                         <th>Prix</th>
                         <th>Stock</th>
@@ -361,6 +374,17 @@
                                 <small class="text-muted">{{ $product->type }} - {{ $product->size }}</small>
                                 @if($product->badge)
                                     <br><span class="badge bg-info mt-1">{{ $product->badge }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(($product->product_type ?? 'parfum') === 'parfum')
+                                    <span class="badge bg-primary">
+                                        <i class="fas fa-spray-can me-1"></i>Parfum
+                                    </span>
+                                @else
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-magic me-1"></i>Cosmétique
+                                    </span>
                                 @endif
                             </td>
                             <td>

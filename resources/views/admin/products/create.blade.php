@@ -160,6 +160,108 @@
         margin-top: 1rem;
     }
 
+    .notes-category {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        border: 1px solid var(--guerlain-border);
+    }
+
+    .notes-category-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--guerlain-black);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .notes-category-title small {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 300;
+        font-style: italic;
+        margin-left: 0.5rem;
+    }
+
+    .pyramid-preview {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-top: 2rem;
+        border: 2px solid var(--guerlain-border);
+    }
+
+    .pyramid-preview h6 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: var(--guerlain-black);
+    }
+
+    .preview-pyramid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .preview-layer {
+        background: white;
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    .preview-layer.head-preview {
+        border-left: 4px solid #2196F3;
+    }
+
+    .preview-layer.heart-preview {
+        border-left: 4px solid #E91E63;
+    }
+
+    .preview-layer.base-preview {
+        border-left: 4px solid #FF9800;
+    }
+
+    .layer-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--guerlain-black);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .layer-notes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .preview-note {
+        background: var(--guerlain-gold);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .no-notes {
+        color: var(--guerlain-text-gray);
+        font-style: italic;
+        font-size: 0.85rem;
+    }
+
     .note-input, .image-input {
         margin-bottom: 1rem;
     }
@@ -321,7 +423,7 @@
                     <h3 class="section-title">Informations de Base</h3>
                     
                     <div class="row">
-                        <div class="col-md-8 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="name" class="form-label required">Nom du Produit</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
                                    id="name" name="name" value="{{ old('name') }}" required>
@@ -329,6 +431,16 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             <div class="invalid-feedback" id="name-error">Veuillez remplir ce champ</div>
+                        </div>
+                        
+                        <div class="col-md-2 mb-3">
+                            <label for="brand" class="form-label">Marque</label>
+                            <input type="text" class="form-control @error('brand') is-invalid @enderror" 
+                                   id="brand" name="brand" value="{{ old('brand') }}" 
+                                   placeholder="ex: Guerlain, Dior">
+                            @error('brand')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         
                         <div class="col-md-4 mb-3">
@@ -345,15 +457,29 @@
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
+                            <label for="product_type" class="form-label required">Type de Produit</label>
+                            <select class="form-select @error('product_type') is-invalid @enderror" 
+                                    id="product_type" name="product_type" required onchange="updateCategoriesAndTypes()">
+                                <option value="">Sélectionner le type de produit</option>
+                                <option value="parfum" {{ old('product_type') === 'parfum' ? 'selected' : '' }}>
+                                    Parfum
+                                </option>
+                                <option value="cosmetique" {{ old('product_type') === 'cosmetique' ? 'selected' : '' }}>
+                                    Cosmétique
+                                </option>
+                            </select>
+                            @error('product_type')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <div class="invalid-feedback" id="product_type-error">Veuillez sélectionner un type de produit</div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
                             <label for="category" class="form-label required">Catégorie</label>
                             <select class="form-select @error('category') is-invalid @enderror" 
                                     id="category" name="category" required>
                                 <option value="">Sélectionner une catégorie</option>
-                                @foreach($categories as $key => $label)
-                                    <option value="{{ $key }}" {{ old('category') === $key ? 'selected' : '' }}>
-                                        {{ $label }}
-                                    </option>
-                                @endforeach
+                                <!-- Options dynamiques -->
                             </select>
                             @error('category')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -366,31 +492,26 @@
                             <select class="form-select @error('type') is-invalid @enderror" 
                                     id="type" name="type" required>
                                 <option value="">Sélectionner un type</option>
-                                @foreach($types as $key => $label)
-                                    <option value="{{ $key }}" {{ old('type') === $key ? 'selected' : '' }}>
-                                        {{ $label }}
-                                    </option>
-                                @endforeach
+                                <!-- Options dynamiques -->
                             </select>
                             @error('type')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             <div class="invalid-feedback" id="type-error">Veuillez sélectionner un type</div>
                         </div>
-                        
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="size" class="form-label required">Taille</label>
                             <input type="text" class="form-control @error('size') is-invalid @enderror" 
                                    id="size" name="size" value="{{ old('size') }}" 
-                                   placeholder="ex: 50ml, 100ml" required>
+                                   placeholder="ex: 50ml, 100ml, 30g" required>
                             @error('size')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             <div class="invalid-feedback" id="size-error">Veuillez remplir ce champ</div>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="stock" class="form-label required">Stock</label>
                             <input type="number" min="0" 
@@ -419,13 +540,14 @@
                     <h3 class="section-title">Descriptions</h3>
                     
                     <div class="mb-3">
-                        <label for="short_description" class="form-label">Description Courte</label>
+                        <label for="short_description" class="form-label required">Description Courte</label>
                         <textarea class="form-control @error('short_description') is-invalid @enderror" 
                                   id="short_description" name="short_description" rows="3" 
-                                  placeholder="Description courte pour les listes de produits">{{ old('short_description') }}</textarea>
+                                  placeholder="Description courte qui s'affichera sur la page d'accueil" required>{{ old('short_description') }}</textarea>
                         @error('short_description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="invalid-feedback" id="short_description-error">Cette description s'affiche dans le carrousel</div>
                     </div>
                     
                     <div class="mb-3">
@@ -443,42 +565,155 @@
                 <!-- Notes olfactives -->
                 <div class="form-section">
                     <h3 class="section-title">Notes Olfactives</h3>
+                    <p class="text-muted mb-4">Organisez les notes par catégories pour créer une pyramide olfactive complète</p>
                     
-                    <div class="notes-container">
-                        <div id="notes-list">
-                            @if(old('notes'))
-                                @foreach(old('notes') as $index => $note)
+                    <!-- Notes de Tête -->
+                    <div class="notes-category mb-4">
+                        <h5 class="notes-category-title">
+                            <i class="fas fa-cloud text-primary"></i>
+                            Notes de Tête
+                            <small class="text-muted">(Première impression, légères et volatiles)</small>
+                        </h5>
+                        <div class="notes-container">
+                            <div id="head-notes-list">
+                                @if(old('head_notes'))
+                                    @foreach(old('head_notes') as $index => $note)
+                                        <div class="note-input">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="head_notes[]" 
+                                                       value="{{ htmlspecialchars($note, ENT_QUOTES, 'UTF-8') }}" 
+                                                       placeholder="ex: Bergamote, Citron, Menthe">
+                                                <button type="button" class="btn remove-btn" onclick="removeNote(this)">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
                                     <div class="note-input">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" name="notes[]" 
-                                                   value="{{ htmlspecialchars($note, ENT_QUOTES, 'UTF-8') }}" placeholder="ex: Rose, Jasmin, Bois de santal">
+                                            <input type="text" class="form-control" name="head_notes[]" 
+                                                   placeholder="ex: Bergamote, Citron, Menthe">
                                             <button type="button" class="btn remove-btn" onclick="removeNote(this)">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
                                     </div>
-                                @endforeach
-                            @else
-                                <div class="note-input">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="notes[]" 
-                                               placeholder="ex: Rose, Jasmin, Bois de santal">
-                                        <button type="button" class="btn remove-btn" onclick="removeNote(this)">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
+                            <button type="button" class="btn add-btn" onclick="addNote('head')">
+                                <i class="fas fa-plus me-2"></i>Ajouter une note de tête
+                            </button>
                         </div>
-                        <button type="button" class="btn add-btn" onclick="addNote()">
-                            <i class="fas fa-plus me-2"></i>Ajouter une note
-                        </button>
+                    </div>
+
+                    <!-- Notes de Cœur -->
+                    <div class="notes-category mb-4">
+                        <h5 class="notes-category-title">
+                            <i class="fas fa-heart text-danger"></i>
+                            Notes de Cœur
+                            <small class="text-muted">(Personnalité du parfum, florales ou fruitées)</small>
+                        </h5>
+                        <div class="notes-container">
+                            <div id="heart-notes-list">
+                                @if(old('heart_notes'))
+                                    @foreach(old('heart_notes') as $index => $note)
+                                        <div class="note-input">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="heart_notes[]" 
+                                                       value="{{ htmlspecialchars($note, ENT_QUOTES, 'UTF-8') }}" 
+                                                       placeholder="ex: Rose, Jasmin, Pivoine">
+                                                <button type="button" class="btn remove-btn" onclick="removeNote(this)">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="note-input">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="heart_notes[]" 
+                                                   placeholder="ex: Rose, Jasmin, Pivoine">
+                                            <button type="button" class="btn remove-btn" onclick="removeNote(this)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <button type="button" class="btn add-btn" onclick="addNote('heart')">
+                                <i class="fas fa-plus me-2"></i>Ajouter une note de cœur
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Notes de Fond -->
+                    <div class="notes-category mb-4">
+                        <h5 class="notes-category-title">
+                            <i class="fas fa-tree text-warning"></i>
+                            Notes de Fond
+                            <small class="text-muted">(Sillage persistant, boisées ou orientales)</small>
+                        </h5>
+                        <div class="notes-container">
+                            <div id="base-notes-list">
+                                @if(old('base_notes'))
+                                    @foreach(old('base_notes') as $index => $note)
+                                        <div class="note-input">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="base_notes[]" 
+                                                       value="{{ htmlspecialchars($note, ENT_QUOTES, 'UTF-8') }}" 
+                                                       placeholder="ex: Bois de Santal, Musc, Vanille">
+                                                <button type="button" class="btn remove-btn" onclick="removeNote(this)">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="note-input">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="base_notes[]" 
+                                                   placeholder="ex: Bois de Santal, Musc, Vanille">
+                                            <button type="button" class="btn remove-btn" onclick="removeNote(this)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <button type="button" class="btn add-btn" onclick="addNote('base')">
+                                <i class="fas fa-plus me-2"></i>Ajouter une note de fond
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Aperçu de la pyramide -->
+                    <div class="pyramid-preview">
+                        <h6>Aperçu de la Pyramide Olfactive</h6>
+                        <div class="preview-pyramid">
+                            <div class="preview-layer head-preview">
+                                <span class="layer-title">Tête</span>
+                                <div class="layer-notes" id="head-preview"></div>
+                            </div>
+                            <div class="preview-layer heart-preview">
+                                <span class="layer-title">Cœur</span>
+                                <div class="layer-notes" id="heart-preview"></div>
+                            </div>
+                            <div class="preview-layer base-preview">
+                                <span class="layer-title">Fond</span>
+                                <div class="layer-notes" id="base-preview"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Images -->
                 <div class="form-section">
                     <h3 class="section-title">Images</h3>
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Au moins une image est obligatoire</strong> pour l'affichage dans le carrousel de la page d'accueil
+                    </p>
                     
                     <div class="images-container">
                         <div id="images-list">
@@ -487,7 +722,8 @@
                                     <div class="image-input">
                                         <div class="input-group">
                                             <input type="url" class="form-control" name="images[]" 
-                                                   value="{{ htmlspecialchars($image, ENT_QUOTES, 'UTF-8') }}" placeholder="https://example.com/image.jpg">
+                                                   value="{{ htmlspecialchars($image, ENT_QUOTES, 'UTF-8') }}" 
+                                                   placeholder="https://example.com/image.jpg" required>
                                             <button type="button" class="btn remove-btn" onclick="removeImage(this)">
                                                 <i class="fas fa-times"></i>
                                             </button>
@@ -498,7 +734,7 @@
                                 <div class="image-input">
                                     <div class="input-group">
                                         <input type="url" class="form-control" name="images[]" 
-                                               placeholder="https://example.com/image.jpg">
+                                               placeholder="https://example.com/image.jpg" required>
                                         <button type="button" class="btn remove-btn" onclick="removeImage(this)">
                                             <i class="fas fa-times"></i>
                                         </button>
@@ -509,6 +745,9 @@
                         <button type="button" class="btn add-btn" onclick="addImage()">
                             <i class="fas fa-plus me-2"></i>Ajouter une image
                         </button>
+                        <div class="invalid-feedback" id="images-error" style="display: none;">
+                            Au moins une image valide est requise pour l'affichage
+                        </div>
                     </div>
                 </div>
 
@@ -559,20 +798,89 @@
 // Variables globales
 let isSubmitting = false;
 
+// Données des catégories et types
+const parfumCategories = {!! json_encode($parfumCategories) !!};
+const cosmetiqueCategories = {!! json_encode($cosmetiqueCategories) !!};
+const parfumTypes = {!! json_encode($parfumTypes) !!};
+const cosmetiqueTypes = {!! json_encode($cosmetiqueTypes) !!};
+
+// Fonction pour mettre à jour les catégories et types
+function updateCategoriesAndTypes() {
+    const productType = document.getElementById('product_type').value;
+    const categorySelect = document.getElementById('category');
+    const typeSelect = document.getElementById('type');
+    
+    // Réinitialiser les selects
+    categorySelect.innerHTML = '<option value="">Sélectionner une catégorie</option>';
+    typeSelect.innerHTML = '<option value="">Sélectionner un type</option>';
+    
+    if (productType === 'parfum') {
+        // Ajouter les catégories de parfum
+        Object.entries(parfumCategories).forEach(([key, label]) => {
+            const option = new Option(label, key);
+            categorySelect.add(option);
+        });
+        
+        // Ajouter les types de parfum
+        Object.entries(parfumTypes).forEach(([key, label]) => {
+            const option = new Option(label, key);
+            typeSelect.add(option);
+        });
+        
+        // Mettre à jour le placeholder de la taille
+        document.getElementById('size').placeholder = 'ex: 50ml, 100ml, 125ml';
+        
+    } else if (productType === 'cosmetique') {
+        // Ajouter les catégories de cosmétique
+        Object.entries(cosmetiqueCategories).forEach(([key, label]) => {
+            const option = new Option(label, key);
+            categorySelect.add(option);
+        });
+        
+        // Ajouter les types de cosmétique
+        Object.entries(cosmetiqueTypes).forEach(([key, label]) => {
+            const option = new Option(label, key);
+            typeSelect.add(option);
+        });
+        
+        // Mettre à jour le placeholder de la taille
+        document.getElementById('size').placeholder = 'ex: 30ml, 50ml, 100g, 250ml';
+    }
+    
+    // Restaurer les valeurs old() si elles existent
+    const oldCategory = '{{ old("category") }}';
+    const oldType = '{{ old("type") }}';
+    
+    if (oldCategory) {
+        categorySelect.value = oldCategory;
+    }
+    if (oldType) {
+        typeSelect.value = oldType;
+    }
+}
+
 // Validation en temps réel
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('productForm');
     const submitBtn = document.getElementById('submitBtn');
     const loadingOverlay = document.getElementById('loadingOverlay');
     
+    // Initialiser les catégories/types si un type de produit est déjà sélectionné
+    const productTypeValue = document.getElementById('product_type').value;
+    if (productTypeValue) {
+        updateCategoriesAndTypes();
+    }
+    
     // Champs obligatoires
     const requiredFields = {
         'name': 'Le nom du produit est obligatoire',
         'price': 'Le prix est obligatoire',
+        'product_type': 'Le type de produit est obligatoire',
         'category': 'La catégorie est obligatoire',
         'type': 'Le type est obligatoire',
         'size': 'La taille est obligatoire',
         'stock': 'Le stock est obligatoire',
+        'short_description': 'La description courte est obligatoire pour l\'affichage dans le carrousel',
         'description': 'La description complète est obligatoire'
     };
     
@@ -677,19 +985,69 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        // Validation des images (au moins une image valide requise)
+        const imageInputs = document.querySelectorAll('input[name="images[]"]');
+        const validImages = Array.from(imageInputs).filter(input => {
+            const url = input.value.trim();
+            try {
+                return url !== '' && new URL(url);
+            } catch {
+                return false;
+            }
+        });
+        
+        if (validImages.length === 0) {
+            const imagesError = document.getElementById('images-error');
+            if (imagesError) {
+                imagesError.style.display = 'block';
+                imagesError.textContent = 'Au moins une image valide est requise pour l\'affichage dans le carrousel';
+            }
+            // Marquer le premier champ image comme invalide
+            if (imageInputs.length > 0) {
+                imageInputs[0].classList.add('is-invalid');
+            }
+            isValid = false;
+        } else {
+            const imagesError = document.getElementById('images-error');
+            if (imagesError) {
+                imagesError.style.display = 'none';
+            }
+            // Marquer les champs image comme valides
+            imageInputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    input.classList.remove('is-invalid');
+                    input.classList.add('is-valid');
+                }
+            });
+        }
+        
         return isValid;
     }
 });
 
 // Fonctions pour les notes et images
-function addNote() {
-    const notesList = document.getElementById('notes-list');
+function addNote(category = null) {
+    let notesList, placeholder;
+    
+    if (category) {
+        notesList = document.getElementById(`${category}-notes-list`);
+        const placeholders = {
+            'head': 'ex: Bergamote, Citron, Menthe',
+            'heart': 'ex: Rose, Jasmin, Pivoine',
+            'base': 'ex: Bois de Santal, Musc, Vanille'
+        };
+        placeholder = placeholders[category];
+    } else {
+        notesList = document.getElementById('notes-list');
+        placeholder = 'ex: Rose, Jasmin, Bois de santal';
+    }
+    
     const newNote = document.createElement('div');
     newNote.className = 'note-input';
     newNote.innerHTML = `
         <div class="input-group">
-            <input type="text" class="form-control" name="notes[]" 
-                   placeholder="ex: Rose, Jasmin, Bois de santal">
+            <input type="text" class="form-control" name="${category ? category + '_notes[]' : 'notes[]'}" 
+                   placeholder="${placeholder}" onchange="updatePyramidPreview()">
             <button type="button" class="btn remove-btn" onclick="removeNote(this)">
                 <i class="fas fa-times"></i>
             </button>
@@ -699,11 +1057,44 @@ function addNote() {
 }
 
 function removeNote(button) {
-    const notesList = document.getElementById('notes-list');
+    const notesList = button.closest('[id$="-notes-list"], #notes-list');
     if (notesList.children.length > 1) {
         button.closest('.note-input').remove();
+        updatePyramidPreview();
     }
 }
+
+function updatePyramidPreview() {
+    const categories = ['head', 'heart', 'base'];
+    
+    categories.forEach(category => {
+        const inputs = document.querySelectorAll(`input[name="${category}_notes[]"]`);
+        const preview = document.getElementById(`${category}-preview`);
+        
+        if (preview) {
+            const notes = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(note => note !== '');
+            
+            preview.innerHTML = notes.length > 0 
+                ? notes.map(note => `<span class="preview-note">${note}</span>`).join('')
+                : '<span class="no-notes">Aucune note</span>';
+        }
+    });
+}
+
+// Initialiser l'aperçu au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing DOMContentLoaded code ...
+    
+    // Mettre à jour l'aperçu de la pyramide
+    updatePyramidPreview();
+    
+    // Ajouter des event listeners pour les notes existantes
+    document.querySelectorAll('input[name$="_notes[]"]').forEach(input => {
+        input.addEventListener('input', updatePyramidPreview);
+    });
+});
 
 function addImage() {
     const imagesList = document.getElementById('images-list');
@@ -712,7 +1103,7 @@ function addImage() {
     newImage.innerHTML = `
         <div class="input-group">
             <input type="url" class="form-control" name="images[]" 
-                   placeholder="https://example.com/image.jpg">
+                   placeholder="https://example.com/image.jpg" required>
             <button type="button" class="btn remove-btn" onclick="removeImage(this)">
                 <i class="fas fa-times"></i>
             </button>

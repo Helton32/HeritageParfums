@@ -39,14 +39,14 @@ Route::get('/', function () {
 // Route pour afficher un produit unique
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
+// Route pour le catalogue complet
+Route::get('/catalogue', [ProductController::class, 'catalogue'])->name('catalogue');
+
 // Pages statiques
 Route::get('/heritage', function () {
     return view('pages.heritage');
 })->name('heritage');
 
-Route::get('/expedition', function () {
-    return view('pages.expedition');
-})->name('expedition');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
