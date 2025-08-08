@@ -60,6 +60,9 @@
                                             @if($navbarFeaturedProduct->brand)
                                                 <p class="featured-brand">{{ $navbarFeaturedProduct->brand }}</p>
                                             @endif
+                                            <p class="featured-type">
+                                                <i class="fas fa-spray-can me-1"></i>Parfum d'Exception
+                                            </p>
                                             @if($navbarFeaturedProduct->hasValidPromotion())
                                                 <div class="featured-price-promo">
                                                     <span class="original-price-small">{{ $navbarFeaturedProduct->formatted_price }}</span>
@@ -191,8 +194,37 @@
                         <div class="dropdown-menu mega-menu">
                             <div class="container">
                                 <div class="row">
+                                    <!-- Section À la une (cosmétique en vedette) -->
+                                    @if(isset($navbarFeaturedCosmetique) && $navbarFeaturedCosmetique)
+                                    <div class="col-lg-3 featured-section featured-cosmetique">
+                                        <h6 class="mega-menu-title">À la Une</h6>
+                                        <div class="featured-product">
+                                            <div class="featured-image">
+                                                <img src="{{ $navbarFeaturedCosmetique->main_image }}" alt="{{ $navbarFeaturedCosmetique->name }}" class="img-fluid">
+                                            </div>
+                                            <h6 class="featured-name">{{ $navbarFeaturedCosmetique->name }}</h6>
+                                            @if($navbarFeaturedCosmetique->brand)
+                                                <p class="featured-brand">{{ $navbarFeaturedCosmetique->brand }}</p>
+                                            @endif
+                                            <p class="featured-type">
+                                                <i class="fas fa-spa me-1"></i>Soin de Luxe
+                                            </p>
+                                            @if($navbarFeaturedCosmetique->hasValidPromotion())
+                                                <div class="featured-price-promo">
+                                                    <span class="original-price-small">{{ $navbarFeaturedCosmetique->formatted_price }}</span>
+                                                    <span class="promo-price-small">{{ $navbarFeaturedCosmetique->formatted_current_price }}</span>
+                                                    <span class="discount-badge-mini">-{{ $navbarFeaturedCosmetique->getDiscountPercentage() }}%</span>
+                                                </div>
+                                            @else
+                                                <p class="featured-price">{{ $navbarFeaturedCosmetique->formatted_price }}</p>
+                                            @endif
+                                            <a href="{{ route('product.show', $navbarFeaturedCosmetique->slug) }}" class="btn-discover-mini">Découvrir</a>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    
                                     <!-- Soins du Visage -->
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-{{ isset($navbarFeaturedCosmetique) && $navbarFeaturedCosmetique ? '3' : '4' }}">
                                         <h6 class="mega-menu-title">Soins du Visage</h6>
                                         <ul class="mega-menu-list">
                                             @if(isset($navbarCosmetiques['soins_visage']))
@@ -224,7 +256,7 @@
                                     </div>
                                     
                                     <!-- Soins du Corps -->
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-{{ isset($navbarFeaturedCosmetique) && $navbarFeaturedCosmetique ? '3' : '4' }}">
                                         <h6 class="mega-menu-title">Soins du Corps</h6>
                                         <ul class="mega-menu-list">
                                             @if(isset($navbarCosmetiques['soins_corps']))
@@ -256,7 +288,7 @@
                                     </div>
                                     
                                     <!-- Nouveautés + Call to Action -->
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-{{ isset($navbarFeaturedCosmetique) && $navbarFeaturedCosmetique ? '3' : '4' }}">
                                         <h6 class="mega-menu-title">Nouveautés</h6>
                                         <ul class="mega-menu-list">
                                             @if(isset($navbarCosmetiques['nouveautes_cosmetiques']))
@@ -286,13 +318,15 @@
                                             </li>
                                         </ul>
                                         
-                                        <!-- Call to action -->
+                                        <!-- Call to action pour voir tout -->
+                                        @if(!isset($navbarFeaturedCosmetique) || !$navbarFeaturedCosmetique)
                                         <div class="mega-menu-cta mt-4">
                                             <a href="{{ route('catalogue', ['product_type' => 'cosmetique']) }}" class="btn btn-outline-gold btn-sm w-100">
                                                 Voir tous les cosmétiques
                                             </a>
                                             <p class="text-muted small mt-2">Explorez notre gamme de soins de luxe</p>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

@@ -60,39 +60,29 @@ body.home-page {
     z-index: 2;
 }
 
-/* --- Layout responsive --- */
+/* --- Layout responsive DESKTOP IMAGE GAUCHE / TEXTE DROITE --- */
 .carousel-content-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    gap: 1.5rem;         /* réduit le gap */
-    padding: 1rem;       /* réduit le padding */
-    flex-wrap: wrap;
-    max-width: 90vw;     /* réduit la largeur max */
+    gap: 3rem; /* Gap généreux sur desktop */
+    padding: 2rem;
+    flex-wrap: nowrap; /* Pas de wrap sur desktop */
+    max-width: 1200px;
     margin: 0 auto;
     box-sizing: border-box;
     transform: translateZ(0);
 }
 
-/* Option media query pour petits écrans */
-@media (max-width: 768px) {
-    .carousel-content-wrapper {
-        gap: 1rem;
-        padding: 0.8rem;
-        max-width: 95vw;
-    }
-}
-
-
-/* Image à gauche */
+/* Image à gauche sur desktop */
 .product-image-zone {
-    flex: 1 1 400px;
+    flex: 0 0 45%; /* Largeur fixe 45% */
     max-width: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1rem;
+    order: 1; /* Ordre 1 = à gauche */
     transform: translateZ(0);
 }
 
@@ -100,8 +90,9 @@ body.home-page {
     width: 100%;
     max-width: 450px;
     height: auto;
+    max-height: 70vh;
     border-radius: 20px;
-    object-fit: cover;
+    object-fit: contain;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
@@ -109,15 +100,16 @@ body.home-page {
     image-rendering: auto;
 }
 
-/* Texte à droite */
+/* Texte à droite sur desktop */
 .content-zone {
-    flex: 1 1 400px;
+    flex: 1 1 55%; /* Prend le reste de l'espace */
     max-width: 600px;
-    text-align: left;
+    text-align: left; /* Alignement à gauche sur desktop */
     padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    order: 2; /* Ordre 2 = à droite */
     transform: translateZ(0);
 }
 
@@ -379,11 +371,12 @@ body.home-page {
         user-select: none;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
+        padding-top: 60px; /* Espace pour la navbar mobile */
     }
     
     .fullscreen-carousel {
-        height: 100vh !important; /* Force la hauteur complète */
-        height: 100dvh !important; /* Dynamic viewport height pour mobile */
+        height: calc(100vh - 60px) !important; /* Ajusté pour la navbar mobile */
+        height: calc(100dvh - 60px) !important; /* Dynamic viewport height pour mobile */
         position: relative;
         background: var(--deep-black);
         -webkit-transform: translate3d(0, 0, 0);
@@ -424,12 +417,12 @@ body.home-page {
     }
     
     .carousel-content-wrapper {
-        flex-direction: column;
-        gap: 0.4rem; /* Gap encore plus réduit */
-        padding: 0.3rem; /* Padding minimal */
+        flex-direction: column !important; /* Force colonne sur mobile */
+        gap: 0.1rem; /* Gap minimal pour rapprocher */
+        padding: 0.2rem; /* Padding ultra-minimal */
         text-align: center;
         height: 100%;
-        justify-content: space-evenly; /* Répartition équitable de l'espace */
+        justify-content: space-evenly; /* Répartition équitable optimisée */
         align-items: center;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -440,29 +433,30 @@ body.home-page {
     }
     
     .product-image-zone {
-        order: 1;
-        max-width: 65%; /* Réduit encore pour plus d'espace texte */
+        order: 1 !important; /* Force l'ordre sur mobile */
+        max-width: 68%; /* Optimisé pour mobile */
         width: 100%;
-        margin-bottom: 0.2rem; /* Margin encore plus réduite */
+        margin-bottom: 0; /* Supprimé la marge pour rapprocher */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
         flex-shrink: 0; /* Évite la compression */
         height: auto; /* Hauteur flexible */
-        max-height: 28vh; /* Hauteur maximum encore réduite */
-        max-height: 28dvh; /* Dynamic viewport */
+        max-height: 30vh; /* Hauteur optimisée mobile */
+        max-height: 30dvh; /* Dynamic viewport */
         display: flex;
         align-items: center;
         justify-content: center;
+        flex: none !important; /* Force flex none sur mobile */
     }
     
     .product-image {
         max-width: 100%;
         height: auto;
-        max-height: 26vh; /* Encore plus réduit */
-        max-height: 26dvh; /* Dynamic viewport */
+        max-height: 28vh; /* Optimisé pour mobile */
+        max-height: 28dvh; /* Dynamic viewport */
         border-radius: 12px; /* Plus petit radius */
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
+        -webkit-transform: translateZ(0) translateY(1.5rem); /* Descend légèrement l'image */
+        transform: translateZ(0) translateY(1.5rem); /* Descend légèrement l'image */
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
         image-rendering: auto;
@@ -472,10 +466,10 @@ body.home-page {
     }
     
     .content-zone {
-        order: 2;
-        text-align: center;
+        order: 2 !important; /* Force l'ordre sur mobile */
+        text-align: center !important; /* Force centrage sur mobile */
         max-width: 100%;
-        padding: 0.2rem; /* Padding minimal */
+        padding: 0.3rem; /* Padding minimal */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
         flex: 1;
@@ -489,9 +483,9 @@ body.home-page {
     }
     
     .product-title {
-        font-size: 1.5rem; /* Encore plus réduit */
+        font-size: 1.6rem; /* Taille optimisée mobile */
         line-height: 1.0; /* Line height minimal */
-        margin-bottom: 0.2rem; /* Margin minimale */
+        margin-bottom: 0.3rem; /* Margin équilibrée */
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
         font-weight: 700;
@@ -502,52 +496,52 @@ body.home-page {
     }
     
     .product-subtitle {
-        font-size: 0.9rem; /* Plus petit */
-        margin-bottom: 0.3rem; /* Margin minimale */
+        font-size: 0.95rem; /* Taille optimisée */
+        margin-bottom: 0.4rem; /* Margin équilibrée */
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
-        line-height: 1.1; /* Line height minimal */
+        line-height: 1.15; /* Line height légèrement augmentée pour lisibilité */
         color: rgba(255, 255, 255, 0.9);
         word-wrap: break-word; /* Évite le débordement */
         max-width: 100%;
     }
     
     .signature-text {
-        font-size: 0.7rem; /* Plus petit */
-        margin-bottom: 0.2rem; /* Margin minimale */
+        font-size: 0.75rem; /* Taille équilibrée */
+        margin-bottom: 0.3rem; /* Margin équilibrée */
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
-        letter-spacing: 0.5px; /* Réduit */
+        letter-spacing: 0.8px; /* Letter spacing équilibré */
         text-transform: uppercase;
         opacity: 0.8;
     }
     
     .buttons-container {
         justify-content: center;
-        gap: 0.5rem; /* Gap encore plus réduit */
+        gap: 0.6rem; /* Gap équilibré */
         flex-direction: column;
         align-items: center;
         width: 100%;
-        max-width: 280px; /* Largeur encore plus réduite */
+        max-width: 300px; /* Largeur équilibrée */
         margin: 0 auto;
-        margin-top: 0.3rem; /* Margin minimale */
+        margin-top: 0.5rem; /* Margin équilibrée */
         flex-shrink: 0; /* Évite la compression des boutons */
     }
     
     .discover-button, .order-button {
         width: 100%;
-        padding: 0.6rem 1rem; /* Padding encore plus réduit */
-        font-size: 0.8rem; /* Taille encore plus réduite */
+        padding: 0.75rem 1.2rem; /* Padding équilibré tactile */
+        font-size: 0.85rem; /* Taille lisible */
         text-align: center;
-        min-height: 40px; /* Hauteur réduite mais tactile */
+        min-height: 42px; /* Hauteur tactile optimisée */
         display: flex;
         align-items: center;
         justify-content: center;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
-        border-radius: 20px; /* Plus petit */
+        border-radius: 21px; /* Arrondi équilibré */
         font-weight: 600;
-        letter-spacing: 0.3px; /* Réduit */
+        letter-spacing: 0.4px; /* Letter spacing équilibré */
         transition: all 0.2s ease; /* Transition plus rapide sur mobile */
         position: relative;
         overflow: hidden;
@@ -560,40 +554,40 @@ body.home-page {
         box-shadow: 0 4px 12px rgba(201, 160, 108, 0.3);
     }
     
-    /* Optimisation maximale des éléments additionnels sur mobile */
+    /* Optimisation équilibrée des éléments additionnels sur mobile */
     .price-container {
-        margin-bottom: 0.4rem; /* Margin encore plus réduite */
+        margin-bottom: 0.5rem; /* Margin équilibrée */
         display: flex;
         align-items: center;
-        gap: 0.3rem; /* Gap minimal */
+        gap: 0.4rem; /* Gap équilibré */
         flex-wrap: wrap;
         justify-content: center;
     }
     
     .current-price, .promotion-price {
-        font-size: 1.4rem; /* Réduit */
+        font-size: 1.5rem; /* Taille lisible */
     }
     
     .original-price {
-        font-size: 1.1rem; /* Réduit */
+        font-size: 1.2rem; /* Taille équilibrée */
     }
     
     .product-info-extra {
-        margin-bottom: 0.4rem; /* Margin réduite */
+        margin-bottom: 0.5rem; /* Margin équilibrée */
     }
     
     .product-features {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.2rem; /* Gap minimal */
+        gap: 0.3rem; /* Gap équilibré */
         justify-content: center;
     }
     
     .feature {
         background: rgba(255, 255, 255, 0.1);
-        padding: 0.1rem 0.4rem; /* Padding minimal */
-        border-radius: 10px; /* Plus petit */
-        font-size: 0.6rem; /* Encore plus petit */
+        padding: 0.15rem 0.5rem; /* Padding équilibré */
+        border-radius: 12px; /* Arrondi équilibré */
+        font-size: 0.65rem; /* Taille lisible */
         color: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(5px);
@@ -601,34 +595,34 @@ body.home-page {
     }
     
     .customer-rating {
-        margin-top: 0.4rem; /* Margin réduite */
+        margin-top: 0.5rem; /* Margin équilibrée */
         text-align: center;
     }
     
     .customer-rating .stars {
         color: var(--gold);
-        margin-bottom: 0.1rem; /* Margin minimale */
-        font-size: 0.8rem; /* Plus petit */
+        margin-bottom: 0.15rem; /* Margin équilibrée */
+        font-size: 0.85rem; /* Taille équilibrée */
     }
     
     .customer-rating .rating-text {
-        font-size: 0.65rem; /* Encore plus petit */
+        font-size: 0.7rem; /* Taille lisible */
         color: rgba(255, 255, 255, 0.8);
     }
     
     .promotion-details {
         text-align: center;
-        margin-bottom: 0.3rem; /* Margin réduite */
+        margin-bottom: 0.4rem; /* Margin équilibrée */
     }
     
     .promotion-info {
         color: var(--gold);
         font-style: italic;
         background: rgba(212, 175, 55, 0.1);
-        padding: 0.1rem 0.4rem; /* Padding minimal */
-        border-radius: 10px; /* Plus petit */
+        padding: 0.15rem 0.5rem; /* Padding équilibré */
+        border-radius: 12px; /* Arrondi équilibré */
         border: 1px solid rgba(212, 175, 55, 0.2);
-        font-size: 0.65rem; /* Encore plus petit */
+        font-size: 0.7rem; /* Taille lisible */
     }
     /* Navigation optimisée mobile */
     .carousel-nav {
@@ -747,15 +741,98 @@ body.home-page {
     }
 }
 
-/* Très petits écrans - ULTRA OPTIMISÉ */
+/* Très petits écrans - NAVBAR INTÉGRÉE */
 @media (max-width: 480px) {
     html {
         font-size: 13px; /* Base encore plus petite */
     }
     
-    .carousel-slide {
-        padding: 0.2rem 0.2rem; /* Padding minimal */
+    body.home-page {
+        padding-top: 50px; /* Espace réduit pour navbar compacte */
     }
+    
+    .fullscreen-carousel {
+        height: calc(100vh - 50px) !important;
+        height: calc(100dvh - 50px) !important;
+    }
+    
+    .carousel-content-wrapper {
+        gap: 0.15rem; /* Gap légèrement augmenté */
+        padding: 0.2rem;
+    }
+    
+    .product-image-zone {
+        max-width: 65%; /* Équilibré */
+        max-height: 25vh; /* Réduit mais équilibré */
+        max-height: 25dvh;
+    }
+    
+    .product-image {
+        max-height: 23vh; /* Équilibré */
+        max-height: 23dvh;
+        border-radius: 10px;
+        -webkit-transform: translateZ(0) translateY(1rem); /* Moins de décalage */
+        transform: translateZ(0) translateY(1rem);
+    }
+    
+    .product-title {
+        font-size: 1.4rem; /* Équilibré pour très petits écrans */
+        line-height: 0.98;
+        margin-bottom: 0.2rem;
+    }
+    
+    .product-subtitle {
+        font-size: 0.85rem; /* Équilibré */
+        margin-bottom: 0.3rem;
+        line-height: 1.1;
+    }
+    
+    .signature-text {
+        font-size: 0.65rem; /* Équilibré */
+        margin-bottom: 0.2rem;
+    }
+    
+    .buttons-container {
+        max-width: 100%; /* Pleine largeur */
+        gap: 0.4rem; /* Gap équilibré */
+        padding: 0 0.8rem; /* Padding équilibré */
+        margin-top: 0.3rem;
+    }
+    
+    .discover-button, .order-button {
+        padding: 0.65rem 1rem; /* Padding équilibré */
+        font-size: 0.8rem; /* Équilibré */
+        min-height: 40px; /* Hauteur tactile */
+        border-radius: 20px;
+    }
+    
+    .feature {
+        padding: 0.1rem 0.35rem; /* Padding équilibré */
+        font-size: 0.6rem; /* Équilibré */
+        border-radius: 10px;
+    }
+    
+    .customer-rating .stars {
+        font-size: 0.75rem; /* Équilibré */
+    }
+    
+    .customer-rating .rating-text {
+        font-size: 0.65rem; /* Équilibré */
+    }
+    
+    .price-container {
+        margin-bottom: 0.3rem;
+        gap: 0.3rem;
+    }
+    
+    .current-price, .promotion-price {
+        font-size: 1.3rem; /* Équilibré */
+    }
+    
+    .original-price {
+        font-size: 1.1rem; /* Équilibré */
+    }
+}
     
     .carousel-content-wrapper {
         gap: 0.2rem; /* Gap minimal */
@@ -824,12 +901,15 @@ body.home-page {
         gap: 0.2rem;
     }
     
-    .current-price, .promotion-price {
-        font-size: 1.2rem;
+/* Écrans moyens - TRANSITION NAVBAR */
+@media (max-width: 768px) and (min-width: 481px) {
+    body.home-page {
+        padding-top: 55px; /* Espace intermédiaire */
     }
     
-    .original-price {
-        font-size: 1rem;
+    .fullscreen-carousel {
+        height: calc(100vh - 55px) !important;
+        height: calc(100dvh - 55px) !important;
     }
 }
 

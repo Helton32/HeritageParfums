@@ -168,21 +168,21 @@ h1, h2, h3, h4, h5, h6 {
     color: white;
     transform: translateY(-2px);
 }
-/* Navigation Guerlain */
+/* Navigation Guerlain - MOBILE OPTIMISÉ */
 .navbar {
     background: var(--guerlain-white);
     border-bottom: 1px solid var(--guerlain-border);
     transition: all 0.5s ease;
-    padding: 25px 0 15px 0; /* Augmenté le padding top pour plus d'espace */
+    padding: 20px 0 12px 0; /* Padding optimisé */
     box-shadow: none;
     position: relative;
-    z-index: 1000; /* Assure l'accessibilité sur Chrome */
+    z-index: 1000;
 }
 
 .navbar.scrolled {
     background: var(--guerlain-white);
     box-shadow: 0 2px 30px rgba(0, 0, 0, 0.08);
-    padding: 15px 0 8px 0; /* Augmenté le padding pour maintenir l'espace */
+    padding: 12px 0 6px 0; /* Padding réduit en scroll */
 }
 
 .navbar .container {
@@ -192,22 +192,22 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     text-align: center;
     width: 100%;
-    min-height: 60px; /* Assure une hauteur minimum pour l'accessibilité */
+    min-height: 50px; /* Hauteur réduite pour mobile */
 }
 
 .navbar-brand {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
+    font-size: 2rem; /* Taille réduite */
     font-weight: 300;
     color: var(--guerlain-black) !important;
     text-decoration: none;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px; /* Réduit */
     transition: all 0.3s ease;
     margin: 0;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: -35px; /* Ajusté de -35px à -20px pour plus d'espace avec la navbar */
+    top: -25px; /* Ajusté */
     z-index: 20;
 }
 
@@ -230,10 +230,10 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--guerlain-black) !important;
     font-family: 'Montserrat', sans-serif;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 13px; /* Taille réduite pour mobile */
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    padding: 10px 20px !important;
+    letter-spacing: 1.2px; /* Réduit */
+    padding: 8px 15px !important; /* Padding réduit */
     transition: all 0.3s ease;
     position: relative;
 }
@@ -241,10 +241,11 @@ h1, h2, h3, h4, h5, h6 {
 .nav-link:hover {
     color: var(--guerlain-gold) !important;
 }
+
 .nav-link::after {
     content: '';
     position: absolute;
-    bottom: 5px;
+    bottom: 3px; /* Ajusté */
     left: 50%;
     width: 0;
     height: 1px;
@@ -257,7 +258,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 60%;
 }
 
-/* Zone des actions utilisateur */
+/* Zone des actions utilisateur - MOBILE OPTIMISÉ */
 .navbar-actions {
     display: flex;
     align-items: center;
@@ -266,33 +267,78 @@ h1, h2, h3, h4, h5, h6 {
     top: 50%;
     transform: translateY(-50%);
     z-index: 30;
+    gap: 0.5rem; /* Espacement entre les éléments */
 }
 
 .cart-icon {
     position: relative;
     color: var(--guerlain-black) !important;
     transition: all 0.3s ease;
+    padding: 8px 12px; /* Padding tactile */
+    border-radius: 8px;
+    background: transparent;
 }
 
 .cart-icon:hover {
     color: var(--guerlain-gold) !important;
+    background: rgba(212, 175, 55, 0.1);
 }
 
 .cart-count {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -6px;
+    right: -6px;
     background: var(--guerlain-gold);
     color: var(--guerlain-white);
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 11px;
+    width: 16px; /* Plus petit */
+    height: 16px;
+    font-size: 10px; /* Plus petit */
     font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Montserrat', sans-serif;
+}
+
+/* BOUTON ADMIN DISCRET */
+.navbar-actions .nav-link {
+    font-size: 11px !important; /* Très petit */
+    padding: 6px 10px !important; /* Padding réduit */
+    letter-spacing: 0.5px !important; /* Réduit */
+    color: rgba(102, 102, 102, 0.7) !important; /* Couleur discrète */
+    opacity: 0.6; /* Transparence pour discrétion */
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    background: transparent;
+}
+
+.navbar-actions .nav-link:hover {
+    color: var(--guerlain-gold) !important;
+    opacity: 1;
+    background: rgba(212, 175, 55, 0.08);
+}
+
+.navbar-actions .nav-link i {
+    font-size: 10px; /* Icône très petite */
+    margin-right: 4px;
+}
+
+/* Dropdown admin discret */
+.navbar-actions .dropdown-toggle {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    color: rgba(102, 102, 102, 0.8) !important;
+    opacity: 0.7;
+}
+
+.navbar-actions .dropdown-toggle:hover {
+    opacity: 1;
+    color: var(--guerlain-gold) !important;
+}
+
+.navbar-actions .dropdown-toggle::after {
+    font-size: 8px; /* Flèche plus petite */
 }
 /* Mega-Menu Styles */
 .mega-dropdown {
@@ -1039,6 +1085,32 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+/* Scroll sur toute la colonne pour englober le produit à la une */
+.mega-menu .col-lg-3, 
+.mega-menu .col-lg-4 {
+    max-height: 400px; /* Hauteur maximum pour toute la colonne */
+    overflow-y: auto; /* Scroll vertical */
+    overflow-x: hidden; /* Pas de scroll horizontal */
+    -webkit-overflow-scrolling: touch; /* Scroll fluide sur mobile */
+    padding-right: 8px; /* Espace pour la scrollbar */
+}
+
+.mega-menu .col-lg-3::-webkit-scrollbar,
+.mega-menu .col-lg-4::-webkit-scrollbar {
+    width: 4px; /* Scrollbar fine */
+}
+
+.mega-menu .col-lg-3::-webkit-scrollbar-track,
+.mega-menu .col-lg-4::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+}
+
+.mega-menu .col-lg-3::-webkit-scrollbar-thumb,
+.mega-menu .col-lg-4::-webkit-scrollbar-thumb {
+    background: var(--guerlain-gold);
+    border-radius: 2px;
+}
+
 .mega-menu-list li {
     margin-bottom: 1rem;
 }
@@ -1162,7 +1234,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 80%;
 }
 
-/* Responsive mega menu */
+/* Responsive mega menu avec scroll - MOBILE AVEC SCROLL */
 @media (max-width: 991.98px) {
     .mega-menu {
         position: static;
@@ -1170,23 +1242,53 @@ h1, h2, h3, h4, h5, h6 {
         opacity: 1;
         visibility: visible;
         box-shadow: none;
-        padding: 1rem;
+        padding: 0.8rem; /* Padding réduit */
         background: var(--guerlain-light-gray);
-        margin-top: 1rem;
+        margin-top: 0.5rem; /* Margin réduite */
+        border-radius: 8px;
+    }
+    
+    /* Scroll aussi sur mobile mais avec hauteur réduite */
+    .mega-menu .col-lg-3, 
+    .mega-menu .col-lg-4 {
+        max-height: 250px !important; /* Hauteur réduite sur mobile */
+        overflow-y: auto !important; /* Scroll activé sur mobile */
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-right: 8px; /* Espace pour scrollbar */
     }
     
     .mega-menu-title {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
+        font-size: 1rem; /* Plus petit */
+        margin-bottom: 0.8rem; /* Margin réduite */
     }
     
     .mega-menu-cta {
-        margin-top: 1rem;
-        padding: 1.5rem;
+        margin-top: 0.8rem; /* Margin réduite */
+        padding: 1rem; /* Padding réduit */
+    }
+    
+    .featured-section {
+        padding: 1rem; /* Padding réduit */
+        margin-bottom: 0.8rem; /* Margin réduite */
+    }
+    
+    .featured-image {
+        width: 60px; /* Plus petit */
+        height: 60px;
+    }
+    
+    .featured-name {
+        font-size: 0.9rem; /* Plus petit */
+    }
+    
+    .mega-menu-list a {
+        padding: 0.3rem 0; /* Padding réduit */
+        font-size: 0.85rem; /* Plus petit */
     }
     
     .navbar-nav .nav-link {
-        padding: 0.8rem 1rem;
+        padding: 10px 0 !important; /* Plus d'espace tactile */
     }
     
     .navbar-nav .nav-link::after {
@@ -1227,12 +1329,56 @@ h1, h2, h3, h4, h5, h6 {
    ENHANCED MEGA MENUS WITH REAL PRODUCTS
    ============================================== */
 
-/* Featured section styling */
+/* Featured section styling - DIFFÉRENCIATION PARFUMS vs COSMÉTIQUES */
 .featured-section {
     background: var(--guerlain-light-gray);
     padding: 2rem;
     border-radius: 10px;
     border: 1px solid var(--guerlain-border);
+    position: relative;
+}
+
+/* Style spécifique pour les parfums (À la une) */
+.featured-section:not(.featured-cosmetique) {
+    background: linear-gradient(135deg, #faf9f7 0%, #f8f6f0 100%);
+    border-left: 4px solid var(--guerlain-gold);
+}
+
+.featured-section:not(.featured-cosmetique)::before {
+    content: '🌸';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.2rem;
+    opacity: 0.6;
+}
+
+/* Style spécifique pour les cosmétiques (À la une) */
+.featured-section.featured-cosmetique {
+    background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+    border-left: 4px solid #20c997;
+}
+
+.featured-section.featured-cosmetique::before {
+    content: '✨';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.2rem;
+    opacity: 0.6;
+}
+
+/* Type de produit dans À la une */
+.featured-type {
+    font-size: 0.8rem;
+    color: #20c997;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.featured-section:not(.featured-cosmetique) .featured-type {
+    color: var(--guerlain-gold);
 }
 
 .featured-product {
@@ -1628,49 +1774,150 @@ h1, h2, h3, h4, h5, h6 {
     background: #FF9800;
 }
 
-/* === RESPONSIVE NAVBAR - CORRIGÉ === */
+/* === RESPONSIVE NAVBAR - MOBILE OPTIMISÉ === */
 @media (max-width: 991px) {
     .navbar {
-        padding: 15px 0 10px 0;
-        position: relative; /* Changé de fixed pour éviter les conflits */
+        padding: 12px 0 8px 0; /* Padding encore plus réduit */
+        position: fixed; /* Fixed pour mobile */
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1050;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
     
     .navbar.scrolled {
-        padding: 10px 0 5px 0;
+        padding: 8px 0 5px 0;
+        background: rgba(255, 255, 255, 0.98) !important;
+    }
+    
+    .navbar .container {
+        flex-direction: row; /* Garde la disposition horizontale */
+        align-items: center;
+        justify-content: space-between; /* Répartit les éléments */
+        min-height: 45px; /* Hauteur réduite */
     }
     
     .navbar-brand {
-        font-size: 1.8rem;
+        font-size: 1.6rem; /* Plus petit sur mobile */
         top: 0; /* Réinitialisé */
         position: relative;
         transform: none;
         left: auto;
+        order: 2; /* Au centre */
+        flex: 1;
+        text-align: center;
+        margin: 0 1rem;
+    }
+    
+    .navbar-toggler {
+        order: 1; /* À gauche */
+        border: none;
+        padding: 4px 8px;
+        font-size: 1rem;
+        background: transparent;
+        color: var(--guerlain-black);
+        border-radius: 4px;
+    }
+    
+    .navbar-toggler:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: none;
+        outline: none;
     }
     
     .navbar-actions {
+        order: 3; /* À droite */
         position: relative;
         transform: none;
         right: auto;
         top: auto;
+        gap: 0.3rem; /* Gap réduit sur mobile */
+    }
+    
+    .navbar-actions .cart-icon {
+        padding: 6px 8px; /* Plus compact */
+    }
+    
+    .navbar-actions .nav-link {
+        font-size: 10px !important; /* Encore plus petit sur mobile */
+        padding: 4px 6px !important;
+        opacity: 0.5 !important; /* Plus discret sur mobile */
     }
     
     .navbar-collapse {
-        margin-top: 1rem;
+        margin-top: 0.8rem;
+        background: var(--guerlain-white);
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 0.8rem -15px 0 -15px;
     }
     
-    /* Note: Les styles fullscreen-carousel sont gérés par home-improvements.css */
+    .navbar-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 12px 0 !important; /* Plus d'espace tactile */
+        text-align: center;
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .navbar-nav .nav-link:last-child {
+        border-bottom: none;
+    }
+    
+    .navbar-nav .nav-link::after {
+        display: none; /* Supprime l'underline sur mobile */
+    }
 }
 
 @media (max-width: 768px) {
     .navbar {
-        padding: 10px 0 8px 0;
+        padding: 10px 0 6px 0;
     }
     
     .navbar-brand {
-        font-size: 1.6rem;
+        font-size: 1.4rem; /* Encore plus petit */
+        letter-spacing: 1px;
     }
     
-    /* Note: Les styles fullscreen-carousel sont gérés par home-improvements.css */
+    .navbar-actions .nav-link {
+        font-size: 9px !important; /* Très petit */
+        padding: 3px 5px !important;
+        opacity: 0.4 !important; /* Très discret */
+    }
+    
+    .cart-count {
+        width: 14px;
+        height: 14px;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+        margin: 0 0.5rem;
+    }
+    
+    .navbar-actions .nav-link {
+        font-size: 8px !important;
+        padding: 2px 4px !important;
+        opacity: 0.3 !important; /* Presque invisible */
+    }
+    
+    .navbar-actions .nav-link i {
+        font-size: 8px;
+    }
 }
 
 /* === STYLES POUR LES PROMOTIONS === */
