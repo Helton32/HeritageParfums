@@ -98,6 +98,43 @@
 .cart-item {
     display: grid;
     grid-template-columns: 100px 1fr auto auto auto;
+    gap: 1rem;
+    padding: 2rem;
+    border-bottom: 1px solid var(--guerlain-border);
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.cart-item:hover {
+    background: rgba(212, 175, 55, 0.02);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+/* Promotions dans le panier */
+.item-promotion {
+    margin-top: 0.5rem;
+    padding: 0.3rem 0;
+}
+
+.promo-badge-cart {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    display: inline-block;
+}
+
+.original-price-small-cart {
+    font-size: 0.8rem;
+    color: #999;
+    text-decoration: line-through;
+}
     gap: 1.5rem;
     padding: 2rem;
     border-bottom: 1px solid var(--guerlain-border);

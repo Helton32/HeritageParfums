@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Contact - Heritage Parfums')
-@section('description', 'Contactez Heritage Parfums. Notre équipe d\'experts vous accompagne dans le choix de vos parfums de luxe.')
+@section('title', 'Contact - Héritaj Parfums')
+@section('description', 'Contactez Héritaj Parfums. Notre équipe d\'experts vous accompagne dans le choix de vos parfums de luxe.')
 
 @push('styles')
 <style>

@@ -5,8 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="@yield('description', 'Heritage Parfums - Maison de parfums de luxe depuis 1925. Découvrez nos collections exclusives de parfums pour homme et femme.')">
-    <title>@yield('title', 'Heritage Parfums - Maison de Parfums de Luxe')</title>
+    <meta name="description" content="@yield('description', 'Héritaj Parfums - Maison de parfums de luxe depuis 1925. Découvrez nos collections exclusives de parfums pour homme et femme.')">
+    <title>@yield('title', 'Héritaj Parfums - Maison de Parfums de Luxe')</title>
     
     <!-- SEO et Meta Tags Guerlain -->
     @include('components.seo-guerlain')
@@ -30,7 +30,7 @@
         <div class="container">
             <!-- Logo/Titre centré avec plus d'espacement -->
             <a class="navbar-brand mx-5" href="/">
-                Heritage Parfums
+                Héritaj Parfums
             </a>
             
             <!-- Navigation principale centrée -->
@@ -60,7 +60,15 @@
                                             @if($navbarFeaturedProduct->brand)
                                                 <p class="featured-brand">{{ $navbarFeaturedProduct->brand }}</p>
                                             @endif
-                                            <p class="featured-price">{{ $navbarFeaturedProduct->formatted_price }}</p>
+                                            @if($navbarFeaturedProduct->hasValidPromotion())
+                                                <div class="featured-price-promo">
+                                                    <span class="original-price-small">{{ $navbarFeaturedProduct->formatted_price }}</span>
+                                                    <span class="promo-price-small">{{ $navbarFeaturedProduct->formatted_current_price }}</span>
+                                                    <span class="discount-badge-mini">-{{ $navbarFeaturedProduct->getDiscountPercentage() }}%</span>
+                                                </div>
+                                            @else
+                                                <p class="featured-price">{{ $navbarFeaturedProduct->formatted_price }}</p>
+                                            @endif
                                             <a href="{{ route('product.show', $navbarFeaturedProduct->slug) }}" class="btn-discover-mini">Découvrir</a>
                                         </div>
                                     </div>
@@ -77,6 +85,13 @@
                                                         {{ $product->name }}
                                                         @if($product->brand)
                                                             <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->hasValidPromotion())
+                                                            <div class="menu-price-promo">
+                                                                <small class="original-price-tiny">{{ $product->formatted_price }}</small>
+                                                                <small class="promo-price-tiny">{{ $product->formatted_current_price }}</small>
+                                                                <span class="promo-badge-tiny">-{{ $product->getDiscountPercentage() }}%</span>
+                                                            </div>
                                                         @endif
                                                         @if($product->badge)
                                                             <span class="product-badge">{{ $product->badge }}</span>
@@ -103,6 +118,13 @@
                                                         @if($product->brand)
                                                             <small class="text-muted d-block">{{ $product->brand }}</small>
                                                         @endif
+                                                        @if($product->hasValidPromotion())
+                                                            <div class="menu-price-promo">
+                                                                <small class="original-price-tiny">{{ $product->formatted_price }}</small>
+                                                                <small class="promo-price-tiny">{{ $product->formatted_current_price }}</small>
+                                                                <span class="promo-badge-tiny">-{{ $product->getDiscountPercentage() }}%</span>
+                                                            </div>
+                                                        @endif
                                                         @if($product->badge)
                                                             <span class="product-badge">{{ $product->badge }}</span>
                                                         @endif
@@ -127,6 +149,13 @@
                                                         {{ $product->name }}
                                                         @if($product->brand)
                                                             <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->hasValidPromotion())
+                                                            <div class="menu-price-promo">
+                                                                <small class="original-price-tiny">{{ $product->formatted_price }}</small>
+                                                                <small class="promo-price-tiny">{{ $product->formatted_current_price }}</small>
+                                                                <span class="promo-badge-tiny">-{{ $product->getDiscountPercentage() }}%</span>
+                                                            </div>
                                                         @endif
                                                         @if($product->badge)
                                                             <span class="product-badge">{{ $product->badge }}</span>
@@ -174,6 +203,13 @@
                                                         @if($product->brand)
                                                             <small class="text-muted d-block">{{ $product->brand }}</small>
                                                         @endif
+                                                        @if($product->hasValidPromotion())
+                                                            <div class="menu-price-promo">
+                                                                <small class="original-price-tiny">{{ $product->formatted_price }}</small>
+                                                                <small class="promo-price-tiny">{{ $product->formatted_current_price }}</small>
+                                                                <span class="promo-badge-tiny">-{{ $product->getDiscountPercentage() }}%</span>
+                                                            </div>
+                                                        @endif
                                                         @if($product->badge)
                                                             <span class="product-badge">{{ $product->badge }}</span>
                                                         @endif
@@ -198,6 +234,13 @@
                                                         {{ $product->name }}
                                                         @if($product->brand)
                                                             <small class="text-muted d-block">{{ $product->brand }}</small>
+                                                        @endif
+                                                        @if($product->hasValidPromotion())
+                                                            <div class="menu-price-promo">
+                                                                <small class="original-price-tiny">{{ $product->formatted_price }}</small>
+                                                                <small class="promo-price-tiny">{{ $product->formatted_current_price }}</small>
+                                                                <span class="promo-badge-tiny">-{{ $product->getDiscountPercentage() }}%</span>
+                                                            </div>
                                                         @endif
                                                         @if($product->badge)
                                                             <span class="product-badge">{{ $product->badge }}</span>
@@ -224,6 +267,13 @@
                                                         @if($product->brand)
                                                             <small class="text-muted d-block">{{ $product->brand }}</small>
                                                         @endif
+                                                        @if($product->hasValidPromotion())
+                                                            <div class="menu-price-promo">
+                                                                <small class="original-price-tiny">{{ $product->formatted_price }}</small>
+                                                                <small class="promo-price-tiny">{{ $product->formatted_current_price }}</small>
+                                                                <span class="promo-badge-tiny">-{{ $product->getDiscountPercentage() }}%</span>
+                                                            </div>
+                                                        @endif
                                                         @if($product->badge)
                                                             <span class="product-badge">{{ $product->badge }}</span>
                                                         @endif
@@ -248,9 +298,9 @@
                             </div>
                         </div>
                     </li>                    
-                    <!-- Heritage Parfums -->
+                    <!-- Héritaj Parfums -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('heritage') }}">Heritage Parfums</a>
+                        <a class="nav-link" href="{{ route('heritage') }}">Héritaj Parfums</a>
                     </li>
                     
                     <!-- Contact -->
@@ -312,7 +362,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 mb-4">
-                    <h5 class="font-serif">Heritage Parfums</h5>
+                    <h5 class="font-serif">Héritaj Parfums</h5>
                     <p>Depuis 1925, nous créons <strong>Éternelle Rose</strong>, notre parfum signature qui capture l'essence de l'élégance française et l'art de la parfumerie traditionnelle.</p>
                     <div class="social-links mt-4">
                         <a href="#"><i class="fab fa-instagram"></i></a>
@@ -354,7 +404,7 @@
             <hr style="border-color: #444;">
             <div class="row">
                 <div class="col-md-6">
-                    <p>&copy; 2025 Heritage Parfums. Tous droits réservés.</p>
+                    <p>&copy; 2025 Héritaj Parfums. Tous droits réservés.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <a href="#" class="me-3">Politique de Confidentialité</a>

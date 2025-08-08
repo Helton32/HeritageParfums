@@ -47,11 +47,27 @@ class Product extends Model
     public function setNotesAttribute($value)
     {
         if (is_array($value)) {
-            // Filtrer et nettoyer les notes
-            $cleanNotes = array_filter(array_map(function($note) {
-                return is_string($note) ? trim($note) : '';
-            }, $value));
-            $this->attributes['notes'] = json_encode(array_values($cleanNotes));
+            // Si c'est une structure avec head/heart/base, la préserver
+            if (isset($value['head']) || isset($value['heart']) || isset($value['base'])) {
+                $structuredNotes = [];
+                foreach (['head', 'heart', 'base'] as $level) {
+                    if (isset($value[$level]) && is_array($value[$level])) {
+                        $cleanNotes = array_filter(array_map(function($note) {
+                            return is_string($note) ? trim($note) : '';
+                        }, $value[$level]));
+                        if (!empty($cleanNotes)) {
+                            $structuredNotes[$level] = array_values($cleanNotes);
+                        }
+                    }
+                }
+                $this->attributes['notes'] = !empty($structuredNotes) ? json_encode($structuredNotes) : null;
+            } else {
+                // Ancienne logique pour compatibilité
+                $cleanNotes = array_filter(array_map(function($note) {
+                    return is_string($note) ? trim($note) : '';
+                }, $value));
+                $this->attributes['notes'] = !empty($cleanNotes) ? json_encode(array_values($cleanNotes)) : null;
+            }
         } else {
             $this->attributes['notes'] = $value;
         }
@@ -79,18 +95,30 @@ class Product extends Model
     // Accessors pour s'assurer que les arrays retournés contiennent des strings
     public function getNotesAttribute($value)
     {
-        $notes = json_decode($value, true) ?: [];
-        
-        // S'assurer que chaque niveau contient des strings
-        foreach (['head', 'heart', 'base'] as $level) {
-            if (isset($notes[$level]) && is_array($notes[$level])) {
-                $notes[$level] = array_filter(array_map(function($note) {
-                    return is_string($note) ? trim($note) : (string) $note;
-                }, $notes[$level]));
-            }
+        if (empty($value)) {
+            return ['head' => [], 'heart' => [], 'base' => []];
         }
         
-        return $notes;
+        $notes = json_decode($value, true) ?: [];
+        
+        // Si c'est déjà une structure avec head/heart/base
+        if (isset($notes['head']) || isset($notes['heart']) || isset($notes['base'])) {
+            $structuredNotes = ['head' => [], 'heart' => [], 'base' => []];
+            
+            foreach (['head', 'heart', 'base'] as $level) {
+                if (isset($notes[$level]) && is_array($notes[$level])) {
+                    $structuredNotes[$level] = array_filter(array_map(function($note) {
+                        return is_string($note) ? trim($note) : (string) $note;
+                    }, $notes[$level]));
+                }
+            }
+            
+            return $structuredNotes;
+        }
+        
+        // Si c'est un ancien format (array simple), retourner une structure vide
+        // Les anciens produits devront être modifiés pour avoir des notes structurées
+        return ['head' => [], 'heart' => [], 'base' => []];
     }
 
     public function getImagesAttribute($value)

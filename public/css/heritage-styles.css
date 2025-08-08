@@ -173,15 +173,16 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--guerlain-white);
     border-bottom: 1px solid var(--guerlain-border);
     transition: all 0.5s ease;
-    padding: 50px 0 15px 0; /* Réduit le padding */
+    padding: 25px 0 15px 0; /* Augmenté le padding top pour plus d'espace */
     box-shadow: none;
     position: relative;
+    z-index: 1000; /* Assure l'accessibilité sur Chrome */
 }
 
 .navbar.scrolled {
     background: var(--guerlain-white);
     box-shadow: 0 2px 30px rgba(0, 0, 0, 0.08);
-    padding: 35px 0 8px 0; /* Réduit le padding */
+    padding: 15px 0 8px 0; /* Augmenté le padding pour maintenir l'espace */
 }
 
 .navbar .container {
@@ -191,6 +192,7 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     text-align: center;
     width: 100%;
+    min-height: 60px; /* Assure une hauteur minimum pour l'accessibilité */
 }
 
 .navbar-brand {
@@ -205,7 +207,7 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: -35px; /* Ajusté de -45px à -35px */
+    top: -35px; /* Ajusté de -35px à -20px pour plus d'espace avec la navbar */
     z-index: 20;
 }
 
@@ -342,17 +344,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* === STYLES PAGE D'ACCUEIL === */
 
-/* Container principal du carrousel full-screen */
+/* Container principal du carrousel full-screen - MOBILE OPTIMISÉ */
 .fullscreen-carousel {
-    height: calc(100vh - 75px); /* Optimisé pour s'adapter parfaitement */
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height pour mobile */
     width: 100vw;
     position: relative;
-    margin-top: 75px; /* Ajusté pour un alignement parfait */
+    margin-top: 0; /* Supprimé le margin-top fixe */
     overflow: hidden;
-    border-top: 1px solid transparent; /* Assure une transition fluide */
+    border-top: 1px solid transparent;
+    top: 0; /* Ajouté pour assurer le positionnement */
 }
 
-/* Slide individual */
+/* Slide individual - MOBILE OPTIMISÉ */
 .carousel-slide {
     position: absolute;
     top: 0;
@@ -368,6 +372,8 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0 8rem;
     background: var(--guerlain-black);
     z-index: 1;
+    box-sizing: border-box; /* Ajouté pour mobile */
+    overflow: hidden; /* Évite les débordements */
 }
 
 .carousel-slide.active {
@@ -398,7 +404,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.05);
 }
 
-/* Zone de contenu texte */
+/* Zone de contenu texte - MOBILE OPTIMISÉ */
 .content-zone {
     flex: 1;
     padding: 0 0 0 4rem;
@@ -407,7 +413,10 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    height: 100%;
+    height: auto; /* Changé de 50% à auto pour mobile */
+    max-height: 100%; /* Évite les débordements */
+    overflow: hidden; /* Protection contre le débordement */
+    box-sizing: border-box; /* Ajouté pour mobile */
 }
 
 /* Texte signature en haut */
@@ -501,6 +510,11 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     gap: 1rem;
     z-index: 100;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
 }
 
 .nav-dot {
@@ -632,7 +646,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* === STYLES RESPONSIVE === */
 
-/* Responsive pour tablettes */
+/* Responsive pour tablettes - CORRIGÉ */
 @media (max-width: 1024px) {
     .carousel-slide, .footer-slide {
         flex-direction: column;
@@ -642,13 +656,16 @@ h1, h2, h3, h4, h5, h6 {
     
     .product-image-zone {
         flex: none;
-        height: 50%;
+        height: auto; /* Changé de 50% à auto */
+        max-height: 50vh; /* Limite la hauteur */
     }
     
     .content-zone {
         flex: none;
         padding: 2rem 0 0 0;
         align-items: center;
+        height: auto; /* Ajouté */
+        max-height: none; /* Réinitialisé */
     }
     
     .product-title {
@@ -668,27 +685,10 @@ h1, h2, h3, h4, h5, h6 {
         gap: 2rem;
     }
 
-    .fullscreen-carousel {
-        margin-top: 55px; /* Optimisé pour tablette */
-        height: calc(100vh - 55px);
-    }
-    
-    .main-content {
-        margin-top: 55px; /* Cohérent avec le carrousel */
-    }
-    
-    .carousel-nav {
-        left: 1rem;
-        bottom: 1.5rem;
-        top: auto;
-        transform: none;
-        flex-direction: row;
-        padding: 0.5rem 1rem;
-        gap: 0.6rem;
-    }
+    /* Note: Les styles fullscreen-carousel et main-content sont maintenant gérés par home-improvements.css */
 }
 
-/* Responsive pour mobile */
+/* Responsive pour mobile - SIMPLIFIÉ pour éviter les conflits */
 @media (max-width: 640px) {
     .product-title {
         font-size: 2rem;
@@ -708,26 +708,7 @@ h1, h2, h3, h4, h5, h6 {
         gap: 1rem;
     }
     
-    .fullscreen-carousel {
-        margin-top: 45px; /* Encore plus réduit sur mobile */
-        height: calc(100vh - 45px);
-    }
-    
-    .main-content {
-        margin-top: 45px;
-    }
-    
-    .carousel-nav {
-        padding: 0.4rem 0.8rem;
-        gap: 0.5rem;
-        bottom: 1rem;
-    }
-    
-    .scroll-indicator {
-        bottom: 1rem;
-        font-size: 0.7rem;
-        padding: 0.4rem 0.8rem;
-    }
+    /* Note: Les autres styles mobiles sont gérés par home-improvements.css */
 }
 
 /* Responsive Navigation */
@@ -971,7 +952,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     gap: 0.8rem; /* Réduit l'espacement */
     z-index: 100;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(38, 171, 40, 0.1);
     padding: 1rem 0.5rem;
     border-radius: 20px;
     backdrop-filter: blur(10px);
@@ -1645,4 +1626,165 @@ h1, h2, h3, h4, h5, h6 {
 
 .mega-menu-list .mini-category[data-category="base"]::before {
     background: #FF9800;
+}
+
+/* === RESPONSIVE NAVBAR - CORRIGÉ === */
+@media (max-width: 991px) {
+    .navbar {
+        padding: 15px 0 10px 0;
+        position: relative; /* Changé de fixed pour éviter les conflits */
+    }
+    
+    .navbar.scrolled {
+        padding: 10px 0 5px 0;
+    }
+    
+    .navbar-brand {
+        font-size: 1.8rem;
+        top: 0; /* Réinitialisé */
+        position: relative;
+        transform: none;
+        left: auto;
+    }
+    
+    .navbar-actions {
+        position: relative;
+        transform: none;
+        right: auto;
+        top: auto;
+    }
+    
+    .navbar-collapse {
+        margin-top: 1rem;
+    }
+    
+    /* Note: Les styles fullscreen-carousel sont gérés par home-improvements.css */
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 0 8px 0;
+    }
+    
+    .navbar-brand {
+        font-size: 1.6rem;
+    }
+    
+    /* Note: Les styles fullscreen-carousel sont gérés par home-improvements.css */
+}
+
+/* === STYLES POUR LES PROMOTIONS === */
+
+/* Promotions dans le mega menu - Produit en vedette */
+.featured-price-promo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.original-price-small {
+    font-size: 0.9rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.promo-price-small {
+    font-size: 1.1rem;
+    color: var(--guerlain-gold);
+    font-weight: 600;
+}
+
+.discount-badge-mini {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: inline-block;
+    width: fit-content;
+}
+
+/* Promotions dans les listes du mega menu */
+.menu-price-promo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+.original-price-tiny {
+    font-size: 0.75rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.promo-price-tiny {
+    font-size: 0.8rem;
+    color: var(--guerlain-gold);
+    font-weight: 600;
+}
+
+.promo-badge-tiny {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    color: white;
+    padding: 0.1rem 0.3rem;
+    border-radius: 8px;
+    font-size: 0.6rem;
+    font-weight: bold;
+}
+
+/* Promotions dans le détail produit */
+.product-promotion {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 2px solid #ffc107;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.promotion-title {
+    color: #856404;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.promotion-prices {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.original-price-detail {
+    font-size: 1.3rem;
+    color: #dc3545;
+    text-decoration: line-through;
+    font-weight: 300;
+}
+
+.promotion-price-detail {
+    font-size: 2rem;
+    color: #28a745;
+    font-weight: 700;
+}
+
+.discount-badge-detail {
+    background: #dc3545;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.promotion-description {
+    font-style: italic;
+    color: #856404;
+    margin-top: 0.5rem;
 }

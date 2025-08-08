@@ -1,6 +1,6 @@
 {
-  "name": "Heritage Parfums - Éternelle Rose",
-  "short_name": "Heritage Parfums",
+  "name": "Héritaj Parfums - Éternelle Rose",
+  "short_name": "Héritaj Parfums",
   "description": "Parfum de luxe français - Éternelle Rose, fragrance d'exception depuis 1925",
   "start_url": "/",
   "display": "standalone",
@@ -55,7 +55,7 @@
     {
       "name": "Notre Histoire",
       "short_name": "Histoire",
-      "description": "L'histoire de Heritage Parfums",
+      "description": "L'histoire de Héritaj Parfums",
       "url": "/about",
       "icons": [
         {
@@ -83,14 +83,14 @@
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Page d'accueil Heritage Parfums"
+      "label": "Page d'accueil Héritaj Parfums"
     },
     {
       "src": "/images/screenshot-desktop-1.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Boutique Heritage Parfums"
+      "label": "Boutique Héritaj Parfums"
     }
   ],
   "related_applications": [],

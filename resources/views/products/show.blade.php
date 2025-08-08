@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $product->name . ' - Heritage Parfums')
+@section('title', $product->name . ' - Héritaj Parfums')
 @section('description', $product->short_description)
 
 @push('styles')
@@ -84,7 +84,21 @@
                         <span class="rating-text">(4.9/5 - 127 avis)</span>
                     </div>
                     
-                    <div class="product-price">{{ $product->formatted_price }}</div>
+                    @if($product->hasValidPromotion())
+                        <div class="product-promotion">
+                            <h5 class="promotion-title">🎯 Offre Spéciale</h5>
+                            <div class="promotion-prices">
+                                <span class="original-price-detail">{{ $product->formatted_price }}</span>
+                                <span class="promotion-price-detail">{{ $product->formatted_current_price }}</span>
+                                <span class="discount-badge-detail">-{{ $product->getDiscountPercentage() }}%</span>
+                            </div>
+                            @if($product->promotion_description)
+                                <p class="promotion-description">{{ $product->promotion_description }}</p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="product-price">{{ $product->formatted_price }}</div>
+                    @endif
                     
                     <!-- Stock Info -->
                     <div class="stock-info">
@@ -124,6 +138,10 @@
                                 <i class="fas fa-shopping-bag"></i>
                                 <span>Ajouter au Panier</span>
                             </button>
+                            <button class="btn-apple-pay" id="applePayBtn" data-product-id="{{ $product->id }}">
+                                <i class="fab fa-apple"></i>
+                                <span>Payer avec Apple Pay</span>
+                            </button>
                             <button class="btn-wishlist" onclick="toggleWishlist({{ $product->id }})">
                                 <i class="far fa-heart"></i>
                             </button>
@@ -141,13 +159,6 @@
                             <div>
                                 <strong>Livraison Express</strong>
                                 <small>Gratuite dès 150€</small>
-                            </div>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-gift"></i>
-                            <div>
-                                <strong>Emballage Cadeau</strong>
-                                <small>Offert sur demande</small>
                             </div>
                         </div>
                         <div class="feature">
@@ -176,7 +187,9 @@
         <div class="product-tabs">
             <nav class="tab-nav">
                 <button class="tab-btn active" data-tab="description">Description</button>
-                <button class="tab-btn" data-tab="notes">Notes Olfactives</button>
+                @if($product->product_type === 'parfum')
+                    <button class="tab-btn" data-tab="notes">Notes Olfactives</button>
+                @endif
                 <button class="tab-btn" data-tab="details">Détails</button>
                 <button class="tab-btn" data-tab="reviews">Avis (127)</button>
             </nav>
@@ -185,30 +198,34 @@
                 <!-- Description Tab -->
                 <div class="tab-pane active" id="description">
                     <div class="row">
-                        <div class="col-lg-8">
+                        <div class="{{ $product->product_type === 'parfum' ? 'col-lg-8' : 'col-lg-12' }}">
                             <p class="lead">{{ $product->short_description }}</p>
                             <div class="description-text">
                                 {!! nl2br(e($product->description)) !!}
                             </div>
                         </div>
-                        <div class="col-lg-4">
-                            <div class="product-highlights">
-                                <h5>Points Forts</h5>
-                                <ul>
-                                    <li>Création artisanale française</li>
-                                    <li>Ingrédients de haute qualité</li>
-                                    <li>Longue tenue (8-12h)</li>
-                                    <li>Sillage exceptionnel</li>
-                                </ul>
+                        @if($product->product_type === 'parfum')
+                            <div class="col-lg-4">
+                                <div class="product-highlights">
+                                    <h5>Points Forts</h5>
+                                    <ul>
+                                        <li>Création artisanale française</li>
+                                        <li>Ingrédients de haute qualité</li>
+                                        <li>Longue tenue (8-12h)</li>
+                                        <li>Sillage exceptionnel</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
                 
-                <!-- Notes Tab -->
-                <div class="tab-pane" id="notes">
-                    @include('components.olfactory-notes', ['product' => $product])
-                </div>                
+                @if($product->product_type === 'parfum')
+                    <!-- Notes Tab -->
+                    <div class="tab-pane" id="notes">
+                        @include('components.olfactory-notes', ['product' => $product])
+                    </div>
+                @endif                
                 <!-- Details Tab -->
                 <div class="tab-pane" id="details">
                     <div class="row">
@@ -216,7 +233,7 @@
                             <table class="product-specs">
                                 <tr>
                                     <td>Marque</td>
-                                    <td>Heritage Parfums</td>
+                                    <td>Héritaj Parfums</td>
                                 </tr>
                                 <tr>
                                     <td>Catégorie</td>
@@ -316,6 +333,9 @@
                 <div class="product-card">
                     <div class="product-image">
                         <img src="{{ $relatedProduct->main_image }}" alt="{{ $relatedProduct->name }}">
+                        @if($relatedProduct->hasValidPromotion())
+                            <span class="promotion-badge-related">-{{ $relatedProduct->getDiscountPercentage() }}%</span>
+                        @endif
                         @if($relatedProduct->badge)
                             <span class="badge">{{ $relatedProduct->badge }}</span>
                         @endif
@@ -340,7 +360,14 @@
                                 <i class="fas fa-star"></i>
                             </div>
                         </div>
-                        <div class="product-price">{{ $relatedProduct->formatted_price }}</div>
+                        @if($relatedProduct->hasValidPromotion())
+                            <div class="product-price-promo">
+                                <span class="original-price-related">{{ $relatedProduct->formatted_price }}</span>
+                                <span class="promo-price-related">{{ $relatedProduct->formatted_current_price }}</span>
+                            </div>
+                        @else
+                            <div class="product-price">{{ $relatedProduct->formatted_price }}</div>
+                        @endif
                     </div>
                 </div>
                 @endforeach
@@ -532,6 +559,51 @@ function toggleWishlist(productId) {
         showNotification('Retiré des favoris', 'info');
     }
 }
+
+// Apple Pay functionality
+document.getElementById('applePayBtn')?.addEventListener('click', function() {
+    const productId = this.dataset.productId;
+    const quantity = document.getElementById('quantity').value;
+    
+    // Vérifier si Apple Pay est disponible
+    if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
+        // Ajouter d'abord le produit au panier
+        const originalText = this.innerHTML;
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Préparation Apple Pay...</span>';
+        
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                product_id: parseInt(productId),
+                quantity: parseInt(quantity)
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Rediriger vers checkout avec Apple Pay
+                window.location.href = '/checkout?payment_method=apple_pay';
+            } else {
+                showNotification(data.message, 'error');
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Erreur lors de la préparation', 'error');
+            this.innerHTML = originalText;
+            this.disabled = false;
+        });
+    } else {
+        showNotification('Apple Pay n\'est pas disponible sur cet appareil', 'info');
+    }
+});
 
 // Notification function
 function showNotification(message, type = 'success') {

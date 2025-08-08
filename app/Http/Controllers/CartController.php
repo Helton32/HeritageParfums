@@ -182,7 +182,8 @@ class CartController extends Controller
             }
 
             $quantity = $cartItem['quantity'];
-            $itemTotal = $product->price * $quantity;
+            $currentPrice = $product->getCurrentPrice(); // Utilise le prix avec promotion si applicable
+            $itemTotal = $currentPrice * $quantity;
             
             $items[] = [
                 'product_id' => $product->id,
@@ -190,7 +191,10 @@ class CartController extends Controller
                 'slug' => $product->slug,
                 'type' => $product->type,
                 'size' => $product->size,
-                'price' => $product->price,
+                'price' => $currentPrice,
+                'original_price' => $product->price,
+                'is_on_promotion' => $product->hasValidPromotion(),
+                'promotion_percentage' => $product->getDiscountPercentage(),
                 'quantity' => $quantity,
                 'total' => $itemTotal,
                 'image' => $product->main_image,

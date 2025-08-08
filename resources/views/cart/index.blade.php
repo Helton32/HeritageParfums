@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Mon Panier - Heritage Parfums')
-@section('description', 'Finalisez votre commande Heritage Parfums.')
+@section('title', 'Mon Panier - Héritaj Parfums')
+@section('description', 'Finalisez votre commande Héritaj Parfums.')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/cart-modern.css') }}">
@@ -49,6 +49,12 @@
                                 <span class="item-size">{{ $item['size'] }}</span>
                             </div>
                             <div class="item-category">{{ ucfirst($item['category']) }}</div>
+                            @if($item['is_on_promotion'])
+                                <div class="item-promotion">
+                                    <span class="promo-badge-cart">🏷️ -{{ $item['promotion_percentage'] }}%</span>
+                                    <div class="original-price-small-cart">Prix initial: {{ number_format($item['original_price'], 2) }}€</div>
+                                </div>
+                            @endif
                         </div>
                         
                         <div class="item-controls">

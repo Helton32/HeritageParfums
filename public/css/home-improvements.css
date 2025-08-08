@@ -11,14 +11,15 @@
 
 /* --- Base --- */
 body.home-page {
-    overflow-x: hidden; /* Changé de overflow: hidden à overflow-x: hidden */
-    overflow-y: hidden;
+    overflow: hidden;
     margin: 0;
     padding: 0;
     background-color: var(--deep-black);
     color: var(--off-white);
     font-family: var(--modern-font);
-    font-size: 16px; /* Taille de base */
+    font-size: 16px;
+    height: 100vh;
+    position: relative;
 }
 
 .fullscreen-carousel {
@@ -26,7 +27,8 @@ body.home-page {
     width: 100%;
     height: 100vh;
     overflow: hidden;
-    max-width: 100vw; /* Empêche le débordement horizontal */
+    max-width: 100vw;
+    background-color: var(--deep-black);
 }
 
 /* --- Slides --- */
@@ -37,20 +39,24 @@ body.home-page {
     top: 0;
     left: 0;
     opacity: 0;
-    transform: scale(0.95); /* Réduit légèrement l'effet de scale */
-    transition: all 0.6s ease-in-out; /* Transition plus rapide */
+    visibility: hidden;
+    transform: translateZ(0);
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
     background-color: var(--deep-black);
-    padding: 1rem; /* Réduit le padding */
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    contain: layout style paint;
 }
 
 .carousel-slide.active {
     opacity: 1;
-    transform: scale(1);
+    visibility: visible;
     z-index: 2;
 }
 
@@ -60,177 +66,204 @@ body.home-page {
     align-items: center;
     justify-content: center;
     height: 100%;
-    gap: 3rem; /* Augmenté pour plus d'espace */
-    padding: 2rem; /* Augmenté */
+    gap: 1.5rem;         /* réduit le gap */
+    padding: 1rem;       /* réduit le padding */
     flex-wrap: wrap;
-    max-width: 1600px; /* Augmenté */
+    max-width: 90vw;     /* réduit la largeur max */
     margin: 0 auto;
     box-sizing: border-box;
+    transform: translateZ(0);
 }
+
+/* Option media query pour petits écrans */
+@media (max-width: 768px) {
+    .carousel-content-wrapper {
+        gap: 1rem;
+        padding: 0.8rem;
+        max-width: 95vw;
+    }
+}
+
 
 /* Image à gauche */
 .product-image-zone {
-    flex: 1 1 400px; /* Augmenté */
-    max-width: 500px; /* Augmenté */
+    flex: 1 1 400px;
+    max-width: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+    transform: translateZ(0);
 }
 
 .product-image {
     width: 100%;
-    max-width: 450px; /* Augmenté significativement */
+    max-width: 450px;
     height: auto;
-    border-radius: 20px; /* Restauré */
+    border-radius: 20px;
     object-fit: cover;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); /* Augmenté */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    image-rendering: auto;
 }
 
 /* Texte à droite */
 .content-zone {
-    flex: 1 1 400px; /* Augmenté */
-    max-width: 600px; /* Augmenté */
+    flex: 1 1 400px;
+    max-width: 600px;
     text-align: left;
-    padding: 2rem; /* Augmenté */
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    transform: translateZ(0);
 }
 
 .signature-text {
-    font-size: 1rem; /* Augmenté */
+    font-size: 1rem;
     font-weight: 600;
     color: var(--soft-gray);
     text-transform: none;
-    letter-spacing: 2px; /* Restauré */
+    letter-spacing: 2px;
     margin-bottom: 1rem;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 .product-title {
-    font-size: 2.8rem; /* Restauré à la taille originale */
+    font-size: 2.8rem;
     font-weight: 700;
     font-family: var(--luxury-font);
     color: var(--gold);
     margin-bottom: 1rem;
     letter-spacing: 1px;
     line-height: 1.2;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 .product-subtitle {
     font-style: italic;
-    font-size: 1.2rem; /* Augmenté */
+    font-size: 1.2rem;
     color: var(--off-white);
-    margin-bottom: 2rem; /* Augmenté */
+    margin-bottom: 2rem;
     line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 /* --- Boutons --- */
 .buttons-container {
     display: flex;
-    justify-content: flex-start; /* Aligne à gauche au lieu du centre */
-    gap: 1.5rem; /* Augmenté */
+    justify-content: flex-start;
+    gap: 1.5rem;
     flex-wrap: wrap;
-    margin-top: 1.5rem; /* Augmenté */
+    margin-top: 1.5rem;
 }
 
 .discover-button, .order-button {
     background: transparent;
     border: 2px solid var(--gold);
     color: var(--gold);
-    padding: 0.8rem 2rem; /* Augmenté */
-    border-radius: 30px; /* Restauré */
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
     font-weight: 600;
-    font-size: 1rem; /* Augmenté */
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
-    letter-spacing: 1px; /* Ajouté pour plus d'élégance */
+    letter-spacing: 1px;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .discover-button:hover, .order-button:hover {
     background: var(--gold);
     color: var(--deep-black);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(201, 160, 108, 0.3); /* Effet d'ombre au hover */
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 5px 15px rgba(201, 160, 108, 0.3);
 }
 
 /* --- Navigation dots --- */
 .carousel-nav {
     position: fixed;
-    right: 2rem; /* Restauré à la distance originale */
+    right: 2rem;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Augmenté */
+    gap: 15px;
     z-index: 50;
     pointer-events: auto;
-    /* SUPPRESSION COMPLÈTE DE TOUS LES EFFETS DE FLOU */
-    background: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 1rem 0.8rem;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-dot {
-    width: 14px; /* Augmenté */
-    height: 14px; /* Augmenté */
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background-color: rgba(191, 191, 191, 0.7); /* Semi-transparent pour être visible */
+    background-color: rgba(191, 191, 191, 0.7);
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease;
-    border: 2px solid rgba(255, 255, 255, 0.2); /* Bordure pour plus de visibilité */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transform: translateZ(0);
 }
 
 .nav-dot.active {
     background-color: var(--gold);
     border-color: var(--gold);
-    transform: scale(1.4); /* Augmenté */
-    box-shadow: 0 0 10px rgba(201, 160, 108, 0.5); /* Effet de lueur */
+    transform: scale(1.4) translateZ(0);
+    box-shadow: 0 0 10px rgba(201, 160, 108, 0.5);
 }
 
 /* --- Footer --- */
 .footer-slide {
     background-color: #111;
     color: var(--off-white);
-    padding: 3rem 1.5rem; /* Réduit le padding */
+    padding: 3rem 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     height: 100vh;
     box-sizing: border-box;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .footer-content {
     max-width: 1200px;
     margin: auto;
     width: 100%;
+    padding-top: 2rem;
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Réduit la taille minimum */
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
 .footer-content h5 {
     font-family: var(--luxury-font);
-    font-size: 1.1rem; /* Réduit la taille */
+    font-size: 1.3rem;
     color: var(--gold);
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
 }
 
 .footer-content p,
 .footer-links li a {
     color: var(--soft-gray);
-    font-size: 0.9rem; /* Réduit la taille */
-    line-height: 1.4;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 .footer-links {
@@ -240,7 +273,7 @@ body.home-page {
 }
 
 .footer-links li {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 .footer-links a {
@@ -256,8 +289,8 @@ body.home-page {
 
 .social-links a {
     color: var(--off-white);
-    font-size: 1.1rem; /* Réduit la taille */
-    margin-right: 0.8rem;
+    font-size: 1.2rem;
+    margin-right: 1rem;
     transition: color 0.3s ease;
 }
 
@@ -267,43 +300,43 @@ body.home-page {
 
 .footer-bottom {
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--soft-gray);
-    margin-top: 1rem;
-    padding-top: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
     border-top: 1px solid #333;
 }
 
 /* --- Scroll indicator --- */
 #scroll-indicator {
     position: fixed;
-    bottom: 1.5rem; /* Réduit la distance du bas */
+    bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     color: var(--soft-gray);
-    font-size: 0.8rem; /* Réduit la taille */
+    font-size: 0.9rem;
     animation: bounce 2s infinite;
     cursor: pointer;
     z-index: 5;
 }
 
 #scroll-indicator i {
-    font-size: 1rem; /* Réduit la taille */
-    margin-top: 0.2rem;
+    font-size: 1.2rem;
+    margin-top: 0.3rem;
     display: block;
 }
 
 @keyframes bounce {
     0%, 100% { transform: translate(-50%, 0); }
-    50% { transform: translate(-50%, -6px); }
+    50% { transform: translate(-50%, -8px); }
 }
 
 /* --- Effet fade-in --- */
 .fade-in {
     opacity: 0;
-    transform: translateY(20px); /* Réduit l'effet */
-    transition: all 1s ease; /* Transition plus rapide */
+    transform: translateY(30px);
+    transition: all 1.2s ease;
 }
 
 .fade-in.show {
@@ -311,83 +344,664 @@ body.home-page {
     transform: translateY(0);
 }
 
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }
+.delay-3 { transition-delay: 0.6s; }
 
-/* --- Responsive design --- */
-@media (max-width: 768px) {
+/* --- Responsive design MOBILE OPTIMISÉ - CONTENU COMPLET VISIBLE --- */
+@media (max-width: 991px) {
+    /* Reset anti-blur pour mobile */
+    * {
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    html {
+        -webkit-text-size-adjust: 100% !important;
+        -ms-text-size-adjust: 100% !important;
+        font-size: 15px; /* Légèrement plus grand pour mobile */
+        overflow: hidden;
+    }
+    
+    body.home-page {
+        overflow: hidden;
+        height: 100vh;
+        height: 100dvh; /* Utilise dynamic viewport height */
+        position: fixed;
+        width: 100%;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .fullscreen-carousel {
+        height: 100vh !important; /* Force la hauteur complète */
+        height: 100dvh !important; /* Dynamic viewport height pour mobile */
+        position: relative;
+        background: var(--deep-black);
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
+        top: 0 !important; /* Force la position en haut */
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        margin: 0 !important; /* Supprime toutes les marges */
+        padding: 0 !important; /* Supprime tous les paddings */
+    }
+    
+    .carousel-slide {
+        height: 100vh !important;
+        height: 100dvh !important; /* Dynamic viewport height */
+        position: absolute;
+        padding: 0.5rem 0.4rem; /* Padding réduit pour plus d'espace */
+        display: none;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        contain: layout style paint;
+        will-change: transform, opacity;
+        overflow: hidden; /* Évite le débordement sur mobile */
+        top: 0 !important; /* Force la position */
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+    }
+    
+    .carousel-slide.active {
+        display: flex !important;
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+    }
+    
     .carousel-content-wrapper {
         flex-direction: column;
-        gap: 1rem;
-        padding: 0.5rem;
+        gap: 0.4rem; /* Gap encore plus réduit */
+        padding: 0.3rem; /* Padding minimal */
         text-align: center;
-    }
-    
-    .content-zone {
-        text-align: center;
-        max-width: 100%;
-    }
-    
-    .product-title {
-        font-size: 1.8rem;
-    }
-    
-    .product-subtitle {
-        font-size: 0.9rem;
+        height: 100%;
+        justify-content: space-evenly; /* Répartition équitable de l'espace */
+        align-items: center;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+        overflow: hidden; /* Protection contre débordement */
     }
     
     .product-image-zone {
-        max-width: 280px;
+        order: 1;
+        max-width: 65%; /* Réduit encore pour plus d'espace texte */
+        width: 100%;
+        margin-bottom: 0.2rem; /* Margin encore plus réduite */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        flex-shrink: 0; /* Évite la compression */
+        height: auto; /* Hauteur flexible */
+        max-height: 28vh; /* Hauteur maximum encore réduite */
+        max-height: 28dvh; /* Dynamic viewport */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .product-image {
+        max-width: 100%;
+        height: auto;
+        max-height: 26vh; /* Encore plus réduit */
+        max-height: 26dvh; /* Dynamic viewport */
+        border-radius: 12px; /* Plus petit radius */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        image-rendering: auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Ombre réduite */
+        object-fit: contain; /* Assure que l'image complète est visible */
+        width: 100%;
+    }
+    
+    .content-zone {
+        order: 2;
+        text-align: center;
+        max-width: 100%;
+        padding: 0.2rem; /* Padding minimal */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        flex: 1;
+        min-height: 0; /* Permet la compression si nécessaire */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden; /* Protection contre débordement */
+        max-height: 65vh; /* Plus d'espace pour le contenu */
+        max-height: 65dvh; /* Dynamic viewport */
+    }
+    
+    .product-title {
+        font-size: 1.5rem; /* Encore plus réduit */
+        line-height: 1.0; /* Line height minimal */
+        margin-bottom: 0.2rem; /* Margin minimale */
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-weight: 700;
+        color: var(--gold);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        word-wrap: break-word; /* Évite le débordement du texte */
+        max-width: 100%;
+    }
+    
+    .product-subtitle {
+        font-size: 0.9rem; /* Plus petit */
+        margin-bottom: 0.3rem; /* Margin minimale */
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        line-height: 1.1; /* Line height minimal */
+        color: rgba(255, 255, 255, 0.9);
+        word-wrap: break-word; /* Évite le débordement */
+        max-width: 100%;
+    }
+    
+    .signature-text {
+        font-size: 0.7rem; /* Plus petit */
+        margin-bottom: 0.2rem; /* Margin minimale */
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        letter-spacing: 0.5px; /* Réduit */
+        text-transform: uppercase;
+        opacity: 0.8;
     }
     
     .buttons-container {
         justify-content: center;
-        gap: 0.8rem;
+        gap: 0.5rem; /* Gap encore plus réduit */
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 280px; /* Largeur encore plus réduite */
+        margin: 0 auto;
+        margin-top: 0.3rem; /* Margin minimale */
+        flex-shrink: 0; /* Évite la compression des boutons */
     }
     
     .discover-button, .order-button {
-        padding: 0.5rem 1.2rem;
-        font-size: 0.85rem;
+        width: 100%;
+        padding: 0.6rem 1rem; /* Padding encore plus réduit */
+        font-size: 0.8rem; /* Taille encore plus réduite */
+        text-align: center;
+        min-height: 40px; /* Hauteur réduite mais tactile */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        border-radius: 20px; /* Plus petit */
+        font-weight: 600;
+        letter-spacing: 0.3px; /* Réduit */
+        transition: all 0.2s ease; /* Transition plus rapide sur mobile */
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap; /* Évite le retour à la ligne */
     }
     
+    .discover-button:hover, .order-button:hover,
+    .discover-button:active, .order-button:active {
+        transform: translateZ(0) scale(0.98); /* Effet de pression subtil */
+        box-shadow: 0 4px 12px rgba(201, 160, 108, 0.3);
+    }
+    
+    /* Optimisation maximale des éléments additionnels sur mobile */
+    .price-container {
+        margin-bottom: 0.4rem; /* Margin encore plus réduite */
+        display: flex;
+        align-items: center;
+        gap: 0.3rem; /* Gap minimal */
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .current-price, .promotion-price {
+        font-size: 1.4rem; /* Réduit */
+    }
+    
+    .original-price {
+        font-size: 1.1rem; /* Réduit */
+    }
+    
+    .product-info-extra {
+        margin-bottom: 0.4rem; /* Margin réduite */
+    }
+    
+    .product-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.2rem; /* Gap minimal */
+        justify-content: center;
+    }
+    
+    .feature {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.1rem 0.4rem; /* Padding minimal */
+        border-radius: 10px; /* Plus petit */
+        font-size: 0.6rem; /* Encore plus petit */
+        color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        white-space: nowrap; /* Évite le retour à la ligne */
+    }
+    
+    .customer-rating {
+        margin-top: 0.4rem; /* Margin réduite */
+        text-align: center;
+    }
+    
+    .customer-rating .stars {
+        color: var(--gold);
+        margin-bottom: 0.1rem; /* Margin minimale */
+        font-size: 0.8rem; /* Plus petit */
+    }
+    
+    .customer-rating .rating-text {
+        font-size: 0.65rem; /* Encore plus petit */
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .promotion-details {
+        text-align: center;
+        margin-bottom: 0.3rem; /* Margin réduite */
+    }
+    
+    .promotion-info {
+        color: var(--gold);
+        font-style: italic;
+        background: rgba(212, 175, 55, 0.1);
+        padding: 0.1rem 0.4rem; /* Padding minimal */
+        border-radius: 10px; /* Plus petit */
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        font-size: 0.65rem; /* Encore plus petit */
+    }
+    /* Navigation optimisée mobile */
     .carousel-nav {
         right: 1rem;
+        gap: 15px; /* Gap plus généreux */
+        background: rgba(0, 0, 0, 0.85); /* Plus opaque */
+        padding: 1rem 0.8rem; /* Padding plus généreux */
+        border-radius: 25px;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .nav-dot {
+        width: 14px; /* Légèrement plus grand */
+        height: 14px;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-dot::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: -8px;
+        /* Zone de frappe plus large pour mobile */
+        z-index: -1;
+    }
+    
+    .nav-dot.active {
+        transform: scale(1.4) translateZ(0);
+        box-shadow: 0 0 8px rgba(201, 160, 108, 0.5);
+        background-color: var(--gold);
+    }
+    
+    /* Footer slide mobile */
+    .footer-slide {
+        padding: 1.5rem 1rem; /* Padding optimisé */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: #0a0a0a;
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height */
     }
     
     .footer-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 2rem;
+        text-align: center;
+        max-width: 100%;
+    }
+    
+    .footer-content {
+        max-width: 100%;
+        width: 100%;
+        padding-top: 1rem; /* Padding réduit */
+    }
+    
+    .footer-content h5 {
+        font-size: 1.2rem; /* Légèrement plus grand */
+        margin-bottom: 1rem;
+        color: var(--gold);
+    }
+    
+    .footer-content p {
+        font-size: 0.9rem; /* Légèrement plus grand */
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.9rem; /* Cohérent avec le paragraphe */
+        padding: 0.3rem 0; /* Zone de frappe plus grande */
+        display: block;
+    }
+    
+    /* Scroll indicator mobile */
+    #scroll-indicator {
+        bottom: 2rem; /* Plus haut pour éviter les boutons système */
+        font-size: 0.9rem; /* Légèrement plus grand */
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 0.8rem 1.2rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: var(--soft-gray);
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    #scroll-indicator i {
+        font-size: 1.1rem; /* Légèrement plus grand */
+        margin-top: 0.2rem;
+    }
+    
+    /* Optimisation des animations sur mobile */
+    .fade-in {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    /* Animation bounce optimisée pour mobile */
+    @keyframes bounce {
+        0%, 100% { transform: translate(-50%, 0); }
+        50% { transform: translate(-50%, -4px); } /* Mouvement plus subtil */
     }
 }
 
+/* Très petits écrans - ULTRA OPTIMISÉ */
 @media (max-width: 480px) {
+    html {
+        font-size: 13px; /* Base encore plus petite */
+    }
+    
     .carousel-slide {
-        padding: 0.5rem;
+        padding: 0.2rem 0.2rem; /* Padding minimal */
     }
     
-    .product-title {
-        font-size: 1.6rem;
-    }
-    
-    .product-subtitle {
-        font-size: 0.85rem;
-    }
-    
-    .signature-text {
-        font-size: 0.75rem;
+    .carousel-content-wrapper {
+        gap: 0.2rem; /* Gap minimal */
+        padding: 0.2rem;
     }
     
     .product-image-zone {
-        max-width: 250px;
+        max-width: 60%; /* Encore plus petit */
+        max-height: 22vh; /* Très réduit */
+        max-height: 22dvh;
+    }
+    
+    .product-image {
+        max-height: 20vh; /* Très réduit */
+        max-height: 20dvh;
+        border-radius: 10px;
+    }
+    
+    .product-title {
+        font-size: 1.3rem; /* Encore plus petit */
+        line-height: 0.95;
+        margin-bottom: 0.1rem;
+    }
+    
+    .product-subtitle {
+        font-size: 0.8rem; /* Très petit */
+        margin-bottom: 0.2rem;
+        line-height: 1.0;
+    }
+    
+    .signature-text {
+        font-size: 0.6rem; /* Minimal */
+        margin-bottom: 0.1rem;
+    }
+    
+    .buttons-container {
+        max-width: 100%; /* Pleine largeur */
+        gap: 0.3rem; /* Gap minimal */
+        padding: 0 0.5rem; /* Padding horizontal minimal */
+        margin-top: 0.2rem;
+    }
+    
+    .discover-button, .order-button {
+        padding: 0.5rem 0.8rem; /* Padding très réduit */
+        font-size: 0.75rem; /* Très petit */
+        min-height: 36px; /* Hauteur minimale */
+        border-radius: 18px;
+    }
+    
+    .feature {
+        padding: 0.05rem 0.3rem; /* Padding minimal */
+        font-size: 0.55rem; /* Très petit */
+        border-radius: 8px;
+    }
+    
+    .customer-rating .stars {
+        font-size: 0.7rem;
+    }
+    
+    .customer-rating .rating-text {
+        font-size: 0.6rem;
+    }
+    
+    .price-container {
+        margin-bottom: 0.2rem;
+        gap: 0.2rem;
+    }
+    
+    .current-price, .promotion-price {
+        font-size: 1.2rem;
+    }
+    
+    .original-price {
+        font-size: 1rem;
     }
 }
 
-/* --- Toasts notifications --- */
+/* Mode paysage mobile - OPTIMISÉ */
+@media (max-width: 991px) and (orientation: landscape) and (max-height: 500px) {
+    .carousel-slide {
+        padding: 0.4rem;
+    }
+    
+    .carousel-content-wrapper {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.2rem; /* Gap plus généreux */
+        height: 100%;
+        max-height: 100vh;
+        max-height: 100dvh;
+    }
+    
+    .product-image-zone {
+        flex: 0 0 45%; /* Légèrement plus grande */
+        max-width: 45%;
+        order: 1;
+        margin-bottom: 0;
+    }
+    
+    .content-zone {
+        flex: 1;
+        order: 2;
+        text-align: left;
+        padding: 0.5rem;
+        height: 100%;
+        overflow-y: auto; /* Permet le scroll si contenu trop long */
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .product-image {
+        max-height: 70vh; /* Plus grande en paysage */
+        max-height: 70dvh;
+        width: 100%;
+        object-fit: contain;
+    }
+    
+    .product-title {
+        font-size: 1.6rem; /* Adapté pour paysage */
+        margin-bottom: 0.4rem;
+    }
+    
+    .product-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .buttons-container {
+        flex-direction: row;
+        max-width: none;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .discover-button, .order-button {
+        flex: 1;
+        min-width: 120px;
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Navigation en mode paysage */
+    .carousel-nav {
+        right: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    /* Scroll indicator adapté */
+    #scroll-indicator {
+        bottom: 1rem;
+        font-size: 0.8rem;
+        padding: 0.6rem 1rem;
+    }
+}
+
+/* --- Toasts notifications MOBILE-FRIENDLY --- */
 .toast-success {
     background: linear-gradient(135deg, #28a745, #20c997);
 }
 
 .toast-error {
     background: linear-gradient(135deg, #dc3545, #e74c3c);
+}
+
+/* Optimisations spécifiques iOS */
+@supports (-webkit-touch-callout: none) {
+    .fullscreen-carousel {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .carousel-slide {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    
+    .product-image {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Amélioration des zones tactiles */
+@media (max-width: 991px) {
+    .nav-dot {
+        position: relative;
+    }
+    
+    .nav-dot::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: transparent;
+        z-index: -1;
+        border-radius: 50%;
+    }
+    
+    .discover-button, .order-button {
+        position: relative;
+        -webkit-tap-highlight-color: rgba(201, 160, 108, 0.2);
+    }
+    
+    .discover-button:active, .order-button:active {
+        transform: translateZ(0) scale(0.96);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* Gestion de la barre d'adresse mobile */
+@media screen and (max-width: 991px) {
+    @supports (height: 100dvh) {
+        .fullscreen-carousel,
+        .carousel-slide,
+        body.home-page {
+            height: 100dvh !important;
+        }
+    }
+}
+
+/* Préchargement des images optimisé */
+.product-image[loading="lazy"] {
+    background: linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #1a1a1a 75%), 
+                linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.product-image.loaded {
+    background: none;
+}
+
+/* Amélioration des focus pour l'accessibilité mobile */
+@media (max-width: 991px) {
+    .nav-dot:focus,
+    .discover-button:focus,
+    .order-button:focus {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+    
+    .nav-dot:focus {
+        box-shadow: 0 0 0 4px rgba(201, 160, 108, 0.3);
+    }
 }

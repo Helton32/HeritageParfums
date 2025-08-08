@@ -7,7 +7,7 @@ return [
     | Shop Configuration
     |--------------------------------------------------------------------------
     |
-    | Configuration pour les paramètres de la boutique Heritage Parfums
+    | Configuration pour les paramètres de la boutique Héritaj Parfums
     |
     */
 

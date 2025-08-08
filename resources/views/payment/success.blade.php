@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Paiement Réussi - Heritage Parfums')
-@section('description', 'Votre commande Heritage Parfums a été confirmée. Merci pour votre achat.')
+@section('title', 'Paiement Réussi - Héritaj Parfums')
+@section('description', 'Votre commande Héritaj Parfums a été confirmée. Merci pour votre achat.')
 
 @push('styles')
 <style>

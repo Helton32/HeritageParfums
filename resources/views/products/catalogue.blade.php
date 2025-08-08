@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Catalogue Complet - Heritage Parfums')
-@section('description', 'Découvrez notre catalogue complet de parfums de niche et cosmétiques de luxe. Heritage Parfums, la quintessence de l\'élégance française.')
+@section('title', 'Catalogue Complet - Héritaj Parfums')
+@section('description', 'Découvrez notre catalogue complet de parfums de niche et cosmétiques de luxe. Héritaj Parfums, la quintessence de l\'élégance française.')
 
 @section('content')
 <div class="container mt-5 pt-5">

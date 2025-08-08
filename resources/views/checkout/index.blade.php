@@ -1,8 +1,7 @@
 @extends('layouts.app')
-@extends('layouts.app')
 
-@section('title', 'Commande - Heritage Parfums')
-@section('description', 'Finalisez votre commande Heritage Parfums en toute sécurité avec Stripe.')
+@section('title', 'Commande - Héritaj Parfums')
+@section('description', 'Finalisez votre commande Héritaj Parfums en toute sécurité avec Stripe.')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/checkout-shipping.css') }}">
@@ -149,6 +148,15 @@
                                 <div class="flex-grow-1">
                                     <h6 class="mb-1">{{ $item['name'] }}</h6>
                                     <small class="text-muted">{{ $item['type'] }} - {{ $item['size'] }}</small>
+                                    @if($item['is_on_promotion'])
+                                        <div class="checkout-promotion mt-1">
+                                            <span class="promo-badge-checkout">🏷️ -{{ $item['promotion_percentage'] }}%</span>
+                                            <div class="checkout-prices">
+                                                <small class="original-price-checkout">{{ number_format($item['original_price'], 2) }}€</small>
+                                                <small class="promo-price-checkout">{{ number_format($item['price'], 2) }}€</small>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="d-flex justify-content-between mt-1">
                                         <span>Qté: {{ $item['quantity'] }}</span>
                                         <strong>{{ number_format($item['total'], 2) }}€</strong>

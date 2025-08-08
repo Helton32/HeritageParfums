@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Administration - Heritage Parfums')
+@section('title', 'Dashboard Administration - Héritaj Parfums')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}">
@@ -12,7 +12,7 @@
     <div class="container">
         <div class="text-center">
             <h1>Administration</h1>
-            <p class="lead">Tableau de bord Heritage Parfums</p>
+            <p class="lead">Tableau de bord Héritaj Parfums</p>
         </div>
     </div>
 </section>

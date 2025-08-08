@@ -2,6 +2,15 @@
 use App\Services\OlfactoryNotesService;
 $structuredNotes = OlfactoryNotesService::getProductNotes($product);
 $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
+
+// Vérifier si nous avons des notes
+$hasAnyNotes = false;
+foreach(['head', 'heart', 'base'] as $category) {
+    if(isset($structuredNotes[$category]) && count($structuredNotes[$category]) > 0) {
+        $hasAnyNotes = true;
+        break;
+    }
+}
 @endphp
 
 <div class="olfactory-notes-section">
@@ -10,7 +19,7 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
         Pyramide Olfactive
     </h3>
     
-    @if(array_filter($structuredNotes))
+    @if($hasAnyNotes)
         <div class="olfactory-pyramid">
             @foreach(['head', 'heart', 'base'] as $category)
                 @if(count($structuredNotes[$category]) > 0)
@@ -31,19 +40,16 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
                         <div class="notes-grid">
                             @foreach($structuredNotes[$category] as $noteData)
                                 <div class="note-item" data-type="{{ $noteData['type'] }}">
-                                    <div class="note-image-container">
-                                        <img src="{{ $noteData['image'] }}" 
-                                             alt="{{ $noteData['name'] }}" 
-                                             class="note-image"
-                                             loading="lazy">
-                                        <div class="note-overlay">
+                                    <div class="note-color-circle">
+                                        <div class="color-indicator" 
+                                             style="background-color: {{ $noteData['color'] }}"></div>
+                                        <div class="note-type-badge">
                                             <span class="note-type">{{ ucfirst($noteData['type']) }}</span>
                                         </div>
                                     </div>
                                     <div class="note-info">
                                         <h5 class="note-name">{{ $noteData['name'] }}</h5>
-                                        <div class="note-color-indicator" 
-                                             style="background-color: {{ $noteData['color'] }}"></div>
+                                        <small class="note-category-text">{{ ucfirst($noteData['type']) }}</small>
                                     </div>
                                 </div>
                             @endforeach
@@ -55,7 +61,7 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
         
         <!-- Légende des types -->
         <div class="notes-legend">
-            <h5>Légende</h5>
+            <h5>Légende des Types</h5>
             <div class="legend-items">
                 <div class="legend-item">
                     <span class="legend-icon" style="background: #4CAF50"></span>
@@ -196,70 +202,74 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
 
 .notes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 1.5rem;
 }
 
 .note-item {
     background: #fafafa;
     border-radius: 12px;
-    padding: 1rem;
+    padding: 1.2rem;
     text-align: center;
     transition: all 0.3s ease;
     cursor: pointer;
     border: 2px solid transparent;
+    position: relative;
 }
 
 .note-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     border-color: var(--guerlain-gold);
+    background: #fff;
 }
 
-.note-image-container {
+/* Cercle coloré remplaçant l'image */
+.note-color-circle {
     position: relative;
     width: 80px;
     height: 80px;
     margin: 0 auto 1rem;
     border-radius: 50%;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.note-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     transition: transform 0.3s ease;
 }
 
-.note-item:hover .note-image {
-    transform: scale(1.1);
+.color-indicator {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    transition: transform 0.3s ease;
 }
 
-.note-overlay {
+.note-item:hover .color-indicator {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.note-type-badge {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    bottom: -5px;
+    right: -5px;
+    background: rgba(0,0,0,0.7);
     color: white;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 600;
     text-transform: uppercase;
-    text-align: center;
-    padding: 0.3rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 8px;
     opacity: 0;
     transition: opacity 0.3s ease;
-}
-
-.note-item:hover .note-overlay {
-    opacity: 1;
-}
-
-.note-type {
-    font-size: 0.6rem;
     letter-spacing: 0.5px;
+}
+
+.note-item:hover .note-type-badge {
+    opacity: 1;
 }
 
 .note-info {
@@ -268,19 +278,18 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
 
 .note-name {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--guerlain-black);
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.3rem 0;
     line-height: 1.3;
 }
 
-.note-color-indicator {
-    width: 30px;
-    height: 4px;
-    margin: 0 auto;
-    border-radius: 2px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+.note-category-text {
+    font-size: 0.75rem;
+    color: var(--guerlain-text-gray);
+    text-transform: capitalize;
+    font-weight: 500;
 }
 
 .notes-legend {
@@ -320,6 +329,7 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
     height: 12px;
     border-radius: 50%;
     display: block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .no-notes {
@@ -352,11 +362,11 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
     }
     
     .notes-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 1rem;
     }
     
-    .note-image-container {
+    .note-color-circle {
         width: 60px;
         height: 60px;
     }
@@ -368,6 +378,21 @@ $categoryLabels = OlfactoryNotesService::getNoteCategoryLabels();
     
     .legend-item {
         font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .notes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    
+    .note-color-circle {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .note-name {
+        font-size: 0.9rem;
     }
 }
 

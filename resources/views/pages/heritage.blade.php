@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Heritage Parfums - Notre Histoire')
-@section('description', 'Découvrez l\'histoire de Heritage Parfums, maison de parfumerie française fondée en 1925. Un siècle de savoir-faire et de passion pour l\'art olfactif.')
+@section('title', 'Héritaj Parfums - Notre Histoire')
+@section('description', 'Découvrez l\'histoire de Héritaj Parfums, maison de parfumerie française fondée en 1925. Un siècle de savoir-faire et de passion pour l\'art olfactif.')
 
 @push('styles')
 <style>
@@ -167,12 +167,12 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <p class="heritage-text">
-                        Depuis 1925, Heritage Parfums perpétue l'excellence de la parfumerie française. 
+                        Depuis 1925, Héritaj Parfums perpétue l'excellence de la parfumerie française. 
                         Née de la passion d'un maître parfumeur visionnaire, notre maison incarne 
                         l'élégance et le raffinement à travers des créations olfactives uniques.
                     </p>
                     <p class="heritage-text">
-                        Chaque parfum Heritage Parfums raconte une histoire, évoque une émotion, 
+                        Chaque parfum Héritaj Parfums raconte une histoire, évoque une émotion, 
                         capture un instant d'éternité. Nous puisons notre inspiration dans les 
                         traditions ancestrales tout en embrassant l'innovation contemporaine.
                     </p>
@@ -180,116 +180,13 @@
             </div>
         </div>
 
-        <!-- Timeline -->
-        <div class="heritage-section">
-            <h2 class="heritage-title">Un Siècle de Créations</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">1925</div>
-                    <div class="timeline-content">
-                        <h4 class="heritage-subtitle">La Fondation</h4>
-                        <p class="heritage-text">
-                            Henri Dubois fonde Heritage Parfums dans son atelier parisien. 
-                            Sa première création, "Rose Éternelle", devient rapidement 
-                            l'emblème de la maison.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-date">1950</div>
-                    <div class="timeline-content">
-                        <h4 class="heritage-subtitle">L'Expansion</h4>
-                        <p class="heritage-text">
-                            Ouverture de la première boutique sur les Champs-Élysées. 
-                            Heritage Parfums devient une référence internationale 
-                            du luxe français.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-date">1975</div>
-                    <div class="timeline-content">
-                        <h4 class="heritage-subtitle">L'Innovation</h4>
-                        <p class="heritage-text">
-                            Lancement de la collection "Signatures", des parfums 
-                            sur-mesure créés pour une clientèle exclusive. 
-                            Innovation dans les techniques d'extraction.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-date">2000</div>
-                    <div class="timeline-content">
-                        <h4 class="heritage-subtitle">Le Renouveau</h4>
-                        <p class="heritage-text">
-                            Nouvelle génération, nouvelle vision. Tout en préservant 
-                            l'héritage familial, Heritage Parfums se réinvente 
-                            pour les amateurs contemporains.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-date">2025</div>
-                    <div class="timeline-content">
-                        <h4 class="heritage-subtitle">L'Avenir</h4>
-                        <p class="heritage-text">
-                            Un siècle plus tard, Heritage Parfums continue d'écrire 
-                            son histoire avec la même passion et le même engagement 
-                            vers l'excellence.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Nos Valeurs -->
-        <div class="heritage-section">
-            <h2 class="heritage-title">Nos Valeurs</h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h4 class="heritage-subtitle">Excellence</h4>
-                    <p class="heritage-text">
-                        Chaque parfum est le fruit d'un savoir-faire artisanal 
-                        transmis de génération en génération.
-                    </p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h4 class="heritage-subtitle">Passion</h4>
-                    <p class="heritage-text">
-                        Notre amour pour l'art olfactif guide chacune de nos 
-                        créations avec authenticité et émotion.
-                    </p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4 class="heritage-subtitle">Innovation</h4>
-                    <p class="heritage-text">
-                        Nous allions tradition et modernité pour créer les 
-                        parfums de demain tout en respectant notre héritage.
-                    </p>
-                </div>
-            </div>
-        </div>
+       
 
         <!-- Call to Action -->
         <div class="heritage-section text-center">
             <h2 class="heritage-title">Découvrez Nos Créations</h2>
             <p class="heritage-text">
-                Laissez-vous séduire par l'univers Heritage Parfums et trouvez 
+                Laissez-vous séduire par l'univers Héritaj Parfums et trouvez 
                 le parfum qui vous ressemble.
             </p>
             <a href="/" class="btn btn-guerlain mt-3">Explorer Nos Parfums</a>

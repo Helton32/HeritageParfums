@@ -48,6 +48,42 @@
     margin-bottom: 0.5rem;
 }
 
+/* === PROMOTIONS DANS LE CHECKOUT === */
+.checkout-promotion {
+    margin: 0.5rem 0;
+    padding: 0.3rem 0;
+}
+
+.promo-badge-checkout {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    color: white;
+    padding: 0.15rem 0.4rem;
+    border-radius: 8px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 0.2rem;
+}
+
+.checkout-prices {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.2rem;
+}
+
+.original-price-checkout {
+    font-size: 0.75rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.promo-price-checkout {
+    font-size: 0.8rem;
+    color: var(--guerlain-gold);
+    font-weight: 600;
+}
+
 /* === SHIPPING SECTION === */
 .shipping-section {
     position: relative;

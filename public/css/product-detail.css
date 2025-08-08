@@ -286,6 +286,25 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
+    align-items: center;
+}
+
+@media (min-width: 769px) {
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .btn-add-cart,
+    .btn-apple-pay {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .btn-wishlist {
+        flex: 0 0 60px;
+        width: 60px;
+        height: 60px;
+    }
 }
 
 .btn-add-cart {
@@ -314,6 +333,35 @@
 
 .btn-add-cart i {
     margin-right: 0.5rem;
+}
+
+.btn-apple-pay {
+    flex: 1;
+    background: linear-gradient(135deg, #000000, #1c1c1e);
+    border: none;
+    color: var(--guerlain-white);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-apple-pay:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
+}
+
+.btn-apple-pay i {
+    font-size: 1.3rem;
 }
 
 .btn-wishlist {
@@ -859,6 +907,17 @@
         height: 300px;
     }
     
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .btn-add-cart,
+    .btn-apple-pay {
+        font-size: 1rem;
+        padding: 0.9rem 1.5rem;
+    }
+    
     .tab-nav {
         flex-wrap: wrap;
     }
@@ -890,6 +949,13 @@
     
     .action-buttons {
         flex-direction: column;
+        gap: 0.6rem;
+    }
+    
+    .btn-add-cart,
+    .btn-apple-pay {
+        font-size: 0.9rem;
+        padding: 0.8rem 1.2rem;
     }
     
     .btn-wishlist {
@@ -909,4 +975,39 @@
     .image-nav {
         padding: 0 10px;
     }
+}
+
+/* === PROMOTIONS DANS LES PRODUITS LIÉS === */
+.promotion-badge-related {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.product-price-promo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    align-items: flex-start;
+}
+
+.original-price-related {
+    font-size: 0.9rem;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 300;
+}
+
+.promo-price-related {
+    font-size: 1.1rem;
+    color: var(--guerlain-gold);
+    font-weight: 700;
 }

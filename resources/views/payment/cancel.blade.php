@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Paiement Annulé - Heritage Parfums')
+@section('title', 'Paiement Annulé - Héritaj Parfums')
 @section('description', 'Votre paiement a été annulé. Vous pouvez reprendre votre commande à tout moment.')
 
 @push('styles')
