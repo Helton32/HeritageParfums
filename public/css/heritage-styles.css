@@ -1,5 +1,14 @@
 /* Heritage Parfums - Styles Consolidés */
 
+/* =================================================================
+   MODIFICATION SPÉCIALE : CENTRAGE AU 3ÈME DOT DE NAVIGATION
+   
+   Les éléments suivants ont été modifiés pour un alignement parfait :
+   - content-zone : Zone de contenu texte centrée au 3ème dot
+   - carousel-nav : Navigation avec indication visuelle du 3ème dot
+   - Alignement coordonné avec home-improvements.css
+   ================================================================= */
+
 /* Variables CSS pour les couleurs Guerlain */
 :root {
     /* Palette Guerlain */
@@ -209,10 +218,46 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateX(-50%);
     top: -25px; /* Ajusté */
     z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espace entre logo et texte */
+}
+
+.navbar-logo {
+    height: 35px; /* Hauteur du logo plus petite */
+    width: auto;
+    transition: all 0.3s ease;
+    filter: contrast(1.5) brightness(0.8); /* Meilleur contraste */
+}
+
+.navbar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--guerlain-black);
+    letter-spacing: 1.5px;
+}
+
+.navbar-brand:hover .navbar-logo {
+    filter: contrast(1.8) brightness(0.9) saturate(1.3);
+    transform: scale(1.05);
+}
+
+.navbar-brand:hover .navbar-title {
+    color: var(--guerlain-gold);
 }
 
 .navbar-brand:hover {
-    color: var(--guerlain-gold) !important;
+    /* Effet géré via .navbar-logo et .navbar-title */
+}
+
+.navbar-brand:hover .navbar-logo {
+    filter: contrast(1.8) brightness(0.9) saturate(1.3);
+    transform: scale(1.05);
+}
+
+.navbar-brand:hover .navbar-title {
+    color: var(--guerlain-gold);
 }
 
 .navbar-collapse {
@@ -428,14 +473,16 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 2;
 }
 
-/* Zone de l'image produit */
+/* Zone de l'image produit - ALIGNÉE AVEC LE PRIX */
 .product-image-zone {
     flex: 1;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: center; /* Retour au centrage pour aligner avec le prix */
     justify-content: center;
     position: relative;
+    /* Position pour que l'image soit au niveau du prix */
+    padding-bottom: 60px; /* Décalage réduit pour aligner avec le prix */
 }
 
 /* Styling de l'image produit */
@@ -450,7 +497,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.05);
 }
 
-/* Zone de contenu texte - MOBILE OPTIMISÉ */
+/* Zone de contenu texte - ALIGNÉ HARMONIEUSEMENT AVEC L'IMAGE */
 .content-zone {
     flex: 1;
     padding: 0 0 0 4rem;
@@ -458,14 +505,18 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
-    height: auto; /* Changé de 50% à auto pour mobile */
-    max-height: 100%; /* Évite les débordements */
-    overflow: hidden; /* Protection contre le débordement */
-    box-sizing: border-box; /* Ajouté pour mobile */
+    justify-content: center; /* Retour au centrage harmonieux */
+    height: auto;
+    max-height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    /* ALIGNEMENT HARMONIEUX : Centré avec l'image */
+    transform: translateZ(0);
+    /* Position centrée cohérente avec l'image */
+    padding-bottom: 60px; /* Même padding que l'image pour alignement */
 }
 
-/* Texte signature en haut */
+/* Texte signature en haut - ALIGNEMENT HARMONIEUX */
 .signature-text {
     font-size: 0.875rem;
     letter-spacing: 0.2em;
@@ -473,6 +524,8 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--guerlain-gold);
     text-transform: uppercase;
     font-weight: 300;
+    /* Alignement harmonieux avec l'image centrée */
+    position: relative;
 }
 
 /* Titre principal */
@@ -546,7 +599,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(212, 175, 55, 0.4);
 }
-/* Navigation points (carousel indicators) */
+/* Navigation points (carousel indicators) - ALIGNEMENT 3ÈME DOT */
 .carousel-nav {
     position: fixed;
     left: 3rem;
@@ -581,6 +634,33 @@ h1, h2, h3, h4, h5, h6 {
 .nav-dot:hover {
     border-color: var(--guerlain-white);
     transform: scale(1.2);
+}
+
+/* RÉFÉRENCE VISUELLE POUR LE 3ÈME DOT - ALIGNEMENT HARMONIEUX */
+.nav-dot:nth-child(3) {
+    /* Indication du point de référence pour l'alignement harmonieux */
+    border-color: rgba(212, 175, 55, 0.8);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    background: rgba(212, 175, 55, 0.2);
+}
+
+.nav-dot:nth-child(3).active {
+    /* Confirmation visuelle de l'alignement harmonieux */
+    background: var(--guerlain-gold);
+    border-color: var(--guerlain-gold);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.9), 0 0 40px rgba(212, 175, 55, 0.4);
+    animation: alignmentGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes alignmentGlow {
+    0% { 
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.9), 0 0 40px rgba(212, 175, 55, 0.4);
+        transform: scale(1.2);
+    }
+    100% { 
+        box-shadow: 0 0 30px rgba(212, 175, 55, 1), 0 0 50px rgba(212, 175, 55, 0.6);
+        transform: scale(1.3);
+    }
 }
 
 /* Scroll indicator */
@@ -1530,7 +1610,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-brand:hover {
-    color: var(--guerlain-gold);
+    /* Effet géré via .navbar-logo */
 }
 
 /* Mega menu responsive enhancements */
@@ -1810,6 +1890,16 @@ h1, h2, h3, h4, h5, h6 {
         flex: 1;
         text-align: center;
         margin: 0 1rem;
+        gap: 8px; /* Gap réduit sur mobile */
+    }
+    
+    .navbar-logo {
+        height: 25px; /* Plus petit sur mobile */
+        width: auto;
+    }
+    
+    .navbar-title {
+        font-size: 1.6rem; /* Cohérent avec navbar-brand */
     }
     
     .navbar-toggler {
@@ -1888,6 +1978,15 @@ h1, h2, h3, h4, h5, h6 {
     .navbar-brand {
         font-size: 1.4rem; /* Encore plus petit */
         letter-spacing: 1px;
+        gap: 6px; /* Gap réduit */
+    }
+    
+    .navbar-logo {
+        height: 22px; /* Plus petit sur tablette */
+    }
+    
+    .navbar-title {
+        font-size: 1.4rem;
     }
     
     .navbar-actions .nav-link {
@@ -1907,6 +2006,15 @@ h1, h2, h3, h4, h5, h6 {
     .navbar-brand {
         font-size: 1.2rem;
         margin: 0 0.5rem;
+        gap: 4px; /* Gap minimal */
+    }
+    
+    .navbar-logo {
+        height: 18px; /* Encore plus petit */
+    }
+    
+    .navbar-title {
+        font-size: 1.2rem;
     }
     
     .navbar-actions .nav-link {

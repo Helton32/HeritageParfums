@@ -28,9 +28,10 @@
     <!-- Navigation Élégante Style Guerlain -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <!-- Logo/Titre centré avec plus d'espacement -->
+            <!-- Logo + Titre centré -->
             <a class="navbar-brand mx-5" href="/">
-                Héritaj Parfums
+                <img src="{{ asset('images/logo-heritaj.svg') }}" alt="Héritaj Parfums" class="navbar-logo">
+                <span class="navbar-title">Héritaj Parfums</span>
             </a>
             
             <!-- Navigation principale centrée -->

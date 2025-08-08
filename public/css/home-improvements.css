@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap');
 
+/* =================================================================
+   HÉRITAJ PARFUMS - HOME PAGE IMPROVEMENTS
+   
+   MODIFICATION SPÉCIALE : CENTRAGE AU 3ÈME DOT DE NAVIGATION
+   - L'image du produit (product-image-zone product-image.loaded)
+   - Le contenu texte (content-zone)
+   - Sont maintenant parfaitement centrés au niveau du 3ème dot
+   
+   Calcul du centrage :
+   - Hauteur dot: 14px + Gap: 15px = 29px par dot
+   - Position 3ème dot: 2 × 29px = 58px depuis le centre
+   - Décalage appliqué: 29px vers le bas
+   ================================================================= */
+
 :root {
     --gold: #c9a06c;
     --deep-black: #1a1a1a;
@@ -60,37 +74,40 @@ body.home-page {
     z-index: 2;
 }
 
-/* --- Layout responsive DESKTOP IMAGE GAUCHE / TEXTE DROITE --- */
+/* --- Layout responsive DESKTOP IMAGE GAUCHE / TEXTE DROITE - CENTRÉ HARMONIEUSEMENT --- */
 .carousel-content-wrapper {
     display: flex;
-    align-items: center;
+    align-items: center; /* Retour au centrage harmonieux */
     justify-content: center;
     height: 100%;
-    gap: 3rem; /* Gap généreux sur desktop */
-    padding: 2rem;
-    flex-wrap: nowrap; /* Pas de wrap sur desktop */
+    gap: 1.5rem;
+    padding: 1.5rem;
+    flex-wrap: nowrap;
     max-width: 1200px;
     margin: 0 auto;
     box-sizing: border-box;
-    transform: translateZ(0);
+    /* CENTRAGE HARMONIEUX : Image et texte alignés au centre */
+    transform: translateY(20px) translateZ(0); /* Léger décalage pour éviter la navbar */
 }
 
-/* Image à gauche sur desktop */
+/* Image à gauche sur desktop - ALIGNÉE AVEC LE PRIX */
 .product-image-zone {
-    flex: 0 0 45%; /* Largeur fixe 45% */
-    max-width: 500px;
+    flex: 0 0 50%;
+    max-width: 600px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    order: 1; /* Ordre 1 = à gauche */
+    align-items: center; /* Retour au centrage pour aligner avec le prix */
+    order: 1;
     transform: translateZ(0);
+    /* Position pour que l'image soit au niveau du prix, pas du texte signature */
+    padding-bottom: 60px; /* Réduit pour aligner avec le prix */
 }
 
 .product-image {
     width: 100%;
-    max-width: 450px;
+    max-width: 550px;
     height: auto;
-    max-height: 70vh;
+    max-height: 70vh; /* Hauteur ajustée */
     border-radius: 20px;
     object-fit: contain;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
@@ -100,17 +117,20 @@ body.home-page {
     image-rendering: auto;
 }
 
-/* Texte à droite sur desktop */
+/* Texte à droite sur desktop - ALIGNÉ AVEC L'IMAGE CENTRÉE */
 .content-zone {
-    flex: 1 1 55%; /* Prend le reste de l'espace */
+    flex: 1 1 50%;
     max-width: 600px;
-    text-align: left; /* Alignement à gauche sur desktop */
-    padding: 2rem;
+    text-align: left;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    order: 2; /* Ordre 2 = à droite */
+    justify-content: center; /* Retour au centrage pour cohérence avec l'image */
+    order: 2;
     transform: translateZ(0);
+    gap: 0.8rem;
+    /* Alignement centré cohérent avec l'image */
+    padding-bottom: 60px; /* Même padding que l'image pour alignement */
 }
 
 .signature-text {
@@ -119,9 +139,11 @@ body.home-page {
     color: var(--soft-gray);
     text-transform: none;
     letter-spacing: 2px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Position de référence - le bas de l'image doit être aligné avec cette ligne */
+    position: relative;
 }
 
 .product-title {
@@ -129,7 +151,7 @@ body.home-page {
     font-weight: 700;
     font-family: var(--luxury-font);
     color: var(--gold);
-    margin-bottom: 1rem;
+    margin-bottom: 0.6rem; /* Margin réduite */
     letter-spacing: 1px;
     line-height: 1.2;
     -webkit-font-smoothing: antialiased;
@@ -140,19 +162,19 @@ body.home-page {
     font-style: italic;
     font-size: 1.2rem;
     color: var(--off-white);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem; /* Margin très réduite */
     line-height: 1.4;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
 
-/* --- Boutons --- */
+/* --- Boutons - COMPACTS --- */
 .buttons-container {
     display: flex;
     justify-content: flex-start;
-    gap: 1.5rem;
+    gap: 1rem; /* Gap réduit */
     flex-wrap: wrap;
-    margin-top: 1.5rem;
+    margin-top: 0.8rem; /* Margin très réduite */
 }
 
 .discover-button, .order-button {
@@ -214,6 +236,32 @@ body.home-page {
     border-color: var(--gold);
     transform: scale(1.4) translateZ(0);
     box-shadow: 0 0 10px rgba(201, 160, 108, 0.5);
+}
+
+/* INDICATEUR VISUEL DU 3ÈME DOT - ALIGNEMENT IMAGE/CONTENU */
+.nav-dot:nth-child(3) {
+    /* Indication que c'est le point de référence pour l'alignement */
+    /* Le bas de l'image est collé au texte "PARFUM D'EXCEPTION" à ce niveau */
+    border-color: rgba(212, 175, 55, 0.8);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    background: rgba(212, 175, 55, 0.2);
+}
+
+.nav-dot:nth-child(3).active {
+    /* Effet spécial quand le 3ème dot est actif pour confirmer l'alignement */
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.9), 0 0 40px rgba(212, 175, 55, 0.4);
+    animation: alignmentConfirmation 2s ease-in-out infinite alternate;
+}
+
+@keyframes alignmentConfirmation {
+    0% { 
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.9), 0 0 40px rgba(212, 175, 55, 0.4);
+        transform: scale(1.4) translateZ(0);
+    }
+    100% { 
+        box-shadow: 0 0 30px rgba(212, 175, 55, 1), 0 0 50px rgba(212, 175, 55, 0.6);
+        transform: scale(1.5) translateZ(0);
+    }
 }
 
 /* --- Footer --- */
@@ -340,8 +388,10 @@ body.home-page {
 .delay-2 { transition-delay: 0.4s; }
 .delay-3 { transition-delay: 0.6s; }
 
-/* --- Responsive design MOBILE OPTIMISÉ - CONTENU COMPLET VISIBLE --- */
+/* === Responsive design MOBILE OPTIMISÉ - CONTENU DÉCOLLÉ DE LA NAVBAR === */
 @media (max-width: 991px) {
+    /* CORRECTION : Contenu bien espacé de la navbar sur mobile */
+    /* OBJECTIF : Image et texte centrés harmonieusement */
     /* Reset anti-blur pour mobile */
     * {
         -webkit-font-smoothing: antialiased !important;
@@ -392,9 +442,9 @@ body.home-page {
     
     .carousel-slide {
         height: 100vh !important;
-        height: 100dvh !important; /* Dynamic viewport height */
+        height: 100dvh !important;
         position: absolute;
-        padding: 0.5rem 0.4rem; /* Padding réduit pour plus d'espace */
+        padding: 0; /* Supprime tout padding pour contrôler précisément l'espace */
         display: none;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -402,8 +452,8 @@ body.home-page {
         backface-visibility: hidden;
         contain: layout style paint;
         will-change: transform, opacity;
-        overflow: hidden; /* Évite le débordement sur mobile */
-        top: 0 !important; /* Force la position */
+        overflow: hidden;
+        top: 0 !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
@@ -418,68 +468,70 @@ body.home-page {
     
     .carousel-content-wrapper {
         flex-direction: column !important; /* Force colonne sur mobile */
-        gap: 0.1rem; /* Gap minimal pour rapprocher */
-        padding: 0.2rem; /* Padding ultra-minimal */
+        gap: 0.4rem; /* Gap réduit pour rapprocher image et texte */
+        padding: 6rem 0.4rem 1rem; /* Beaucoup plus de padding-top pour éviter la navbar */
         text-align: center;
         height: 100%;
-        justify-content: space-evenly; /* Répartition équitable optimisée */
+        justify-content: center; /* Retour au centrage sur mobile */
         align-items: center;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
+        transform: translateZ(0); /* Supprime le translateY sur mobile */
         width: 100%;
         max-width: 100vw;
         box-sizing: border-box;
-        overflow: hidden; /* Protection contre débordement */
+        overflow: hidden;
+        margin-top: 10rem; /* Petit espace entre image et texte */
+        
     }
     
     .product-image-zone {
-        order: 1 !important; /* Force l'ordre sur mobile */
-        max-width: 68%; /* Optimisé pour mobile */
+        order: 1 !important;
+        max-width: 75%; /* Image légèrement réduite */
         width: 100%;
-        margin-bottom: 0; /* Supprimé la marge pour rapprocher */
+        margin-bottom: 1rem; /* Petit espace entre image et texte */
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
-        flex-shrink: 0; /* Évite la compression */
-        height: auto; /* Hauteur flexible */
-        max-height: 30vh; /* Hauteur optimisée mobile */
-        max-height: 30dvh; /* Dynamic viewport */
+        flex-shrink: 0;
+        height: auto;
+        max-height: 40vh; /* Hauteur adaptée */
+        max-height: 40dvh;
         display: flex;
-        align-items: center;
+        align-items: center; /* Centré pour éviter d'être collé en haut */
         justify-content: center;
-        flex: none !important; /* Force flex none sur mobile */
+        flex: none !important;
+        padding-bottom: 0;
     }
     
     .product-image {
         max-width: 100%;
         height: auto;
-        max-height: 28vh; /* Optimisé pour mobile */
-        max-height: 28dvh; /* Dynamic viewport */
-        border-radius: 12px; /* Plus petit radius */
-        -webkit-transform: translateZ(0) translateY(1.5rem); /* Descend légèrement l'image */
-        transform: translateZ(0) translateY(1.5rem); /* Descend légèrement l'image */
+        max-height: 40vh; /* Hauteur réduite pour décoller du haut */
+        max-height: 40dvh;
+        border-radius: 12px;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
         image-rendering: auto;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Ombre réduite */
-        object-fit: contain; /* Assure que l'image complète est visible */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        object-fit: contain;
         width: 100%;
     }
     
     .content-zone {
-        order: 2 !important; /* Force l'ordre sur mobile */
-        text-align: center !important; /* Force centrage sur mobile */
+        order: 2 !important;
+        text-align: center !important;
         max-width: 100%;
-        padding: 0.3rem; /* Padding minimal */
+        padding: 0.4rem;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
         flex: 1;
-        min-height: 0; /* Permet la compression si nécessaire */
+        min-height: 0;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        overflow: hidden; /* Protection contre débordement */
-        max-height: 65vh; /* Plus d'espace pour le contenu */
-        max-height: 65dvh; /* Dynamic viewport */
+        justify-content: center; /* Centré pour un équilibre naturel */
+        overflow: hidden;
+        gap: 0.5rem;
+        margin-top: 0;
     }
     
     .product-title {
@@ -507,13 +559,15 @@ body.home-page {
     }
     
     .signature-text {
-        font-size: 0.75rem; /* Taille équilibrée */
-        margin-bottom: 0.3rem; /* Margin équilibrée */
+        font-size: 0.75rem;
+        margin-bottom: 0.3rem;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
-        letter-spacing: 0.8px; /* Letter spacing équilibré */
+        letter-spacing: 0.8px;
         text-transform: uppercase;
         opacity: 0.8;
+        /* POINT DE RÉFÉRENCE MOBILE : Le bas de l'image doit être collé à cette ligne */
+        margin-top: 0; /* Supprime tout espace pour être collé à l'image */
     }
     
     .buttons-container {
@@ -741,7 +795,7 @@ body.home-page {
     }
 }
 
-/* Très petits écrans - NAVBAR INTÉGRÉE */
+/* Très petits écrans - CONTENU BIEN ESPACÉ DE LA NAVBAR */
 @media (max-width: 480px) {
     html {
         font-size: 13px; /* Base encore plus petite */
@@ -757,22 +811,32 @@ body.home-page {
     }
     
     .carousel-content-wrapper {
-        gap: 0.15rem; /* Gap légèrement augmenté */
-        padding: 0.2rem;
+        gap: 0.2rem; /* Gap minimal pour coller image et texte */
+        padding: 8rem 0.2rem 1rem; /* Encore plus de padding-top pour éviter la navbar */
+        justify-content: center; /* Retour au centrage */
+        -webkit-transform: translateZ(0); /* Supprime le translateY */
+        transform: translateZ(0); /* Supprime le translateY */
     }
     
     .product-image-zone {
-        max-width: 65%; /* Équilibré */
-        max-height: 25vh; /* Réduit mais équilibré */
-        max-height: 25dvh;
+        max-width: 70%; /* Taille adaptée pour petits écrans */
+        max-height: 35vh; /* Hauteur ajustée */
+        max-height: 35dvh;
+        align-items: flex-end; /* Bas de l'image aligné */
+        margin-bottom: 0; /* Pas d'espace pour coller au texte */
     }
     
     .product-image {
-        max-height: 23vh; /* Équilibré */
-        max-height: 23dvh;
+        max-height: 30vh; /* Hauteur adaptée pour petits écrans */
+        max-height: 30dvh;
         border-radius: 10px;
-        -webkit-transform: translateZ(0) translateY(1rem); /* Moins de décalage */
-        transform: translateZ(0) translateY(1rem);
+        -webkit-transform: translateZ(0); /* Pas de décalage vertical */
+        transform: translateZ(0);
+    }
+    
+    .content-zone {
+        justify-content: flex-start; /* Commence immédiatement après l'image */
+        margin-top: 0; /* Pas d'espace pour être collé à l'image */
     }
     
     .product-title {
@@ -1067,8 +1131,27 @@ body.home-page {
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
 
+/* ALIGNEMENT SPÉCIFIQUE AU 3ÈME DOT - CLASSES PRODUCT-IMAGE-ZONE ET PRODUCT-IMAGE.LOADED */
 .product-image.loaded {
     background: none;
+    /* CENTRAGE PARFAIT AU NIVEAU DU 3ÈME DOT DE NAVIGATION */
+    /* S'assure que l'image reste alignée même après le chargement */
+    transform: translateZ(0);
+    vertical-align: middle;
+    /* Optimisation pour maintenir l'alignement */
+    display: block;
+    margin: 0 auto;
+}
+
+/* PRODUCT-IMAGE-ZONE - ALIGNEMENT AU 3ÈME DOT */
+.product-image-zone {
+    /* S'assure que la zone d'image est parfaitement centrée */
+    /* au niveau du 3ème dot de navigation */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Maintient l'alignement parfait */
+    transform: translateZ(0);
 }
 
 /* Amélioration des focus pour l'accessibilité mobile */
