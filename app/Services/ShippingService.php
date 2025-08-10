@@ -123,35 +123,104 @@ class ShippingService
      */
     public function getAvailableCarriers(Order $order)
     {
-        $zone = $order->getShippingZone();
-        $weight = $order->calculatePackageWeight();
-        
-        $carriers = ShippingCarrier::active()->get();
-        $available = [];
-        
-        foreach ($carriers as $carrier) {
-            if ($carrier->servesZone($zone)) {
-                $methods = $carrier->getAvailableMethodsForZone($zone);
-                $carrierData = [
-                    'carrier' => $carrier,
-                    'methods' => []
-                ];
-                
-                foreach ($methods as $methodCode => $methodData) {
-                    $price = $carrier->calculateShippingPrice($weight, $zone, $methodCode);
-                    $carrierData['methods'][$methodCode] = [
-                        'name' => $methodData['name'],
-                        'description' => $methodData['description'],
-                        'price' => $price,
-                        'delivery_time' => $methodData['delivery_time']
-                    ];
-                }
-                
-                $available[] = $carrierData;
+        try {
+            $zone = $order->getShippingZone();
+            $weight = $order->calculatePackageWeight();
+            
+            $carriers = ShippingCarrier::active()->get();
+            
+            // Si aucun transporteur en base, créer des transporteurs par défaut
+            if ($carriers->count() === 0) {
+                $this->createDefaultCarriers();
+                $carriers = ShippingCarrier::active()->get();
             }
+            
+            $available = [];
+            
+            foreach ($carriers as $carrier) {
+                if ($carrier->servesZone($zone)) {
+                    $methods = $carrier->getAvailableMethodsForZone($zone);
+                    $carrierData = [
+                        'carrier' => $carrier,
+                        'methods' => []
+                    ];
+                    
+                    foreach ($methods as $methodCode => $methodData) {
+                        $price = $carrier->calculateShippingPrice($weight, $zone, $methodCode);
+                        $carrierData['methods'][$methodCode] = [
+                            'name' => $methodData['name'],
+                            'description' => $methodData['description'],
+                            'price' => $price,
+                            'delivery_time' => $methodData['delivery_time']
+                        ];
+                    }
+                    
+                    $available[] = $carrierData;
+                }
+            }
+            
+            return $available;
+        } catch (\Exception $e) {
+            \Log::error('Erreur getAvailableCarriers: ' . $e->getMessage());
+            return [];
         }
-        
-        return $available;
+    }
+
+    /**
+     * Créer des transporteurs par défaut si aucun n'existe
+     */
+    private function createDefaultCarriers()
+    {
+        $defaultCarriers = [
+            [
+                'code' => 'colissimo',
+                'name' => 'Colissimo',
+                'methods' => [
+                    'standard' => [
+                        'name' => 'Colissimo Standard',
+                        'description' => 'Livraison standard à domicile',
+                        'delivery_time' => '2-3 jours ouvrés',
+                    ]
+                ],
+                'pricing' => [
+                    'france' => [
+                        'standard' => [
+                            ['max_weight' => 10, 'price' => 6.90]
+                        ]
+                    ]
+                ],
+                'zones' => ['france'],
+                'api_config' => [],
+                'active' => true,
+                'sort_order' => 1
+            ],
+            [
+                'code' => 'chronopost',
+                'name' => 'Chronopost',
+                'methods' => [
+                    'express' => [
+                        'name' => 'Chronopost Express',
+                        'description' => 'Livraison express 24h',
+                        'delivery_time' => '24h',
+                    ]
+                ],
+                'pricing' => [
+                    'france' => [
+                        'express' => [
+                            ['max_weight' => 10, 'price' => 14.90]
+                        ]
+                    ]
+                ],
+                'zones' => ['france'],
+                'api_config' => [],
+                'active' => true,
+                'sort_order' => 2
+            ]
+        ];
+
+        foreach ($defaultCarriers as $carrierData) {
+            ShippingCarrier::create($carrierData);
+        }
     }
 
     /**

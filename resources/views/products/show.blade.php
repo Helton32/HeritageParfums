@@ -6,6 +6,7 @@
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/product-detail.css') }}">
 <link rel="stylesheet" href="{{ asset('css/apple-pay-direct.css') }}">
+
 @endpush
 
 @section('content')

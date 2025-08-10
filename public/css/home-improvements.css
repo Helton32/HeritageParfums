@@ -1460,7 +1460,7 @@ body.home-page {
         transform: scale(1.2) !important;
     }
     
-    /* Layout principal : Image centre + Contenu droite */
+    /* Layout principal : Image centre + Contenu droite - ALIGNEMENT PARFAIT */
     .carousel-content-wrapper {
         display: flex !important;
         align-items: center !important;
@@ -1469,7 +1469,7 @@ body.home-page {
         max-width: 1200px !important;
         margin: 0 auto !important;
         padding: 0 4rem 0 6rem !important; /* Espace pour les dots à gauche */
-        gap: 3rem !important;
+        gap: 4rem !important; /* Gap augmenté pour meilleur espacement */
         flex-direction: row !important;
         transform: none !important;
         margin-top: 0 !important;
@@ -1495,11 +1495,11 @@ body.home-page {
         object-fit: contain !important;
     }
     
-    /* Zone de contenu à droite */
+    /* Zone de contenu à droite - ALIGNEMENT PARFAIT TEXTE */
     .content-zone {
         flex: 0 0 45% !important;
         order: 2 !important;
-        padding: 2rem 0 !important; /* Padding vertical pour espacement */
+        padding: 0 0 0 2rem !important; /* Padding optimisé pour alignement */
         margin: 0 !important;
         text-align: left !important;
         max-width: 500px !important;
@@ -1507,49 +1507,108 @@ body.home-page {
         flex-direction: column !important;
         justify-content: center !important; /* Centre le contenu verticalement */
         align-items: flex-start !important; /* Aligne à gauche horizontalement */
+        height: 100% !important; /* Assure la hauteur complète pour le centrage */
     }
     
-    /* Textures et typographie desktop */
-    .product-category {
+    /* Textures et typographie desktop - TRÈS COMPACT */
+    .signature-text {
         font-size: 0.9rem !important;
-        margin-bottom: 1rem !important;
+        margin-bottom: 0.3rem !important; /* Encore plus réduit */
         text-transform: uppercase !important;
-        letter-spacing: 1px !important;
+        letter-spacing: 2px !important;
+        color: var(--soft-gray) !important;
     }
     
     .product-title {
-        font-size: 2.5rem !important;
-        line-height: 1.2 !important;
-        margin-bottom: 1.5rem !important;
+        font-size: 2.8rem !important;
+        line-height: 1.0 !important; /* Line-height réduit */
+        margin-bottom: 0.5rem !important; /* Encore plus réduit */
         font-family: var(--luxury-font) !important;
+        color: var(--guerlain-gold) !important;
     }
     
-    .product-description {
-        font-size: 1rem !important;
-        line-height: 1.6 !important;
-        margin-bottom: 2rem !important;
+    .product-subtitle {
+        font-size: 1.1rem !important;
+        line-height: 1.3 !important; /* Line-height réduit */
+        margin-bottom: 0.8rem !important; /* Encore plus réduit */
         opacity: 0.9 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
     }
     
-    /* Prix et badges desktop */
+    /* Prix et badges desktop - COMPACT + PROMOTION STYLES */
     .price-container {
-        margin-bottom: 1.5rem !important;
+        margin-bottom: 0.8rem !important; /* Encore plus réduit */
         display: flex !important;
-        align-items: baseline !important;
+        align-items: center !important;
         gap: 1rem !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
     }
     
-    .current-price, .promotion-price {
-        font-size: 2rem !important;
+    .current-price {
+        font-size: 1.8rem !important;
+        color: #d4af37 !important; /* Couleur dorée directe */
         font-weight: 600 !important;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.5) !important;
+        font-family: 'Cormorant Garamond', serif !important;
+    }
+    
+    /* STYLES PROMOTION COMPLETS - RESPECTE LES STYLES DE BASE */
+    .promotion-price {
+        font-size: 2rem !important;
+        color: #d4af37 !important; /* Couleur dorée directe */
+        font-weight: 700 !important;
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.6) !important;
+        position: relative !important;
+        /* Animation définie dans welcome.blade.php sera préservée */
+    }
+    
+    .original-price {
+        font-size: 1.4rem !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        text-decoration: line-through !important;
+        font-weight: 300 !important;
+        position: relative !important;
+        /* Le ::after est défini dans welcome.blade.php */
+    }
+    
+    /* STYLES DÉTAILS PROMOTION - COMPACT */
+    .promotion-details {
+        text-align: center !important;
+        margin-bottom: 0.6rem !important; /* Encore plus réduit */
+    }
+    
+    .promotion-info {
+        color: #d4af37 !important; /* Couleur dorée directe */
+        font-style: italic !important;
+        background: rgba(212, 175, 55, 0.1) !important;
+        padding: 0.3rem 0.8rem !important;
+        border-radius: 15px !important;
+        border: 1px solid rgba(212, 175, 55, 0.2) !important;
+        font-size: 0.8rem !important; /* Taille réduite */
+        display: inline-block !important;
+    }
+    
+    .product-special-badge {
+        position: absolute !important;
+        top: 15px !important;
+        left: 15px !important;
+        background: linear-gradient(135deg, #d4af37, #b8941f) !important; /* Couleurs directes */
+        color: white !important;
+        padding: 0.4rem 0.8rem !important;
+        border-radius: 20px !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        z-index: 10 !important;
     }
     
     .product-features {
-        margin-bottom: 2rem !important;
+        margin-bottom: 1rem !important; /* Encore plus réduit */
         gap: 0.8rem !important;
         display: flex !important;
         flex-wrap: wrap !important;
         align-items: flex-start !important;
+        margin-right: 20%;
     }
     
     .feature {
@@ -1558,12 +1617,43 @@ body.home-page {
         border-radius: 15px !important;
     }
     
-    /* Boutons desktop */
+    /* BADGES PROMOTION - DESKTOP */
+    .promotion-badge {
+        position: absolute !important;
+        top: 15px !important;
+        right: 15px !important;
+        background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+        color: white !important;
+        padding: 0.6rem 1.2rem !important;
+        border-radius: 25px !important;
+        font-size: 0.9rem !important;
+        font-weight: bold !important;
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4) !important;
+        z-index: 10 !important;
+        border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    }
+    
+    .savings-badge {
+        position: absolute !important;
+        bottom: 15px !important;
+        left: 15px !important;
+        background: linear-gradient(135deg, #28a745, #20c997) !important;
+        color: white !important;
+        padding: 0.4rem 0.8rem !important;
+        border-radius: 20px !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3) !important;
+        z-index: 10 !important;
+    }
+    
+    /* Boutons desktop - TRÈS COMPACT */
     .buttons-container {
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 1rem !important;
-        margin-bottom: 2rem !important;
+        gap: 0.6rem !important; /* Encore plus réduit */
+        margin-bottom: 1.2rem !important;
+        margin-top: 0.8rem !important; /* Encore plus réduit */
         max-width: none !important;
         width: 100% !important;
     }
@@ -1577,9 +1667,19 @@ body.home-page {
         border-radius: 25px !important;
     }
     
-    /* Rating et exploration desktop */
+    /* Rating et exploration desktop - TRÈS COMPACT */
     .customer-rating {
-        margin-bottom: 1rem !important;
+        margin-bottom: 0.6rem !important; /* Encore plus réduit */
+        margin-top: 0.6rem !important; /* Encore plus réduit */
+    }
+    
+    /* Éléments additionnels content-zone très resserrés */
+    .product-info-extra {
+        margin-bottom: 0.6rem !important; /* Encore plus réduit */
+    }
+    
+    .promotion-details {
+        margin-bottom: 0.8rem !important; /* Réduit pour rapprocher */
     }
     
     .explore-section {
@@ -1650,19 +1750,21 @@ body.home-page a[href*="panier"]:hover {
     box-shadow: 0 5px 16px rgba(212, 175, 55, 0.4) !important;
 }
 
-/* Admin sur page d'accueil - reste discret */
+/* Admin sur page d'accueil - reste opaque */
 body.home-page .navbar-actions a[href*="admin"],
 body.home-page .navbar-actions .nav-link[href*="admin"] {
-    color: rgba(255, 255, 255, 0.7) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    background: rgba(255, 255, 255, 0.05) !important;
+    color: var(--guerlain-black) !important; /* OPAQUE : couleur noire */
+    border: 1px solid rgba(200, 200, 200, 0.8) !important; /* OPAQUE : bordure visible */
+    background: rgba(248, 248, 248, 1) !important; /* OPAQUE : fond visible */
+    opacity: 1 !important; /* OPAQUE : 100% visible */
 }
 
 body.home-page .navbar-actions a[href*="admin"]:hover,
 body.home-page .navbar-actions .nav-link[href*="admin"]:hover {
-    color: rgba(255, 255, 255, 0.9) !important;
-    border-color: rgba(212, 175, 55, 0.3) !important;
-    background: rgba(212, 175, 55, 0.1) !important;
+    color: var(--guerlain-gold) !important;
+    border-color: rgba(212, 175, 55, 0.8) !important; /* OPAQUE : bordure dorée visible */
+    background: rgba(212, 175, 55, 0.15) !important; /* OPAQUE : fond doré visible */
+    opacity: 1 !important; /* OPAQUE : reste 100% visible */
 }
 
 /* Badge panier sur page d'accueil */
@@ -1683,7 +1785,7 @@ body.home-page .cart-count {
         background: linear-gradient(135deg, rgba(212, 175, 55, 0.98), rgba(212, 175, 55, 0.94)) !important;
         border: 3px solid var(--gold) !important;
         color: var(--deep-black) !important;
-        opacity: 1 !important;
+        opacity: 1 !important; /* OPAQUE : 100% visible sur page accueil mobile */
         box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.25) !important;
         backdrop-filter: blur(15px) !important;
         -webkit-backdrop-filter: blur(15px) !important;
@@ -1698,6 +1800,8 @@ body.home-page .cart-count {
         color: var(--deep-black) !important;
         box-shadow: 0 8px 32px rgba(212, 175, 55, 0.7), inset 0 2px 5px rgba(255, 255, 255, 0.3) !important;
         transform: translateY(-2px) scale(1.03) !important;
+        opacity: 1 !important; /* OPAQUE : reste 100% visible au hover */
+    }
     }
     
     /* ADMIN MOBILE SUR PAGE ACCUEIL - ULTRA DISCRET */

@@ -328,38 +328,17 @@ h1, h2, h3, h4, h5, h6 {
     width: 60%;
 }
 
-/* Zone des actions utilisateur - OPTIMISÉE MAXIMALE */
+/* Zone des actions utilisateur - PANIER PLUS VISIBLE */
 .navbar-actions {
     display: flex;
     align-items: center;
     position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 150;
-    gap: 1rem;
-    padding: 0 1.2rem;
-    will-change: transform;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.navbar-actions::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    background: linear-gradient(135deg, transparent, rgba(212, 175, 55, 0.02), transparent);
-    border-radius: 20px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
-}
-
-.navbar-actions:hover::before {
-    opacity: 1;
+    right: 20px; /* Position fixe à droite comme sur l'image */
+    top: 20px; /* Position fixe en haut comme sur l'image */
+    transform: none; /* Supprime la transformation */
+    z-index: 100;
+    gap: 15px; /* Espacement optimisé entre panier et admin */
+    padding: 0; /* Suppression du padding pour un positionnement précis */
 }
 
 .cart-icon {
@@ -413,59 +392,34 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
-}
+
     font-family: 'Montserrat', sans-serif;
 }
 
 /* BOUTON ADMIN DISCRET MAIS VISIBLE */
 .navbar-actions .nav-link {
-    font-size: 11px !important;
-    padding: 10px 14px !important;
-    letter-spacing: 0.3px !important;
-    color: rgba(102, 102, 102, 0.6) !important;
-    opacity: 0.5;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(102, 102, 102, 0.08);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    position: relative;
-    overflow: hidden;
-}
-
-.navbar-actions .nav-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-    transition: left 0.5s ease;
+    font-size: 12px !important; /* LÉGÈREMENT AUGMENTÉ : Petit mais lisible */
+    padding: 8px 12px !important; /* LÉGÈREMENT AUGMENTÉ : Padding tactile */
+    letter-spacing: 0.5px !important;
+    color: rgba(102, 102, 102, 0.8) !important; /* LÉGÈREMENT PLUS VISIBLE */
+    opacity: 0.75; /* LÉGÈREMENT MOINS TRANSPARENT */
+    transition: all 0.3s ease;
+    border-radius: 8px; /* LÉGÈREMENT AUGMENTÉ */
+    background: rgba(0, 0, 0, 0.02); /* AJOUTÉ : Background très subtil */
+    border: 1px solid rgba(102, 102, 102, 0.1); /* AJOUTÉ : Bordure très discrète */
 }
 
 .navbar-actions .nav-link:hover {
     color: var(--guerlain-gold) !important;
-    opacity: 0.85;
-    background: rgba(212, 175, 55, 0.08);
-    border-color: rgba(212, 175, 55, 0.15);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1);
-}
-
-.navbar-actions .nav-link:hover::before {
-    left: 100%;
+    opacity: 1;
+    background: rgba(212, 175, 55, 0.1); /* LÉGÈREMENT PLUS VISIBLE */
+    border-color: rgba(212, 175, 55, 0.2); /* AJOUTÉ : Bordure dorée au hover */
+    transform: translateY(-0.5px); /* AJOUTÉ : Effet subtil */
 }
 
 .navbar-actions .nav-link i {
-    font-size: 12px;
-    margin-right: 6px;
-    transition: transform 0.3s ease;
-}
-
-.navbar-actions .nav-link:hover i {
-    transform: rotate(15deg);
+    font-size: 11px; /* LÉGÈREMENT AUGMENTÉ : Icône un peu plus visible */
+    margin-right: 5px; /* LÉGÈREMENT AUGMENTÉ */
 }
 
 /* Dropdown admin discret mais visible */
@@ -962,15 +916,15 @@ h1, h2, h3, h4, h5, h6 {
         top: auto;
     }
     
-    /* CORRECTION MOBILE : Actions repositionnées en haut à droite */
+    /* CORRECTION MOBILE : Actions repositionnées en haut à droite selon l'image */
     .navbar-actions {
         position: absolute !important; /* Force absolute positioning */
-        top: 10px !important; /* En haut de la navbar */
-        right: 15px !important; /* À droite avec marge */
+        top: 12px !important; /* Position optimisée selon l'image */
+        right: 15px !important; /* À droite avec marge optimisée */
         transform: none !important;
         margin-top: 0 !important;
         justify-content: flex-end !important;
-        gap: 0.5rem !important; /* Espacement réduit sur mobile */
+        gap: 12px !important; /* Espacement optimisé selon l'image */
         z-index: 100 !important; /* Au-dessus du contenu */
     }
     
@@ -2046,12 +2000,12 @@ h1, h2, h3, h4, h5, h6 {
     }
     
     .navbar-actions {
+        position: absolute !important; /* Cohérent avec nos corrections */
+        top: 12px !important; /* Position optimisée selon l'image */
+        right: 15px !important; /* À droite avec marge optimisée */
+        transform: none !important;
         order: 3; /* À droite */
-        position: relative;
-        transform: none;
-        right: auto;
-        top: auto;
-        gap: 0.3rem; /* Gap réduit sur mobile */
+        gap: 12px !important; /* Gap optimisé selon l'image */
     }
     
     .navbar-actions .cart-icon {
@@ -2396,44 +2350,34 @@ a[href*="panier"]:hover {
 
 /* Responsive - Mobile */
 @media (max-width: 768px) {
-    /* PANIER MOBILE - OPTIMISÉ */
+    /* PANIER MOBILE - SANS TRANSPARENCE */
     .cart-icon,
     a[href*="cart"],
     a[href*="panier"] {
-        min-width: 48px !important;
-        min-height: 48px !important;
-        padding: 14px !important;
-        font-size: 1.2rem !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        padding: 12px !important;
+        font-size: 1.1rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.98), rgba(212, 175, 55, 0.92)) !important;
-        border: 3px solid var(--guerlain-gold) !important;
-        color: var(--guerlain-black) !important;
-        opacity: 1 !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.2) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        transform: translateZ(0);
+        background: rgba(212, 175, 55, 0.9) !important; /* SUPPRIMÉ : Plus de transparence */
+        border: 2px solid var(--guerlain-gold) !important; /* Bordure pleine */
+        color: var(--guerlain-black) !important; /* Couleur contrastée */
+        opacity: 1 !important; /* Pas de transparence */
+        border-radius: 10px !important;
+        box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4) !important;
     }
     
     .cart-icon:hover,
     a[href*="cart"]:hover,
     a[href*="panier"]:hover {
-        background: linear-gradient(135deg, var(--guerlain-gold), rgba(212, 175, 55, 0.95)) !important;
-        transform: translateY(-1px) scale(1.02) !important;
-        box-shadow: 0 6px 24px rgba(212, 175, 55, 0.6), inset 0 1px 4px rgba(255, 255, 255, 0.3) !important;
+        background: var(--guerlain-gold) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.6) !important;
     }
     
-    .cart-icon:active,
-    a[href*="cart"]:active,
-    a[href*="panier"]:active {
-        transform: translateY(0) scale(0.98) !important;
-        transition: all 0.1s ease !important;
-    }
-    
-    /* ADMIN MOBILE - ULTRA DISCRET */
+    /* ADMIN MOBILE - TRANSPARENCE RÉDUITE AVEC ICÔNE */
     .navbar-actions a[href*="admin"],
     .navbar-actions .nav-link[href*="admin"] {
         min-width: 44px !important;
@@ -2441,47 +2385,40 @@ a[href*="panier"]:hover {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 0 !important;
-        opacity: 0.25 !important;
-        background: rgba(102, 102, 102, 0.04) !important;
-        border: 1px solid rgba(102, 102, 102, 0.1) !important;
-        border-radius: 10px !important;
-        color: rgba(102, 102, 102, 0.6) !important;
+        font-size: 0 !important; /* Cache le texte */
+        opacity: 0.4 !important; /* DIMINUÉ : Plus discret */
+        background: rgba(102, 102, 102, 0.1) !important;
+        border: 1px solid rgba(102, 102, 102, 0.2) !important;
+        border-radius: 8px !important;
+        color: rgba(102, 102, 102, 0.8) !important;
         position: relative !important;
-        backdrop-filter: blur(3px) !important;
-        -webkit-backdrop-filter: blur(3px) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     
+    /* ICÔNE ADMIN DISCRÈTE */
     .navbar-actions a[href*="admin"]::before,
     .navbar-actions .nav-link[href*="admin"]::before {
-        content: "⚙" !important;
-        font-size: 16px !important;
+        content: "⚙" !important; /* Icône engrenage discrète */
+        font-size: 14px !important;
         line-height: 1 !important;
         display: block !important;
-        opacity: 0.4 !important;
-        filter: grayscale(0.3) !important;
-        transition: all 0.3s ease !important;
+        opacity: 0.6 !important;
     }
     
     .navbar-actions a[href*="admin"]:hover,
     .navbar-actions .nav-link[href*="admin"]:hover {
-        opacity: 0.55 !important;
-        background: rgba(212, 175, 55, 0.06) !important;
-        border-color: rgba(212, 175, 55, 0.15) !important;
-        transform: translateY(-0.5px) !important;
+        opacity: 0.7 !important; /* Légèrement plus visible au hover */
+        background: rgba(212, 175, 55, 0.1) !important;
+        border-color: rgba(212, 175, 55, 0.3) !important;
     }
     
     .navbar-actions a[href*="admin"]:hover::before,
     .navbar-actions .nav-link[href*="admin"]:hover::before {
-        opacity: 0.7 !important;
-        filter: grayscale(0) !important;
-        transform: rotate(45deg) !important;
+        opacity: 0.9 !important;
     }
     
     .navbar-actions {
-        gap: 0.9rem !important;
-        padding: 0 !important;
+        gap: 0.8rem !important;
+        padding: 0 !important; /* Supprime le padding sur mobile */
     }
 }
 
@@ -2495,119 +2432,23 @@ a[href*="panier"]:hover {
     }
     
     .navbar-actions {
-        gap: 1.4rem !important;
-        padding: 0 1.8rem !important;
-        background: rgba(0, 0, 0, 0.02);
-        border-radius: 16px;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-    }
-    
-    .cart-icon,
-    a[href*="cart"],
-    a[href*="panier"] {
-        font-size: 1.4rem !important;
-        padding: 16px 20px !important;
-        border-radius: 18px !important;
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.95), rgba(212, 175, 55, 0.88)) !important;
-        border: 3px solid var(--guerlain-gold) !important;
-        box-shadow: 0 6px 25px rgba(212, 175, 55, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2) !important;
-        will-change: transform !important;
-    }
-    
-    .cart-icon:hover,
-    a[href*="cart"]:hover,
-    a[href*="panier"]:hover {
-        transform: translateY(-2px) scale(1.02) !important;
-        box-shadow: 0 8px 32px rgba(212, 175, 55, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.25) !important;
-    }
-    
-    .navbar-actions .nav-link {
-        padding: 12px 16px !important;
-        border-radius: 14px !important;
-        backdrop-filter: blur(8px) !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-        will-change: transform, opacity !important;
+        gap: 1.2rem !important;
+        padding: 0 1.5rem !important;
     }
 }
 
 /* ==============================================
-   CORRECTIONS FINALES MOBILES - OPTIMISÉES
+   CORRECTIONS FINALES MOBILES - TOUS NAVIGATEURS
    ============================================== */
 @media (max-width: 480px) {
+    /* Très petits écrans - ajustements fins */
     .navbar-actions {
         position: absolute !important;
-        top: 8px !important;
-        right: 10px !important;
-        gap: 0.7rem !important;
-        transform: none !important;
-        margin: 0 !important;
-        z-index: 200 !important;
-    }
-    
-    .cart-icon,
-    a[href*="cart"],
-    a[href*="panier"] {
-        min-width: 44px !important;
-        min-height: 44px !important;
-        padding: 12px !important;
-        font-size: 1.1rem !important;
-        border-radius: 12px !important;
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.96), rgba(212, 175, 55, 0.9)) !important;
-        box-shadow: 0 3px 15px rgba(212, 175, 55, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
-    }
-    
-    .cart-icon:hover,
-    a[href*="cart"]:hover,
-    a[href*="panier"]:hover {
-        transform: translateY(-1px) scale(1.03) !important;
-        box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5), inset 0 1px 3px rgba(255, 255, 255, 0.25) !important;
-    }
-    
-    .navbar-actions a[href*="admin"],
-    .navbar-actions .nav-link[href*="admin"] {
-        min-width: 42px !important;
-        min-height: 42px !important;
-        opacity: 0.2 !important;
-        border-radius: 8px !important;
-        background: rgba(102, 102, 102, 0.03) !important;
-        border: 1px solid rgba(102, 102, 102, 0.06) !important;
-    }
-    
-    .navbar-actions a[href*="admin"]::before,
-    .navbar-actions .nav-link[href*="admin"]::before {
-        font-size: 14px !important;
-        opacity: 0.3 !important;
-        filter: grayscale(0.4) brightness(0.8) !important;
-    }
-    
-    .navbar-actions a[href*="admin"]:hover,
-    .navbar-actions .nav-link[href*="admin"]:hover {
-        opacity: 0.4 !important;
-        transform: translateY(-0.5px) scale(1.01) !important;
-    }
-    
-    .navbar-actions a[href*="admin"]:hover::before,
-    .navbar-actions .nav-link[href*="admin"]:hover::before {
-        opacity: 0.6 !important;
-        filter: grayscale(0.1) brightness(1) !important;
-        transform: rotate(25deg) scale(1.1) !important;
-    }
-    
-    .cart-count {
-        width: 22px !important;
-        height: 22px !important;
-        font-size: 12px !important;
-        top: -8px !important;
-        right: -8px !important;
-    }
-}
-
-@media (max-width: 360px) {
-    .navbar-actions {
         top: 6px !important;
         right: 8px !important;
-        gap: 0.5rem !important;
+        gap: 0.4rem !important;
+        transform: none !important;
+        margin: 0 !important;
     }
     
     .cart-icon,
@@ -2615,60 +2456,14 @@ a[href*="panier"]:hover {
     a[href*="panier"] {
         min-width: 40px !important;
         min-height: 40px !important;
-        padding: 10px !important;
+        padding: 8px !important;
         font-size: 1rem !important;
     }
     
     .navbar-actions a[href*="admin"],
     .navbar-actions .nav-link[href*="admin"] {
-        min-width: 38px !important;
-        min-height: 38px !important;
-        opacity: 0.15 !important;
-    }
-    
-    .navbar-actions a[href*="admin"]::before,
-    .navbar-actions .nav-link[href*="admin"]::before {
-        font-size: 12px !important;
-        opacity: 0.25 !important;
-    }
-}
-
-/* ==============================================
-   OPTIMISATIONS FINALES PERFORMANCE
-   ============================================== */
-@supports (backdrop-filter: blur(10px)) {
-    .cart-icon {
-        backdrop-filter: blur(15px) !important;
-        -webkit-backdrop-filter: blur(15px) !important;
-    }
-}
-
-@supports (-webkit-appearance: none) {
-    .cart-icon,
-    .navbar-actions .nav-link {
-        -webkit-font-smoothing: antialiased;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-}
-
-.cart-icon,
-.navbar-actions .nav-link,
-.cart-count {
-    will-change: transform;
-    transform: translateZ(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .cart-icon,
-    .navbar-actions .nav-link,
-    .cart-count {
-        transition: none !important;
-        animation: none !important;
-    }
-    
-    .cart-icon:hover,
-    .navbar-actions .nav-link:hover {
-        transform: none !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        opacity: 0.3 !important; /* Encore plus discret sur petits écrans */
     }
 }

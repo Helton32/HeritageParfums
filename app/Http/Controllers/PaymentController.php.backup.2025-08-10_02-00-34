@@ -98,14 +98,13 @@ class PaymentController extends Controller
             ]);
 
             // Créer l'item de commande
-            $productPrice = $product->getCurrentPrice() ?? $product->price ?? 0;
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
                 'product_name' => $product->name,
                 'product_type' => $product->type,
                 'product_size' => $product->size,
-                'product_price' => $productPrice,
+                'product_price' => $product->getCurrentPrice(),
                 'quantity' => $quantity,
                 'total_price' => $subtotal,
             ]);
@@ -384,9 +383,6 @@ class PaymentController extends Controller
             }
 
             if ($session->payment_status === 'paid') {
-                // RÉCUPÉRER LES VRAIES DONNÉES APPLE PAY DEPUIS STRIPE
-                $this->updateOrderWithStripeData($order, $session);
-                
                 $order->markAsPaid();
                 
                 // Clear cart
@@ -432,9 +428,6 @@ class PaymentController extends Controller
                 $order = Order::where('stripe_session_id', $session['id'])->first();
                 
                 if ($order && $session['payment_status'] === 'paid') {
-                    // RÉCUPÉRER LES VRAIES DONNÉES APPLE PAY DEPUIS STRIPE
-                    $this->updateOrderWithStripeData($order, $session);
-                    
                     $order->markAsPaid();
                     
                     // Decrement stock
@@ -535,24 +528,17 @@ class PaymentController extends Controller
         }
     }
 
-        /**
-     * Process Apple Pay payment - CORRIGÉ POUR EXTRAIRE CORRECTEMENT LES DONNÉES
+    /**
+     * Process Apple Pay payment - DIRECT SANS STRIPE
      */
     public function processApplePayment(Request $request)
     {
-        // Log détaillé des données reçues pour debugging
-        \Log::info('Apple Pay Payment Request - Raw Data', [
-            'all_request_data' => $request->all(),
-            'payment_data' => $request->input('payment'),
-            'billing_contact' => $request->input('billing_contact'),
-            'shipping_contact' => $request->input('shipping_contact'),
-            'headers' => $request->headers->all()
-        ]);
-
         $request->validate([
             'payment' => 'required',
             'product_id' => 'required|integer|exists:products,id',
             'quantity' => 'required|integer|min:1',
+            'billing_contact' => 'required',
+            'shipping_contact' => 'required'
         ]);
 
         try {
@@ -572,118 +558,30 @@ class PaymentController extends Controller
             $shippingAmount = $subtotal >= 150 ? 0 : 9.90; // Livraison gratuite dès 150€
             $total = $subtotal + $taxAmount + $shippingAmount;
 
-            // EXTRACTION AMÉLIORÉE DES DONNÉES APPLE PAY
-            $payment = $request->input('payment', []);
-            $billingContact = $request->input('billing_contact', []);
-            $shippingContact = $request->input('shipping_contact', []);
+            // Extraire les informations de contact
+            $payment = $request->payment;
+            $billingContact = $request->billing_contact;
+            $shippingContact = $request->shipping_contact;
 
-            // Fonction helper pour extraire les données de contact de manière robuste
-            $extractContactInfo = function($contact, $type = 'shipping') {
-                // Logging pour voir la structure exacte
-                \Log::info("Apple Pay Contact Data - {$type}", ['contact' => $contact]);
-                
-                $info = [
-                    'email' => '',
-                    'givenName' => '',
-                    'familyName' => '',
-                    'phoneNumber' => '',
-                    'addressLines' => [],
-                    'locality' => '',
-                    'postalCode' => '',
-                    'countryCode' => 'FR'
-                ];
-
-                if (!is_array($contact)) {
-                    return $info;
-                }
-
-                // Extraction flexible - plusieurs formats possibles
-                $info['email'] = $contact['emailAddress'] ?? $contact['email'] ?? '';
-                $info['givenName'] = $contact['givenName'] ?? $contact['given_name'] ?? $contact['firstName'] ?? '';
-                $info['familyName'] = $contact['familyName'] ?? $contact['family_name'] ?? $contact['lastName'] ?? '';
-                $info['phoneNumber'] = $contact['phoneNumber'] ?? $contact['phone_number'] ?? $contact['phone'] ?? '';
-                
-                // Adresse - plusieurs formats possibles
-                if (isset($contact['addressLines'])) {
-                    $info['addressLines'] = is_array($contact['addressLines']) ? $contact['addressLines'] : [$contact['addressLines']];
-                } elseif (isset($contact['address_lines'])) {
-                    $info['addressLines'] = is_array($contact['address_lines']) ? $contact['address_lines'] : [$contact['address_lines']];
-                } elseif (isset($contact['address'])) {
-                    $info['addressLines'] = is_array($contact['address']) ? $contact['address'] : [$contact['address']];
-                } elseif (isset($contact['street'])) {
-                    $info['addressLines'] = [$contact['street']];
-                }
-
-                $info['locality'] = $contact['locality'] ?? $contact['city'] ?? $contact['town'] ?? '';
-                $info['postalCode'] = $contact['postalCode'] ?? $contact['postal_code'] ?? $contact['zip'] ?? '';
-                $info['countryCode'] = $contact['countryCode'] ?? $contact['country_code'] ?? $contact['country'] ?? 'FR';
-
-                return $info;
-            };
-
-            // Extraire les informations avec la fonction helper
-            $billing = $extractContactInfo($billingContact, 'billing');
-            $shipping = $extractContactInfo($shippingContact, 'shipping');
-
-            // Utiliser les données de shipping par défaut, fallback sur billing
-            $customerEmail = $shipping['email'] ?: $billing['email'] ?: 'apple-pay@heritajparfums.com';
-            $customerName = trim(($shipping['givenName'] ?: $billing['givenName']) . ' ' . ($shipping['familyName'] ?: $billing['familyName'])) ?: 'Client Apple Pay';
-            $customerPhone = $shipping['phoneNumber'] ?: $billing['phoneNumber'] ?: null;
-
-            // Adresses de livraison
-            $shippingAddress1 = $shipping['addressLines'][0] ?? $billing['addressLines'][0] ?? 'Adresse Apple Pay';
-            $shippingAddress2 = $shipping['addressLines'][1] ?? $billing['addressLines'][1] ?? null;
-            $shippingCity = $shipping['locality'] ?: $billing['locality'] ?: 'Ville';
-            $shippingPostalCode = $shipping['postalCode'] ?: $billing['postalCode'] ?: '00000';
-            $shippingCountry = strtoupper($shipping['countryCode'] ?: $billing['countryCode'] ?: 'FR');
-
-            // Adresses de facturation
-            $billingAddress1 = $billing['addressLines'][0] ?? $shippingAddress1;
-            $billingAddress2 = $billing['addressLines'][1] ?? $shippingAddress2;
-            $billingCity = $billing['locality'] ?: $shippingCity;
-            $billingPostalCode = $billing['postalCode'] ?: $shippingPostalCode;
-            $billingCountry = strtoupper($billing['countryCode'] ?: $shippingCountry);
-
-            // Log des données extraites pour vérification
-            \Log::info('Apple Pay Extracted Data', [
-                'customer_email' => $customerEmail,
-                'customer_name' => $customerName,
-                'customer_phone' => $customerPhone,
-                'shipping_address' => [
-                    'line_1' => $shippingAddress1,
-                    'line_2' => $shippingAddress2,
-                    'city' => $shippingCity,
-                    'postal_code' => $shippingPostalCode,
-                    'country' => $shippingCountry
-                ],
-                'billing_address' => [
-                    'line_1' => $billingAddress1,
-                    'line_2' => $billingAddress2,
-                    'city' => $billingCity,
-                    'postal_code' => $billingPostalCode,
-                    'country' => $billingCountry
-                ]
-            ]);
-
-            // Créer la commande avec les données extraites
+            // Créer la commande directement - APPLE PAY ACCEPTÉ
             $order = Order::create([
                 'order_number' => Order::generateOrderNumber(),
-                'status' => 'confirmed',
-                'payment_status' => 'paid',
+                'status' => 'confirmed', // Directement confirmé pour Apple Pay
+                'payment_status' => 'paid', // Directement payé car Apple Pay gère la sécurité
                 'payment_method' => 'apple_pay',
-                'customer_email' => $customerEmail,
-                'customer_name' => $customerName,
-                'customer_phone' => $customerPhone,
-                'billing_address_line_1' => $billingAddress1,
-                'billing_address_line_2' => $billingAddress2,
-                'billing_city' => $billingCity,
-                'billing_postal_code' => $billingPostalCode,
-                'billing_country' => $billingCountry,
-                'shipping_address_line_1' => $shippingAddress1,
-                'shipping_address_line_2' => $shippingAddress2,
-                'shipping_city' => $shippingCity,
-                'shipping_postal_code' => $shippingPostalCode,
-                'shipping_country' => $shippingCountry,
+                'customer_email' => $shippingContact['emailAddress'] ?? '',
+                'customer_name' => ($shippingContact['givenName'] ?? '') . ' ' . ($shippingContact['familyName'] ?? ''),
+                'customer_phone' => $shippingContact['phoneNumber'] ?? '',
+                'billing_address_line_1' => $billingContact['addressLines'][0] ?? '',
+                'billing_address_line_2' => $billingContact['addressLines'][1] ?? '',
+                'billing_city' => $billingContact['locality'] ?? '',
+                'billing_postal_code' => $billingContact['postalCode'] ?? '',
+                'billing_country' => $billingContact['countryCode'] ?? 'FR',
+                'shipping_address_line_1' => $shippingContact['addressLines'][0] ?? '',
+                'shipping_address_line_2' => $shippingContact['addressLines'][1] ?? '',
+                'shipping_city' => $shippingContact['locality'] ?? '',
+                'shipping_postal_code' => $shippingContact['postalCode'] ?? '',
+                'shipping_country' => $shippingContact['countryCode'] ?? 'FR',
                 'shipping_carrier' => 'colissimo',
                 'shipping_method' => $shippingAmount == 0 ? 'Gratuite' : 'Express',
                 'subtotal' => $subtotal,
@@ -691,19 +589,17 @@ class PaymentController extends Controller
                 'shipping_amount' => $shippingAmount,
                 'total_amount' => $total,
                 'currency' => 'EUR',
-                'paid_at' => now(),
-                'notes' => 'Commande Apple Pay - Données extraites automatiquement'
+                'paid_at' => now()
             ]);
 
             // Créer l'item de commande
-            $productPrice = $product->getCurrentPrice() ?? $product->price ?? 0;
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
                 'product_name' => $product->name,
                 'product_type' => $product->type,
                 'product_size' => $product->size,
-                'product_price' => $productPrice,
+                'product_price' => $product->getCurrentPrice(),
                 'quantity' => $quantity,
                 'total_price' => $subtotal,
             ]);
@@ -711,35 +607,35 @@ class PaymentController extends Controller
             // Décrémenter le stock immédiatement
             $product->decrementStock($quantity);
 
-            // Log de succès
-            \Log::info('Apple Pay Transaction Success', [
+            // Log de la transaction Apple Pay pour audit
+            \Log::info('Apple Pay Transaction', [
                 'order_number' => $order->order_number,
                 'amount' => $total,
                 'customer_email' => $order->customer_email,
-                'shipping_address' => $order->shipping_address_line_1 . ', ' . $order->shipping_city,
                 'payment_data' => [
                     'payment_network' => $payment['token']['paymentMethod']['network'] ?? 'Unknown',
                     'transaction_id' => $payment['token']['paymentData']['paymentData']['transactionIdentifier'] ?? uniqid('ap_')
                 ]
             ]);
 
+            // Envoyer un email de confirmation (optionnel)
+            try {
+                // Mail::to($order->customer_email)->send(new OrderConfirmation($order));
+            } catch (\Exception $e) {
+                \Log::warning('Failed to send order confirmation email', ['error' => $e->getMessage()]);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Paiement Apple Pay réussi !',
                 'order_number' => $order->order_number,
-                'redirect_url' => route('payment.success') . '?order_number=' . $order->order_number,
-                'order_details' => [
-                    'customer_name' => $order->customer_name,
-                    'shipping_address' => $order->shipping_address_line_1 . ', ' . $order->shipping_city . ' ' . $order->shipping_postal_code,
-                    'total_amount' => $order->formatted_total
-                ]
+                'redirect_url' => route('payment.success') . '?order_number=' . $order->order_number
             ]);
 
         } catch (\Exception $e) {
             \Log::error('Apple Pay processing error', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'request_data' => $request->all()
+                'trace' => $e->getTraceAsString()
             ]);
             
             return response()->json([
@@ -787,162 +683,6 @@ class PaymentController extends Controller
             return ['length' => 20, 'width' => 15, 'height' => 10];
         } else {
             return ['length' => 25, 'width' => 20, 'height' => 12];
-        }
-    }
-
-    /**
-     * MÉTHODE DE DEBUG POUR APPLE PAY - À SUPPRIMER EN PRODUCTION
-     */
-    public function debugApplePayData(Request $request)
-    {
-        \Log::info('Apple Pay Debug - All Request Data', [
-            'method' => $request->method(),
-            'url' => $request->fullUrl(),
-            'headers' => $request->headers->all(),
-            'all_data' => $request->all(),
-            'json_data' => $request->json()->all(),
-            'raw_content' => $request->getContent()
-        ]);
-
-        return response()->json([
-            'message' => 'Debug data logged',
-            'received_keys' => array_keys($request->all()),
-            'payment_keys' => $request->has('payment') ? array_keys($request->input('payment', [])) : [],
-            'billing_keys' => $request->has('billing_contact') ? array_keys($request->input('billing_contact', [])) : [],
-            'shipping_keys' => $request->has('shipping_contact') ? array_keys($request->input('shipping_contact', [])) : []
-        ]);
-    }
-
-    /**
-     * NOUVELLE MÉTHODE: Mettre à jour la commande avec les vraies données Apple Pay depuis Stripe
-     */
-    private function updateOrderWithStripeData($order, $session)
-    {
-        // Vérifier si c'est une commande avec des données temporaires
-        $needsUpdate = ($order->customer_email === 'temp@example.com' || 
-                       $order->customer_name === 'Temp Customer' || 
-                       $order->shipping_address_line_1 === 'Temp Address');
-
-        if (!$needsUpdate) {
-            \Log::info('Order already has real data, skipping update', ['order_number' => $order->order_number]);
-            return;
-        }
-
-        \Log::info('Updating order with Stripe session data', [
-            'order_number' => $order->order_number,
-            'session_id' => $session['id'],
-            'payment_method_types' => $session['payment_method_types'] ?? [],
-            'customer_details' => $session['customer_details'] ?? null,
-            'shipping_details' => $session['shipping_details'] ?? null
-        ]);
-
-        $updateData = [];
-        
-        // Extraire les informations client depuis Stripe
-        if (isset($session['customer_details'])) {
-            $customerDetails = $session['customer_details'];
-            
-            if (!empty($customerDetails['email'])) {
-                $updateData['customer_email'] = $customerDetails['email'];
-            }
-            
-            if (!empty($customerDetails['name'])) {
-                $updateData['customer_name'] = $customerDetails['name'];
-            }
-            
-            if (!empty($customerDetails['phone'])) {
-                $updateData['customer_phone'] = $customerDetails['phone'];
-            }
-            
-            // Adresse de facturation
-            if (!empty($customerDetails['address'])) {
-                $billingAddress = $customerDetails['address'];
-                
-                if (!empty($billingAddress['line1'])) {
-                    $updateData['billing_address_line_1'] = $billingAddress['line1'];
-                }
-                if (!empty($billingAddress['line2'])) {
-                    $updateData['billing_address_line_2'] = $billingAddress['line2'];
-                }
-                if (!empty($billingAddress['city'])) {
-                    $updateData['billing_city'] = $billingAddress['city'];
-                }
-                if (!empty($billingAddress['postal_code'])) {
-                    $updateData['billing_postal_code'] = $billingAddress['postal_code'];
-                }
-                if (!empty($billingAddress['country'])) {
-                    $updateData['billing_country'] = strtoupper($billingAddress['country']);
-                }
-            }
-        }
-        
-        // Extraire les informations de livraison depuis Stripe
-        if (isset($session['shipping_details'])) {
-            $shippingDetails = $session['shipping_details'];
-            
-            if (!empty($shippingDetails['name'])) {
-                $updateData['customer_name'] = $shippingDetails['name'];
-            }
-            
-            if (!empty($shippingDetails['address'])) {
-                $shippingAddress = $shippingDetails['address'];
-                
-                if (!empty($shippingAddress['line1'])) {
-                    $updateData['shipping_address_line_1'] = $shippingAddress['line1'];
-                }
-                if (!empty($shippingAddress['line2'])) {
-                    $updateData['shipping_address_line_2'] = $shippingAddress['line2'];
-                }
-                if (!empty($shippingAddress['city'])) {
-                    $updateData['shipping_city'] = $shippingAddress['city'];
-                }
-                if (!empty($shippingAddress['postal_code'])) {
-                    $updateData['shipping_postal_code'] = $shippingAddress['postal_code'];
-                }
-                if (!empty($shippingAddress['country'])) {
-                    $updateData['shipping_country'] = strtoupper($shippingAddress['country']);
-                }
-            }
-        }
-        
-        // Si on n'a pas d'adresse de livraison, utiliser l'adresse de facturation
-        if (empty($updateData['shipping_address_line_1']) && !empty($updateData['billing_address_line_1'])) {
-            $updateData['shipping_address_line_1'] = $updateData['billing_address_line_1'];
-            $updateData['shipping_address_line_2'] = $updateData['billing_address_line_2'] ?? null;
-            $updateData['shipping_city'] = $updateData['billing_city'] ?? null;
-            $updateData['shipping_postal_code'] = $updateData['billing_postal_code'] ?? null;
-            $updateData['shipping_country'] = $updateData['billing_country'] ?? null;
-        }
-        
-        // Si on n'a pas d'adresse de facturation, utiliser l'adresse de livraison
-        if (empty($updateData['billing_address_line_1']) && !empty($updateData['shipping_address_line_1'])) {
-            $updateData['billing_address_line_1'] = $updateData['shipping_address_line_1'];
-            $updateData['billing_address_line_2'] = $updateData['shipping_address_line_2'] ?? null;
-            $updateData['billing_city'] = $updateData['shipping_city'] ?? null;
-            $updateData['billing_postal_code'] = $updateData['shipping_postal_code'] ?? null;
-            $updateData['billing_country'] = $updateData['shipping_country'] ?? null;
-        }
-        
-        // Ajouter une note pour traçabilité
-        $currentNotes = $order->notes ?: '';
-        $updateData['notes'] = $currentNotes . "\nMis à jour avec données Apple Pay via Stripe le " . now()->format('d/m/Y H:i:s');
-        
-        // Mettre à jour la commande si on a des données
-        if (!empty($updateData)) {
-            $order->update($updateData);
-            
-            \Log::info('Order updated successfully with Stripe data', [
-                'order_number' => $order->order_number,
-                'updated_fields' => array_keys($updateData),
-                'customer_email' => $updateData['customer_email'] ?? 'not updated',
-                'customer_name' => $updateData['customer_name'] ?? 'not updated',
-                'shipping_address' => ($updateData['shipping_address_line_1'] ?? '') . ', ' . ($updateData['shipping_city'] ?? ''),
-            ]);
-        } else {
-            \Log::warning('No data extracted from Stripe session', [
-                'order_number' => $order->order_number,
-                'session_id' => $session['id']
-            ]);
         }
     }
 }

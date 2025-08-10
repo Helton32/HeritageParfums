@@ -84,7 +84,7 @@ body.home-page {
 
 .promotion-price {
     font-size: 2rem;
-    color: var(--guerlain-gold);
+    color: #d4af37; /* Couleur dorée directe */
     font-weight: 700;
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
     position: relative;
@@ -98,7 +98,7 @@ body.home-page {
 
 .current-price {
     font-size: 1.8rem;
-    color: var(--guerlain-gold);
+    color: #d4af37; /* Couleur dorée directe */
     font-weight: 600;
     text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
     font-family: 'Cormorant Garamond', serif;
@@ -166,7 +166,7 @@ body.home-page {
     left: 50%;
     width: 0;
     height: 0;
-    background: var(--guerlain-gold);
+    background: #d4af37; /* Couleur dorée directe */
     border-radius: 50%;
     transition: all 0.3s ease;
     transform: translate(-50%, -50%);
@@ -1207,7 +1207,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .customer-rating .stars {
-    color: var(--guerlain-gold);
+    color: #d4af37; /* Couleur dorée directe */
     margin-bottom: 0.3rem;
 }
 
@@ -1222,7 +1222,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .promotion-info {
-    color: var(--guerlain-gold);
+    color: #d4af37; /* Couleur dorée directe */
     font-style: italic;
     background: rgba(212, 175, 55, 0.1);
     padding: 0.3rem 0.8rem;
@@ -1234,7 +1234,7 @@ document.addEventListener('DOMContentLoaded', function() {
     position: absolute;
     top: 15px;
     left: 15px;
-    background: linear-gradient(135deg, var(--guerlain-gold), var(--guerlain-dark-gold));
+    background: linear-gradient(135deg, #d4af37, #b8941f); /* Couleurs directes */
     color: white;
     padding: 0.4rem 0.8rem;
     border-radius: 20px;
@@ -1258,7 +1258,7 @@ document.addEventListener('DOMContentLoaded', function() {
     display: block;
     font-size: 1.5rem;
     font-weight: bold;
-    color: var(--guerlain-gold);
+    color: #d4af37; /* Couleur dorée directe */
     font-family: 'Cormorant Garamond', serif;
 }
 

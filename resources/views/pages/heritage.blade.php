@@ -179,11 +179,8 @@
                 </div>
             </div>
         </div>
-
-       
-
         <!-- Call to Action -->
-        <div class="heritage-section text-center">
+              <div class="heritage-section text-center">
             <h2 class="heritage-title">Découvrez Nos Créations</h2>
             <p class="heritage-text">
                 Laissez-vous séduire par l'univers Héritaj Parfums et trouvez 

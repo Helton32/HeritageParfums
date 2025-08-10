@@ -36,10 +36,16 @@ class ShippingController extends Controller
      */
     public function show(Order $order)
     {
-        $order->load(['items', 'shippingCarrier']);
-        $availableCarriers = $this->shippingService->getAvailableCarriers($order);
+        try {
+            $order->load(['items', 'shippingCarrier']);
+            $availableCarriers = $this->shippingService->getAvailableCarriers($order);
 
-        return view('admin.shipping.show', compact('order', 'availableCarriers'));
+            return view('admin.shipping.show', compact('order', 'availableCarriers'));
+        } catch (\Exception $e) {
+            \Log::error('Erreur shipping show: ' . $e->getMessage());
+            return redirect()->route('admin.shipping.index')
+                            ->with('error', 'Erreur lors du chargement de la commande: ' . $e->getMessage());
+        }
     }
 
     /**

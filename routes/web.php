@@ -169,3 +169,24 @@ Route::get('/products/{any}', function () {
 Route::get('/search', function () {
     return redirect('/')->with('info', 'Découvrez Éternelle Rose, notre parfum signature unique.');
 });
+// Routes de debug Apple Pay - À SUPPRIMER EN PRODUCTION
+Route::post('/debug/apple-pay', [PaymentController::class, 'debugApplePayData'])->name('debug.apple-pay');
+Route::get('/debug/apple-pay-orders', function() {
+    $orders = \App\Models\Order::where('payment_method', 'apple_pay')->orderBy('created_at', 'desc')->limit(10)->get();
+    $debugInfo = [];
+    foreach ($orders as $order) {
+        $debugInfo[] = [
+            'order_number' => $order->order_number,
+            'customer_name' => $order->customer_name,
+            'customer_email' => $order->customer_email,
+            'shipping_address_line_1' => $order->shipping_address_line_1,
+            'shipping_city' => $order->shipping_city,
+            'shipping_postal_code' => $order->shipping_postal_code,
+            'shipping_country' => $order->shipping_country,
+            'total_amount' => $order->total_amount,
+            'created_at' => $order->created_at->format('Y-m-d H:i:s'),
+            'notes' => $order->notes
+        ];
+    }
+    return response()->json(['message' => 'Dernières commandes Apple Pay', 'count' => count($debugInfo), 'orders' => $debugInfo], 200, [], JSON_PRETTY_PRINT);
+})->name('debug.apple-pay-orders');
