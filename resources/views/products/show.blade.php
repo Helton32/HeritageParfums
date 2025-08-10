@@ -5,6 +5,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/product-detail.css') }}">
+<link rel="stylesheet" href="{{ asset('css/apple-pay-direct.css') }}">
 @endpush
 
 @section('content')
@@ -138,14 +139,28 @@
                                 <i class="fas fa-shopping-bag"></i>
                                 <span>Ajouter au Panier</span>
                             </button>
-                            <button class="btn-apple-pay" id="applePayBtn" data-product-id="{{ $product->id }}">
+                            
+                            <!-- BOUTON APPLE PAY HYBRIDE -->
+                            <button class="btn-apple-pay" id="applePayBtn" 
+                                    data-product-id="{{ $product->id }}"
+                                    data-product-name="{{ $product->name }}"
+                                    data-product-price="{{ $product->getCurrentPrice() }}"
+                                    style="display: none;">
                                 <i class="fab fa-apple"></i>
-                                <span>Payer avec Apple Pay</span>
+                                <span>Acheter avec Apple Pay</span>
                             </button>
+                            
                             <button class="btn-wishlist" onclick="toggleWishlist({{ $product->id }})">
                                 <i class="far fa-heart"></i>
                             </button>
                         </div>
+                        
+                        <!-- Message Apple Pay -->
+                        <div id="applePayMessage" class="apple-pay-info" style="display: none;">
+                            <i class="fab fa-apple"></i>
+                            <span>Paiement sécurisé et instantané avec Apple Pay</span>
+                        </div>
+                        
                     @else
                         <button class="btn-unavailable" disabled>
                             <i class="fas fa-times"></i>Produit Indisponible
@@ -181,6 +196,7 @@
         </div>
     </div>
 </section>
+
 <!-- Product Tabs -->
 <section class="product-tabs-section">
     <div class="container">
@@ -225,7 +241,8 @@
                     <div class="tab-pane" id="notes">
                         @include('components.olfactory-notes', ['product' => $product])
                     </div>
-                @endif                
+                @endif
+                
                 <!-- Details Tab -->
                 <div class="tab-pane" id="details">
                     <div class="row">
@@ -318,6 +335,7 @@
         </div>
     </div>
 </section>
+
 <!-- Related Products -->
 @if($relatedProducts->count() > 0)
 <section class="related-products-section">
@@ -380,6 +398,10 @@
 
 @push('scripts')
 <script>
+// ===== APPLE PAY HYBRIDE INTELLIGENT =====
+let isApplePayAvailable = false;
+let applePaySession = null;
+
 // Product Gallery
 let currentImageIndex = 0;
 const allImages = @json(array_unique(array_merge([$product->main_image], $product->images ?? [])));
@@ -387,8 +409,6 @@ const allImages = @json(array_unique(array_merge([$product->main_image], $produc
 function changeMainImage(imageSrc, index) {
     currentImageIndex = index;
     document.querySelector('#mainImage img').src = imageSrc;
-    
-    // Update active thumbnail
     document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
     document.querySelector(`.thumbnail[data-index="${index}"]`).classList.add('active');
 }
@@ -409,7 +429,6 @@ function incrementQuantity() {
     const input = document.getElementById('quantity');
     const currentValue = parseInt(input.value);
     const maxValue = parseInt(input.max);
-    
     if (currentValue < maxValue) {
         input.value = currentValue + 1;
     }
@@ -419,21 +438,57 @@ function decrementQuantity() {
     const input = document.getElementById('quantity');
     const currentValue = parseInt(input.value);
     const minValue = parseInt(input.min);
-    
     if (currentValue > minValue) {
         input.value = currentValue - 1;
     }
 }
+
+// VÉRIFICATION APPLE PAY
+document.addEventListener('DOMContentLoaded', function() {
+    checkApplePayAvailability();
+});
+
+function checkApplePayAvailability() {
+    if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
+        isApplePayAvailable = true;
+        showApplePayButton();
+        
+        ApplePaySession.canMakePaymentsWithActiveCard('{{ config("apple-pay.merchant_identifier", "merchant.com.heritajparfums.app") }}')
+            .then(function(canMakePayments) {
+                if (canMakePayments) {
+                    document.getElementById('applePayMessage').style.display = 'block';
+                } else {
+                    document.getElementById('applePayMessage').style.display = 'block';
+                    const msg = document.getElementById('applePayMessage');
+                    msg.innerHTML = '<i class="fab fa-apple"></i><span>Apple Pay disponible via Stripe</span>';
+                    msg.style.background = 'linear-gradient(135deg, #ffc107, #ff9800)';
+                    msg.style.color = '#000';
+                }
+            })
+            .catch(function(error) {
+                document.getElementById('applePayMessage').style.display = 'block';
+                const msg = document.getElementById('applePayMessage');
+                msg.innerHTML = '<i class="fab fa-apple"></i><span>Apple Pay via Stripe disponible</span>';
+                msg.style.background = 'linear-gradient(135deg, #17a2b8, #20c997)';
+                msg.style.color = '#fff';
+            });
+    }
+}
+
+function showApplePayButton() {
+    const applePayBtn = document.getElementById('applePayBtn');
+    if (applePayBtn) {
+        applePayBtn.style.display = 'block';
+        applePayBtn.style.animation = 'fadeInUp 0.5s ease-out';
+    }
+}
+
 // Tabs functionality
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const tabId = btn.dataset.tab;
-        
-        // Remove active from all tabs and panes
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-        
-        // Add active to clicked tab and corresponding pane
         btn.classList.add('active');
         document.getElementById(tabId).classList.add('active');
     });
@@ -443,8 +498,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 document.getElementById('addToCartBtn').addEventListener('click', function() {
     const productId = this.dataset.productId;
     const quantity = document.getElementById('quantity').value;
-    
-    // Button animation
     const originalText = this.innerHTML;
     this.disabled = true;
     this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Ajout en cours...</span>';
@@ -463,21 +516,14 @@ document.getElementById('addToCartBtn').addEventListener('click', function() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Update cart count
             const cartCount = document.querySelector('.cart-count');
             if (cartCount) {
                 cartCount.textContent = data.cart_count;
                 cartCount.style.display = 'flex';
             }
-            
-            // Success animation
             this.innerHTML = '<i class="fas fa-check"></i><span>Ajouté au Panier !</span>';
             this.classList.add('success');
-            
-            // Show notification
             showNotification(data.message, 'success');
-            
-            // Reset button after 3 seconds
             setTimeout(() => {
                 this.innerHTML = originalText;
                 this.classList.remove('success');
@@ -490,65 +536,16 @@ document.getElementById('addToCartBtn').addEventListener('click', function() {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         showNotification('Erreur lors de l\'ajout au panier', 'error');
         this.innerHTML = originalText;
         this.disabled = false;
     });
 });
 
-// Quick add to cart from related products
-document.querySelectorAll('.quick-add').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const productId = this.dataset.productId;
-        
-        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        
-        fetch('/cart/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                product_id: parseInt(productId),
-                quantity: 1
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const cartCount = document.querySelector('.cart-count');
-                if (cartCount) {
-                    cartCount.textContent = data.cart_count;
-                    cartCount.style.display = 'flex';
-                }
-                
-                this.innerHTML = '<i class="fas fa-check"></i>';
-                showNotification(data.message, 'success');
-                
-                setTimeout(() => {
-                    this.innerHTML = '<i class="fas fa-shopping-bag"></i>';
-                }, 2000);
-            } else {
-                showNotification(data.message, 'error');
-                this.innerHTML = '<i class="fas fa-shopping-bag"></i>';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Erreur lors de l\'ajout', 'error');
-            this.innerHTML = '<i class="fas fa-shopping-bag"></i>';
-        });
-    });
-});
-
-// Wishlist toggle (placeholder)
+// Wishlist toggle
 function toggleWishlist(productId) {
     const btn = document.querySelector('.btn-wishlist');
     const icon = btn.querySelector('i');
-    
     if (icon.classList.contains('far')) {
         icon.classList.replace('far', 'fas');
         btn.classList.add('active');
@@ -560,80 +557,104 @@ function toggleWishlist(productId) {
     }
 }
 
-// Apple Pay functionality
+// ===== APPLE PAY HYBRIDE =====
 document.getElementById('applePayBtn')?.addEventListener('click', function() {
-    const productId = this.dataset.productId;
-    const quantity = document.getElementById('quantity').value;
-    
-    // Vérifier si Apple Pay est disponible
-    if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
-        // Ajouter d'abord le produit au panier
-        const originalText = this.innerHTML;
-        this.disabled = true;
-        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Préparation Apple Pay...</span>';
-        
-        fetch('/cart/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                product_id: parseInt(productId),
-                quantity: parseInt(quantity)
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Rediriger vers checkout avec Apple Pay
-                window.location.href = '/checkout?payment_method=apple_pay';
-            } else {
-                showNotification(data.message, 'error');
-                this.innerHTML = originalText;
-                this.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Erreur lors de la préparation', 'error');
-            this.innerHTML = originalText;
-            this.disabled = false;
-        });
-    } else {
-        showNotification('Apple Pay n\'est pas disponible sur cet appareil', 'info');
+    if (!isApplePayAvailable) {
+        showNotification('Apple Pay n\'est pas disponible sur cet appareil', 'warning');
+        return;
     }
+    
+    const productId = this.dataset.productId;
+    const productName = this.dataset.productName;
+    const productPrice = parseFloat(this.dataset.productPrice);
+    const quantity = parseInt(document.getElementById('quantity').value);
+    
+    this.disabled = true;
+    this.innerHTML = '<i class="fab fa-apple"></i><span>Redirection Apple Pay...</span>';
+    
+    // Redirection directe vers Stripe avec Apple Pay
+    initiateStripeApplePay(productId, productName, productPrice, quantity);
 });
 
-// Notification function
+function initiateStripeApplePay(productId, productName, productPrice, quantity) {
+    const button = document.getElementById('applePayBtn');
+    const originalContent = '<i class="fab fa-apple"></i><span>Acheter avec Apple Pay</span>';
+    
+    fetch('/payment/create-apple-pay-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            product_id: parseInt(productId),
+            quantity: parseInt(quantity),
+            payment_method: 'apple_pay_stripe'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('🍎 Redirection vers Apple Pay...', 'info');
+            setTimeout(() => {
+                window.location.href = data.checkout_url;
+            }, 500);
+        } else {
+            button.innerHTML = originalContent;
+            button.disabled = false;
+            showNotification('❌ ' + (data.message || 'Erreur lors de la création de la session'), 'error');
+        }
+    })
+    .catch(error => {
+        button.innerHTML = originalContent;
+        button.disabled = false;
+        showNotification('❌ Erreur de connexion', 'error');
+    });
+}
+
 function showNotification(message, type = 'success') {
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
     const notification = document.createElement('div');
     notification.className = 'notification';
+    
+    const colors = {
+        success: 'linear-gradient(135deg, #28a745, #20c997)',
+        error: 'linear-gradient(135deg, #dc3545, #e74c3c)',
+        warning: 'linear-gradient(135deg, #ffc107, #ff9800)',
+        info: 'linear-gradient(135deg, #17a2b8, #20c997)'
+    };
+    
+    const icons = {
+        success: 'check-circle',
+        error: 'exclamation-circle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+    
     notification.style.cssText = `
         position: fixed;
-        top: 100px;
+        top: 20px;
         right: 20px;
         z-index: 9999;
         min-width: 350px;
-        background: ${type === 'success' ? 'linear-gradient(135deg, #28a745, #20c997)' : 
-                     type === 'error' ? 'linear-gradient(135deg, #dc3545, #e74c3c)' :
-                     'linear-gradient(135deg, #17a2b8, #20c997)'};
+        max-width: 500px;
+        background: ${colors[type] || colors.info};
         color: white;
         padding: 1rem 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        border-radius: 12px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         transform: translateX(100%);
-        transition: transform 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     `;
     
     notification.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 
-                              type === 'error' ? 'exclamation-circle' : 'info-circle'}" 
-               style="font-size: 1.2rem;"></i>
-            <span style="flex: 1;">${message}</span>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fas fa-${icons[type] || icons.info}" style="font-size: 1.25rem; flex-shrink: 0;"></i>
+            <span style="flex: 1; line-height: 1.4;">${message}</span>
             <button onclick="this.parentElement.parentElement.remove()" 
-                    style="background: none; border: none; color: white; cursor: pointer;">
+                    style="background: none; border: none; color: white; cursor: pointer; padding: 0.25rem; border-radius: 50%; transition: background 0.2s;">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -641,11 +662,14 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => notification.remove(), 300);
-    }, 4000);
+    }, type === 'error' ? 6000 : 4000);
 }
 </script>
 @endpush

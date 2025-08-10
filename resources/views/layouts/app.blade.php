@@ -30,7 +30,7 @@
         <div class="container">
             <!-- Logo + Titre centré -->
             <a class="navbar-brand mx-5" href="/">
-                <img src="{{ asset('images/logo-heritaj.svg') }}" alt="Héritaj Parfums" class="navbar-logo">
+                <!--  <img src="{{ asset('images/logo-heritaj.svg') }}" alt="Héritaj Parfums" class="navbar-logo"> -->
                 <span class="navbar-title">Héritaj Parfums</span>
             </a>
             

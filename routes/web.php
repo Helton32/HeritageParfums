@@ -68,9 +68,16 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::prefix('payment')->name('payment.')->group(function () {
     Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
     Route::post('/create-session', [PaymentController::class, 'createSession'])->name('create-session');
+    Route::post('/create-apple-pay-session', [PaymentController::class, 'createApplePaySession'])->name('create-apple-pay-session');
     Route::get('/success', [PaymentController::class, 'success'])->name('success');
     Route::get('/cancel', [PaymentController::class, 'cancel'])->name('cancel');
     Route::post('/webhook', [PaymentController::class, 'webhook'])->name('webhook');
+});
+
+// Apple Pay
+Route::prefix('apple-pay')->name('apple-pay.')->group(function () {
+    Route::post('/validate', [PaymentController::class, 'validateApplePayMerchant'])->name('validate');
+    Route::post('/process', [PaymentController::class, 'processApplePayment'])->name('process');
 });
 
 // API Routes pour AJAX
@@ -90,6 +97,11 @@ Route::get('/demo/shipping', function () {
 Route::get('/demo/guerlain', function () {
     return view('guerlain-demo');
 })->name('demo.guerlain');
+
+// Test Apple Pay
+Route::get('/test-apple-pay', function () {
+    return view('test-apple-pay');
+})->name('test.apple-pay');
 
 // Authentification Admin
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -157,5 +169,3 @@ Route::get('/products/{any}', function () {
 Route::get('/search', function () {
     return redirect('/')->with('info', 'Découvrez Éternelle Rose, notre parfum signature unique.');
 });
-
-

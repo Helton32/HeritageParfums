@@ -381,28 +381,8 @@ body.home-page {
                     </div>
                 </div>
                 
-                <div>
-                    <h5><i class="fas fa-compass me-2"></i>Navigation</h5>
-                    <ul class="footer-links">
-                        <li><a href="/">Accueil</a></li>
-                        <li><a href="{{ route('catalogue', ['product_type' => 'parfum']) }}">Parfums</a></li>
-                        <li><a href="{{ route('catalogue', ['product_type' => 'cosmetique']) }}">Cosmétiques</a></li>
-                        <li><a href="{{ route('heritage') }}">Notre Histoire</a></li>
-                        <li><a href="{{ route('contact') }}">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h5><i class="fas fa-concierge-bell me-2"></i>Services</h5>
-                    <ul class="footer-links">
-                        <li><a href="#">Livraison Express</a></li>
-                        <li><a href="#">Retours Gratuits</a></li>
-                        <li><a href="#">Support Client 24/7</a></li>
-                        <li><a href="#">Emballage Cadeau</a></li>
-                        <li><a href="#">Programme Fidélité</a></li>
-                    </ul>
-                </div>
-                
+   
+            
                 <div>
                     <h5><i class="fas fa-envelope me-2"></i>Newsletter</h5>
                     <p>Restez informé de nos actualités exclusives et bénéficiez d'offres privilégiées</p>
@@ -417,9 +397,7 @@ body.home-page {
                                 <i class="fas fa-paper-plane me-1"></i>S'inscrire
                             </button>
                         </div>
-                        <small style="color: rgba(255,255,255,0.7); margin-top: 0.5rem; display: block;">
-                            🎁 Offre de bienvenue : -10% sur votre première commande
-                        </small>
+                       
                     </form>
                 </div>
             </div>
@@ -500,12 +478,14 @@ function goToSlide(slideIndex, direction = 'next') {
     detectMobileDevice();
     
     if (isDeviceMobile) {
-        // Version mobile ultra-optimisée SANS BLUR
+        // Version mobile ultra-optimisée - BOUTONS TOUJOURS ACCESSIBLES
         slides.forEach((slide, index) => {
             slide.classList.remove('active');
-            slide.style.display = 'none';
+            // CORRECTION : Utiliser opacity au lieu de display pour garder les boutons accessibles
             slide.style.opacity = '0';
             slide.style.visibility = 'hidden';
+            slide.style.pointerEvents = 'none'; // Empêche l'interaction générale
+            slide.style.zIndex = '1'; // Z-index bas pour slides inactives
         });
         
         dots.forEach(dot => dot.classList.remove('active'));
@@ -514,8 +494,10 @@ function goToSlide(slideIndex, direction = 'next') {
         const targetSlide = slides[slideIndex];
         if (targetSlide) {
             targetSlide.classList.add('active');
-            targetSlide.style.display = 'flex';
+            targetSlide.style.display = 'flex'; // Garde le display flex pour la slide active
             targetSlide.style.visibility = 'visible';
+            targetSlide.style.pointerEvents = 'auto'; // Permet l'interaction générale
+            targetSlide.style.zIndex = '10'; // Z-index élevé pour slide active
             
             // Animation fade simple et performante
             requestAnimationFrame(() => {
@@ -528,6 +510,15 @@ function goToSlide(slideIndex, direction = 'next') {
         if (dots[slideIndex]) {
             dots[slideIndex].classList.add('active');
         }
+        
+        // CORRECTION FINALE : Assure que tous les boutons restent accessibles
+        const allButtons = document.querySelectorAll('.discover-button, .order-button');
+        allButtons.forEach(button => {
+            button.style.pointerEvents = 'auto';
+            button.style.zIndex = '1000';
+            button.style.opacity = '1';
+            button.style.visibility = 'visible';
+        });
         
     } else {
         // Version desktop avec animations
@@ -1101,18 +1092,22 @@ document.addEventListener('DOMContentLoaded', function() {
             carousel.style.height = '100vh';
         }
         
-        // Force l'affichage des slides
+        // Force l'affichage des slides - BOUTONS TOUJOURS ACCESSIBLES
         const allSlides = document.querySelectorAll('.carousel-slide');
         allSlides.forEach((slide, index) => {
+            // CORRECTION : Toutes les slides gardent leur structure DOM
+            slide.style.display = 'flex'; // Toutes les slides gardent display flex
             if (index === 0) {
-                slide.style.display = 'flex';
                 slide.style.opacity = '1';
                 slide.style.visibility = 'visible';
+                slide.style.pointerEvents = 'auto';
+                slide.style.zIndex = '10';
                 slide.classList.add('active');
             } else {
-                slide.style.display = 'none';
                 slide.style.opacity = '0';
                 slide.style.visibility = 'hidden';
+                slide.style.pointerEvents = 'none';
+                slide.style.zIndex = '1';
                 slide.classList.remove('active');
             }
         });
@@ -1131,6 +1126,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (dots[0]) {
             dots[0].classList.add('active');
         }
+        
+        // CORRECTION CRITIQUE : Force l'accessibilité de tous les boutons "Découvrir"
+        const allDiscoverButtons = document.querySelectorAll('.discover-button, .order-button');
+        allDiscoverButtons.forEach(button => {
+            button.style.pointerEvents = 'auto';
+            button.style.zIndex = '1000';
+            button.style.position = 'relative';
+            button.style.opacity = '1';
+            button.style.visibility = 'visible';
+        });
     }
     
     // Initialiser le carousel après le fix mobile

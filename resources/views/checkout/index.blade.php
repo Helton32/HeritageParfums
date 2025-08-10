@@ -18,6 +18,23 @@
     </div>
 </section>
 
+<!-- Apple Pay Notification -->
+@if(session('apple_pay_requested') || request('payment_method') === 'apple_pay')
+<section class="apple-pay-notification py-3" style="background: linear-gradient(135deg, #000, #333); color: white;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <i class="fab fa-apple" style="font-size: 2rem; color: #fff;"></i>
+            </div>
+            <div class="col">
+                <h5 class="mb-1">🍎 Apple Pay détecté</h5>
+                <p class="mb-0">Vous pourrez utiliser Apple Pay lors du paiement final avec Stripe.</p>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
 <!-- Checkout Form -->
 <section class="py-5">
     <div class="container">

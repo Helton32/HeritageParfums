@@ -182,10 +182,15 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--guerlain-white);
     border-bottom: 1px solid var(--guerlain-border);
     transition: all 0.5s ease;
-    padding: 20px 0 12px 0; /* Padding optimisé */
+    padding: 25px 0 15px 0; /* Padding augmenté pour accommoder les nouveaux styles */
     box-shadow: none;
-    position: relative;
+    position: absolute; /* CHANGÉ : Navbar en position absolute */
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 1000;
+    min-height: 90px; /* Hauteur minimale pour desktop */
 }
 
 .navbar.scrolled {
@@ -269,41 +274,61 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 20px; /* AJOUT : Espace entre le titre et les rubriques */
 }
 
 .nav-link {
     color: var(--guerlain-black) !important;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
-    font-size: 13px; /* Taille réduite pour mobile */
+    font-weight: 400; /* Poids plus marqué */
+    font-size: 14px; /* Taille lisible */
     text-transform: uppercase;
-    letter-spacing: 1.2px; /* Réduit */
-    padding: 8px 15px !important; /* Padding réduit */
+    letter-spacing: 1.5px; /* Espacement plus élégant */
+    padding: 12px 20px !important; /* Padding plus confortable */
     transition: all 0.3s ease;
     position: relative;
+    text-decoration: none;
 }
 
 .nav-link:hover {
     color: var(--guerlain-gold) !important;
+    transform: translateY(-1px); /* Effet de lift subtil */
 }
 
 .nav-link::after {
     content: '';
     position: absolute;
-    bottom: 3px; /* Ajusté */
+    bottom: 5px; /* Position optimisée */
     left: 50%;
     width: 0;
-    height: 1px;
+    height: 2px; /* Épaisseur plus visible */
     background: var(--guerlain-gold);
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
 
 .nav-link:hover::after {
+    width: 80%; /* Largeur de la ligne au hover */
+}
+
+/* État actif/sélectionné pour les liens de navigation */
+.nav-link.active,
+.nav-link[aria-current="page"] {
+    color: var(--guerlain-gold) !important;
+    font-weight: 500;
+}
+
+.nav-link.active::after,
+.nav-link[aria-current="page"]::after {
+    width: 80%;
+    background: var(--guerlain-gold);
+}
+
+.nav-link:hover::after {
     width: 60%;
 }
 
-/* Zone des actions utilisateur - MOBILE OPTIMISÉ */
+/* Zone des actions utilisateur - OPTIMISÉE MAXIMALE */
 .navbar-actions {
     display: flex;
     align-items: center;
@@ -311,68 +336,143 @@ h1, h2, h3, h4, h5, h6 {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 30;
-    gap: 0.5rem; /* Espacement entre les éléments */
+    z-index: 150;
+    gap: 1rem;
+    padding: 0 1.2rem;
+    will-change: transform;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar-actions::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(135deg, transparent, rgba(212, 175, 55, 0.02), transparent);
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.navbar-actions:hover::before {
+    opacity: 1;
 }
 
 .cart-icon {
     position: relative;
     color: var(--guerlain-black) !important;
-    transition: all 0.3s ease;
-    padding: 8px 12px; /* Padding tactile */
-    border-radius: 8px;
-    background: transparent;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.95), rgba(212, 175, 55, 0.85));
+    border: 3px solid var(--guerlain-gold);
+    font-size: 1.3rem;
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-weight: 600;
+    transform: translateZ(0);
 }
 
 .cart-icon:hover {
-    color: var(--guerlain-gold) !important;
-    background: rgba(212, 175, 55, 0.1);
+    color: var(--guerlain-black) !important;
+    background: linear-gradient(135deg, var(--guerlain-gold), rgba(212, 175, 55, 0.9));
+    border-color: #b8941f;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.5), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+}
+
+.cart-icon:active {
+    transform: translateY(-1px) scale(0.98);
+    transition: all 0.1s ease;
 }
 
 .cart-count {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    background: var(--guerlain-gold);
-    color: var(--guerlain-white);
+    top: -10px;
+    right: -10px;
+    background: linear-gradient(135deg, #ff3742, #dc2626);
+    color: white;
     border-radius: 50%;
-    width: 16px; /* Plus petit */
-    height: 16px;
-    font-size: 10px; /* Plus petit */
-    font-weight: 500;
+    width: 24px;
+    height: 24px;
+    font-size: 13px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 3px solid white;
+    box-shadow: 0 3px 10px rgba(220, 38, 38, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.1);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
     font-family: 'Montserrat', sans-serif;
 }
 
-/* BOUTON ADMIN DISCRET */
+/* BOUTON ADMIN DISCRET MAIS VISIBLE */
 .navbar-actions .nav-link {
-    font-size: 11px !important; /* Très petit */
-    padding: 6px 10px !important; /* Padding réduit */
-    letter-spacing: 0.5px !important; /* Réduit */
-    color: rgba(102, 102, 102, 0.7) !important; /* Couleur discrète */
-    opacity: 0.6; /* Transparence pour discrétion */
-    transition: all 0.3s ease;
-    border-radius: 6px;
-    background: transparent;
+    font-size: 11px !important;
+    padding: 10px 14px !important;
+    letter-spacing: 0.3px !important;
+    color: rgba(102, 102, 102, 0.6) !important;
+    opacity: 0.5;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(102, 102, 102, 0.08);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-actions .nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    transition: left 0.5s ease;
 }
 
 .navbar-actions .nav-link:hover {
     color: var(--guerlain-gold) !important;
-    opacity: 1;
+    opacity: 0.85;
     background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1);
+}
+
+.navbar-actions .nav-link:hover::before {
+    left: 100%;
 }
 
 .navbar-actions .nav-link i {
-    font-size: 10px; /* Icône très petite */
-    margin-right: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    transition: transform 0.3s ease;
 }
 
-/* Dropdown admin discret */
+.navbar-actions .nav-link:hover i {
+    transform: rotate(15deg);
+}
+
+/* Dropdown admin discret mais visible */
 .navbar-actions .dropdown-toggle {
-    font-size: 11px !important;
-    padding: 6px 10px !important;
+    font-size: 12px !important; /* LÉGÈREMENT AUGMENTÉ */
+    padding: 8px 12px !important; /* LÉGÈREMENT AUGMENTÉ */
+}
     color: rgba(102, 102, 102, 0.8) !important;
     opacity: 0.7;
 }
@@ -840,28 +940,38 @@ h1, h2, h3, h4, h5, h6 {
 /* Responsive Navigation */
 @media (max-width: 991px) {
     .navbar {
-        padding: 40px 0 10px 0;
+        padding: 15px 0 12px 0;
+        min-height: 80px;
+        max-height: 80px;
+        position: relative; /* Assure que les actions peuvent être positionnées */
     }
     
     .navbar .container {
         flex-direction: column;
         align-items: center;
         text-align: center;
+        min-height: auto;
+        position: relative; /* Pour le positionnement des actions */
     }
     
     .navbar-brand {
         position: static;
         transform: none;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         margin-bottom: 15px;
         top: auto;
     }
     
+    /* CORRECTION MOBILE : Actions repositionnées en haut à droite */
     .navbar-actions {
-        position: static;
-        transform: none;
-        margin-top: 1rem;
-        justify-content: center;
+        position: absolute !important; /* Force absolute positioning */
+        top: 10px !important; /* En haut de la navbar */
+        right: 15px !important; /* À droite avec marge */
+        transform: none !important;
+        margin-top: 0 !important;
+        justify-content: flex-end !important;
+        gap: 0.5rem !important; /* Espacement réduit sur mobile */
+        z-index: 100 !important; /* Au-dessus du contenu */
     }
     
     .mega-menu {
@@ -1368,11 +1478,25 @@ h1, h2, h3, h4, h5, h6 {
     }
     
     .navbar-nav .nav-link {
-        padding: 10px 0 !important; /* Plus d'espace tactile */
+        padding: 12px 0 !important; /* Plus d'espace tactile et visuel */
+        font-size: 14px !important; /* Taille cohérente avec desktop */
+        font-weight: 400 !important; /* Poids plus marqué */
+        letter-spacing: 1.5px !important; /* Espacement élégant */
     }
     
+    .navbar-nav {
+        margin-top: 10px; /* AJOUT : Espace supplémentaire sur mobile */
+    }
+    
+    /* Réinitialise l'effet after sur mobile */
     .navbar-nav .nav-link::after {
         display: none;
+    }
+    
+    /* Effet hover mobile différent */
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(201, 160, 108, 0.05);
+        transform: none; /* Pas d'effet lift sur mobile */
     }
 }
 
@@ -1889,7 +2013,7 @@ h1, h2, h3, h4, h5, h6 {
         order: 2; /* Au centre */
         flex: 1;
         text-align: center;
-        margin: 0 1rem;
+        margin: 1rem;
         gap: 8px; /* Gap réduit sur mobile */
     }
     
@@ -1951,14 +2075,23 @@ h1, h2, h3, h4, h5, h6 {
     
     .navbar-nav {
         flex-direction: column;
+        margin-top: 15px; /* AJOUT : Plus d'espace sur très petits écrans */
         gap: 0.5rem;
     }
     
     .navbar-nav .nav-link {
-        padding: 12px 0 !important; /* Plus d'espace tactile */
+        padding: 15px 0 !important; /* Plus d'espace tactile sur petits écrans */
         text-align: center;
         width: 100%;
+        font-size: 14px !important; /* Taille lisible */
+        font-weight: 400 !important; /* Poids plus marqué */
+        letter-spacing: 1.5px !important; /* Espacement élégant */
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(201, 160, 108, 0.05); /* Effet hover subtil */
     }
     
     .navbar-nav .nav-link:last-child {
@@ -2015,6 +2148,8 @@ h1, h2, h3, h4, h5, h6 {
     
     .navbar-title {
         font-size: 1.2rem;
+        margin-bottom:10;
+
     }
     
     .navbar-actions .nav-link {
@@ -2142,4 +2277,398 @@ h1, h2, h3, h4, h5, h6 {
     font-style: italic;
     color: #856404;
     margin-top: 0.5rem;
+}
+
+/* ==============================================
+   CORRECTION CHROME NAVBAR
+   ============================================== */
+@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
+    /* Chrome spécifique */
+    .navbar {
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    @media (max-width: 991px) {
+        .navbar {
+            padding: 10px 0 8px 0 !important;
+            min-height: 85px !important;
+            max-height: 85px !important;
+            height: 85px !important;
+        }
+        
+        .navbar .container {
+            padding: 0 15px !important;
+            box-sizing: border-box !important;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            margin-bottom: 5px !important;
+            line-height: 1.1 !important;
+        }
+        
+        /* AMÉLIORATIONS PANIER ET ADMIN MOBILE */
+        .cart-icon {
+            padding: 10px 14px !important;
+            font-size: 1.1rem !important;
+            min-width: 44px !important;
+            min-height: 44px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        .navbar-actions .nav-link {
+            min-width: 44px !important;
+            min-height: 44px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 11px !important;
+        }
+        
+        /* POSITIONNEMENT MOBILE CHROME */
+        .navbar-actions {
+            position: absolute !important;
+            top: 8px !important;
+            right: 10px !important;
+            transform: none !important;
+            margin-top: 0 !important;
+            gap: 0.6rem !important;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .navbar {
+            height: 90px !important;
+            min-height: 90px !important;
+            max-height: 90px !important;
+        }
+    }
+}
+
+/* ==============================================
+   VISIBILITÉ PANIER ET ADMIN - TOUTES PAGES
+   ============================================== */
+/* Force la visibilité du panier sur toutes les pages */
+.cart-icon,
+a[href*="cart"],
+a[href*="panier"],
+.navbar .cart-icon {
+    position: relative !important;
+    color: var(--guerlain-black) !important;
+    background: rgba(212, 175, 55, 0.15) !important;
+    border: 2px solid rgba(212, 175, 55, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 1.2rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    z-index: 100 !important;
+}
+
+.cart-icon:hover,
+a[href*="cart"]:hover,
+a[href*="panier"]:hover {
+    background: rgba(212, 175, 55, 0.25) !important;
+    border-color: var(--guerlain-gold) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* Admin reste discret mais visible */
+.navbar-actions a[href*="admin"],
+.navbar-actions .nav-link[href*="admin"] {
+    opacity: 0.75 !important;
+    font-size: 12px !important;
+    border: 1px solid rgba(102, 102, 102, 0.2) !important;
+    background: rgba(0, 0, 0, 0.03) !important;
+}
+
+.navbar-actions a[href*="admin"]:hover,
+.navbar-actions .nav-link[href*="admin"]:hover {
+    opacity: 1 !important;
+    border-color: rgba(212, 175, 55, 0.3) !important;
+    background: rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    /* PANIER MOBILE - OPTIMISÉ */
+    .cart-icon,
+    a[href*="cart"],
+    a[href*="panier"] {
+        min-width: 48px !important;
+        min-height: 48px !important;
+        padding: 14px !important;
+        font-size: 1.2rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.98), rgba(212, 175, 55, 0.92)) !important;
+        border: 3px solid var(--guerlain-gold) !important;
+        color: var(--guerlain-black) !important;
+        opacity: 1 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        transform: translateZ(0);
+    }
+    
+    .cart-icon:hover,
+    a[href*="cart"]:hover,
+    a[href*="panier"]:hover {
+        background: linear-gradient(135deg, var(--guerlain-gold), rgba(212, 175, 55, 0.95)) !important;
+        transform: translateY(-1px) scale(1.02) !important;
+        box-shadow: 0 6px 24px rgba(212, 175, 55, 0.6), inset 0 1px 4px rgba(255, 255, 255, 0.3) !important;
+    }
+    
+    .cart-icon:active,
+    a[href*="cart"]:active,
+    a[href*="panier"]:active {
+        transform: translateY(0) scale(0.98) !important;
+        transition: all 0.1s ease !important;
+    }
+    
+    /* ADMIN MOBILE - ULTRA DISCRET */
+    .navbar-actions a[href*="admin"],
+    .navbar-actions .nav-link[href*="admin"] {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0 !important;
+        opacity: 0.25 !important;
+        background: rgba(102, 102, 102, 0.04) !important;
+        border: 1px solid rgba(102, 102, 102, 0.1) !important;
+        border-radius: 10px !important;
+        color: rgba(102, 102, 102, 0.6) !important;
+        position: relative !important;
+        backdrop-filter: blur(3px) !important;
+        -webkit-backdrop-filter: blur(3px) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    .navbar-actions a[href*="admin"]::before,
+    .navbar-actions .nav-link[href*="admin"]::before {
+        content: "⚙" !important;
+        font-size: 16px !important;
+        line-height: 1 !important;
+        display: block !important;
+        opacity: 0.4 !important;
+        filter: grayscale(0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .navbar-actions a[href*="admin"]:hover,
+    .navbar-actions .nav-link[href*="admin"]:hover {
+        opacity: 0.55 !important;
+        background: rgba(212, 175, 55, 0.06) !important;
+        border-color: rgba(212, 175, 55, 0.15) !important;
+        transform: translateY(-0.5px) !important;
+    }
+    
+    .navbar-actions a[href*="admin"]:hover::before,
+    .navbar-actions .nav-link[href*="admin"]:hover::before {
+        opacity: 0.7 !important;
+        filter: grayscale(0) !important;
+        transform: rotate(45deg) !important;
+    }
+    
+    .navbar-actions {
+        gap: 0.9rem !important;
+        padding: 0 !important;
+    }
+}
+
+/* Desktop - Plus d'espace */
+@media (min-width: 992px) {
+    .cart-icon,
+    a[href*="cart"],
+    a[href*="panier"] {
+        font-size: 1.3rem !important;
+        padding: 14px 18px !important;
+    }
+    
+    .navbar-actions {
+        gap: 1.4rem !important;
+        padding: 0 1.8rem !important;
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: 16px;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .cart-icon,
+    a[href*="cart"],
+    a[href*="panier"] {
+        font-size: 1.4rem !important;
+        padding: 16px 20px !important;
+        border-radius: 18px !important;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.95), rgba(212, 175, 55, 0.88)) !important;
+        border: 3px solid var(--guerlain-gold) !important;
+        box-shadow: 0 6px 25px rgba(212, 175, 55, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2) !important;
+        will-change: transform !important;
+    }
+    
+    .cart-icon:hover,
+    a[href*="cart"]:hover,
+    a[href*="panier"]:hover {
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 32px rgba(212, 175, 55, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.25) !important;
+    }
+    
+    .navbar-actions .nav-link {
+        padding: 12px 16px !important;
+        border-radius: 14px !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        will-change: transform, opacity !important;
+    }
+}
+
+/* ==============================================
+   CORRECTIONS FINALES MOBILES - OPTIMISÉES
+   ============================================== */
+@media (max-width: 480px) {
+    .navbar-actions {
+        position: absolute !important;
+        top: 8px !important;
+        right: 10px !important;
+        gap: 0.7rem !important;
+        transform: none !important;
+        margin: 0 !important;
+        z-index: 200 !important;
+    }
+    
+    .cart-icon,
+    a[href*="cart"],
+    a[href*="panier"] {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        padding: 12px !important;
+        font-size: 1.1rem !important;
+        border-radius: 12px !important;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.96), rgba(212, 175, 55, 0.9)) !important;
+        box-shadow: 0 3px 15px rgba(212, 175, 55, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .cart-icon:hover,
+    a[href*="cart"]:hover,
+    a[href*="panier"]:hover {
+        transform: translateY(-1px) scale(1.03) !important;
+        box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5), inset 0 1px 3px rgba(255, 255, 255, 0.25) !important;
+    }
+    
+    .navbar-actions a[href*="admin"],
+    .navbar-actions .nav-link[href*="admin"] {
+        min-width: 42px !important;
+        min-height: 42px !important;
+        opacity: 0.2 !important;
+        border-radius: 8px !important;
+        background: rgba(102, 102, 102, 0.03) !important;
+        border: 1px solid rgba(102, 102, 102, 0.06) !important;
+    }
+    
+    .navbar-actions a[href*="admin"]::before,
+    .navbar-actions .nav-link[href*="admin"]::before {
+        font-size: 14px !important;
+        opacity: 0.3 !important;
+        filter: grayscale(0.4) brightness(0.8) !important;
+    }
+    
+    .navbar-actions a[href*="admin"]:hover,
+    .navbar-actions .nav-link[href*="admin"]:hover {
+        opacity: 0.4 !important;
+        transform: translateY(-0.5px) scale(1.01) !important;
+    }
+    
+    .navbar-actions a[href*="admin"]:hover::before,
+    .navbar-actions .nav-link[href*="admin"]:hover::before {
+        opacity: 0.6 !important;
+        filter: grayscale(0.1) brightness(1) !important;
+        transform: rotate(25deg) scale(1.1) !important;
+    }
+    
+    .cart-count {
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 12px !important;
+        top: -8px !important;
+        right: -8px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .navbar-actions {
+        top: 6px !important;
+        right: 8px !important;
+        gap: 0.5rem !important;
+    }
+    
+    .cart-icon,
+    a[href*="cart"],
+    a[href*="panier"] {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        padding: 10px !important;
+        font-size: 1rem !important;
+    }
+    
+    .navbar-actions a[href*="admin"],
+    .navbar-actions .nav-link[href*="admin"] {
+        min-width: 38px !important;
+        min-height: 38px !important;
+        opacity: 0.15 !important;
+    }
+    
+    .navbar-actions a[href*="admin"]::before,
+    .navbar-actions .nav-link[href*="admin"]::before {
+        font-size: 12px !important;
+        opacity: 0.25 !important;
+    }
+}
+
+/* ==============================================
+   OPTIMISATIONS FINALES PERFORMANCE
+   ============================================== */
+@supports (backdrop-filter: blur(10px)) {
+    .cart-icon {
+        backdrop-filter: blur(15px) !important;
+        -webkit-backdrop-filter: blur(15px) !important;
+    }
+}
+
+@supports (-webkit-appearance: none) {
+    .cart-icon,
+    .navbar-actions .nav-link {
+        -webkit-font-smoothing: antialiased;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}
+
+.cart-icon,
+.navbar-actions .nav-link,
+.cart-count {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cart-icon,
+    .navbar-actions .nav-link,
+    .cart-count {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .cart-icon:hover,
+    .navbar-actions .nav-link:hover {
+        transform: none !important;
+    }
 }
