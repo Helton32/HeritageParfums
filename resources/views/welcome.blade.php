@@ -5,9 +5,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/home-improvements.css') }}">
-
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Meta viewport optimisée pour mobile -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,202 +13,153 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-
 <style>
-/* Classe spéciale pour la page d'accueil - désactive le scroll normal */
-body.home-page {
-    overflow-y: hidden;
+/* STYLES ADDITIONNELS GUERLAIN FULLSCREEN */
+/* Assure que l'effet plein écran fonctionne parfaitement */
+
+/* Force le plein écran même avec navbar */
+.navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    transition: transform 0.3s ease !important;
+    transform: translateY(0) !important;
 }
 
-/* Amélioration : Transition smooth entre navbar et carrousel */
-.fullscreen-carousel {
-    animation: slideInFromTop 0.8s ease-out;
+/* Navbar cachée au scroll */
+.navbar.hidden-scroll {
+    transform: translateY(-100%) !important;
 }
 
-/* Ajustement pour remonter les produits dans le carrousel */
-.carousel-content-wrapper {
-    transform: translateY(-30px); /* Remonte les produits de 30px */
+.navbar.visible-scroll {
+    transform: translateY(0) !important;
 }
 
-/* Styles pour les promotions dans le carrousel - AMÉLIORÉS */
+/* Badges et promotions sur l'image plein écran */
 .promotion-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: linear-gradient(135deg, #dc3545, #e74c3c);
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 25px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
-    z-index: 10;
-    animation: promotional-pulse 2s infinite;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: absolute !important;
+    top: 2rem !important;
+    right: 2rem !important;
+    background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+    color: white !important;
+    padding: 0.8rem 1.5rem !important;
+    border-radius: 30px !important;
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4) !important;
+    z-index: 15 !important;
+    animation: promotional-pulse 2s infinite !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 @keyframes promotional-pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(220, 53, 69, 0.6); }
+    50% { transform: scale(1.05); box-shadow: 0 10px 30px rgba(220, 53, 69, 0.6); }
 }
 
-.price-container {
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.original-price {
-    font-size: 1.4rem;
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: line-through;
-    font-weight: 300;
-    position: relative;
-}
-
-.original-price::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -5px;
-    right: -5px;
-    height: 2px;
-    background: #dc3545;
-    transform: translateY(-50%);
-}
-
-.promotion-price {
-    font-size: 2rem;
-    color: #d4af37; /* Couleur dorée directe */
-    font-weight: 700;
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
-    position: relative;
-    animation: price-glow 3s ease-in-out infinite;
-}
-
-@keyframes price-glow {
-    0%, 100% { text-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
-    50% { text-shadow: 0 0 25px rgba(212, 175, 55, 0.8), 0 0 35px rgba(212, 175, 55, 0.4); }
-}
-
-.current-price {
-    font-size: 1.8rem;
-    color: #d4af37; /* Couleur dorée directe */
-    font-weight: 600;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-    font-family: 'Cormorant Garamond', serif;
-}
-
-/* Badge économies */
 .savings-badge {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-    z-index: 10;
+    position: absolute !important;
+    bottom: 2rem !important;
+    left: 2rem !important;
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: white !important;
+    padding: 0.6rem 1.2rem !important;
+    border-radius: 25px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3) !important;
+    z-index: 15 !important;
 }
 
-@keyframes slideInFromTop {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
+/* Améliorations des éléments de contenu superposés */
+.product-features {
+    margin-bottom: 1.5rem !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.8rem !important;
+    justify-content: flex-start !important;
+}
+
+.feature {
+    background: rgba(255, 255, 255, 0.1) !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 20px !important;
+    font-size: 0.85rem !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.customer-rating {
+    margin-top: 1.5rem !important;
+    text-align: left !important;
+}
+
+.customer-rating .stars {
+    color: var(--guerlain-gold) !important;
+    margin-bottom: 0.3rem !important;
+    font-size: 1rem !important;
+}
+
+.customer-rating .rating-text {
+    font-size: 0.9rem !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Responsive mobile pour plein écran */
+@media (max-width: 991px) {
+    .promotion-badge {
+        top: 1rem !important;
+        right: 1rem !important;
+        padding: 0.6rem 1.2rem !important;
+        font-size: 0.9rem !important;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    
+    .savings-badge {
+        bottom: 1rem !important;
+        left: 1rem !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .product-features {
+        justify-content: center !important;
+    }
+    
+    .feature {
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.8rem !important;
+    }
+    
+    .customer-rating {
+        text-align: center !important;
+        margin-top: 1rem !important;
     }
 }
 
-/* Amélioration des boutons carrousel */
-.discover-button,
-.order-button {
-    position: relative;
-    overflow: hidden;
+/* Animation d'entrée pour les éléments */
+.fade-in {
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    transition: all 1s ease-out !important;
 }
 
-.discover-button::before,
-.order-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
+.fade-in.delay-1 { transition-delay: 0.2s !important; }
+.fade-in.delay-2 { transition-delay: 0.4s !important; }
+.fade-in.delay-3 { transition-delay: 0.6s !important; }
+.fade-in.delay-4 { transition-delay: 0.8s !important; }
 
-.discover-button:hover::before,
-.order-button:hover::before {
-    left: 100%;
-}
-
-/* Indicateurs carrousel améliorés */
-.nav-dot {
-    position: relative;
-}
-
-.nav-dot::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: #d4af37; /* Couleur dorée directe */
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    transform: translate(-50%, -50%);
-}
-
-.nav-dot.active::after {
-    width: 20px;
-    height: 20px;
-    opacity: 0.3;
-}
-
-/* Animation de chargement pour les images */
-.product-image {
-    position: relative;
-    background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
-                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
-                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-}
-
-.product-image.loaded {
-    background: none;
-}
-
-/* Effets de transition entre slides */
-.carousel-slide {
-    backface-visibility: hidden;
-    perspective: 1000px;
-}
-
-.carousel-slide.transitioning {
-    animation: slideTransition 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-@keyframes slideTransition {
-    0% { 
-        opacity: 0;
-        transform: translateY(30px) rotateX(-10deg);
-    }
-    100% { 
-        opacity: 1;
-        transform: translateY(0) rotateX(0deg);
+/* Force l'affichage des animations sur desktop */
+@media (min-width: 992px) {
+    .fade-in.show {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
     }
 }
 </style>
@@ -237,11 +186,11 @@ body.home-page {
              tabindex="0"></div>
     </div>
 
-    <!-- Slides des produits AMÉLIORÉS -->
+    <!-- Slides des produits STYLE GUERLAIN PLEIN ÉCRAN -->
     @foreach($allActiveProducts as $index => $product)
     <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}" data-product-id="{{ $product->id }}">
         <div class="carousel-content-wrapper">
-            <!-- Image à gauche avec améliorations -->
+            <!-- Image plein écran arrière-plan -->
             <div class="product-image-zone">
                 <img src="{{ $product->main_image }}"
                      alt="{{ $product->name }}"
@@ -249,6 +198,7 @@ body.home-page {
                      loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
                      onload="this.classList.add('loaded')">
                 
+                <!-- Badges superposés sur l'image -->
                 @if($product->hasValidPromotion())
                     <div class="promotion-badge">
                         -{{ $product->getDiscountPercentage() }}%
@@ -268,14 +218,10 @@ body.home-page {
                 @endif
             </div>
 
-            <!-- Texte à droite avec améliorations -->
+            <!-- Contenu texte superposé style Guerlain -->
             <div class="content-zone">
                 <div class="signature-text fade-in">
-                    @if($product->product_type === 'parfum')
-                        Parfum d'Exception
-                    @else
-                        Cosmétique de Luxe
-                    @endif
+                    {{ mb_strtoupper($product->brand ?? "L'éveil d'une jungle parfumée", 'UTF-8') }}
                 </div>
 
                 <h1 class="product-title fade-in delay-1">
@@ -283,66 +229,18 @@ body.home-page {
                 </h1>
 
                 <p class="product-subtitle fade-in delay-2">
-                    {{ $product->short_description ?? 'Une création unique signée Héritaj' }}
+                    {{ mb_strtoupper($product->short_description ?? "L'éveil d'une jungle parfumée", 'UTF-8') }}
                 </p>
 
-                <!-- Prix amélioré avec animations -->
-                @if($product->hasValidPromotion())
-                    <div class="price-container fade-in delay-2">
-                        <span class="original-price">{{ $product->formatted_price }}</span>
-                        <span class="promotion-price">{{ $product->formatted_current_price }}</span>
-                    </div>
-                    <div class="promotion-details fade-in delay-2">
-                        <small class="promotion-info">
-                            <i class="fas fa-clock me-1"></i>
-                            Offre limitée - Jusqu'à épuisement des stocks
-                        </small>
-                    </div>
-                @else
-                    <div class="price-container fade-in delay-2">
-                        <span class="current-price">{{ $product->formatted_price }}</span>
-                    </div>
-                @endif
+               
 
-                <!-- Informations supplémentaires -->
-                <div class="product-info-extra fade-in delay-2">
-                    <div class="product-features">
-                        @if($product->product_type === 'parfum')
-                            <span class="feature"><i class="fas fa-leaf me-1"></i>{{ $product->size }}</span>
-                            <span class="feature"><i class="fas fa-certificate me-1"></i>Eau de Parfum</span>
-                        @else
-                            <span class="feature"><i class="fas fa-spa me-1"></i>{{ $product->size }}</span>
-                            <span class="feature"><i class="fas fa-leaf me-1"></i>Formule naturelle</span>
-                        @endif
-                        <span class="feature"><i class="fas fa-shipping-fast me-1"></i>Livraison 24/48h</span>
-                    </div>
-                </div>
-
+                <!-- Bouton Découvrir unique -->
                 <div class="buttons-container fade-in delay-3">
                     <a href="{{ route('product.show', $product->slug) }}" 
                        class="discover-button"
                        aria-label="Découvrir {{ $product->name }}">
                         <span>Découvrir</span>
                     </a>
-                    <button class="order-button"
-                            data-product-id="{{ $product->id }}"
-                            data-product-name="{{ $product->name }}"
-                            onclick="addToCartFromCarousel(this)"
-                            aria-label="Ajouter {{ $product->name }} au panier">
-                        <span>Commander maintenant</span>
-                    </button>
-                </div>
-
-                <!-- Avis clients (simulation) -->
-                <div class="customer-rating fade-in delay-3">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <span class="rating-text">4.9/5 - {{ rand(45, 127) }} avis clients</span>
                 </div>
             </div>
         </div>
@@ -430,8 +328,8 @@ body.home-page {
         </div>
     </div>
 
-    <!-- Indicateur de scroll amélioré -->
-    <div class="scroll-indicator" id="scroll-indicator">
+    <!-- Indicateur de scroll minimaliste (masqué sur mobile) -->
+    <div class="scroll-indicator" id="scroll-indicator" style="display: none;">
         <span>Explorez</span>
         <i class="fas fa-chevron-down"></i>
     </div>
@@ -441,32 +339,76 @@ body.home-page {
 @push('scripts')
 <script>
 // ===============================================
-// CAROUSEL MOBILE CORRIGÉ - HERITAGE PARFUMS
-// Solution pour l'erreur "Cannot access 'isMobile' before initialization"
+// CAROUSEL GUERLAIN STYLE - HERITAGE PARFUMS
+// Système de navigation par scroll vertical avec navbar qui disparaît
 // ===============================================
 
-// Variables globales CORRECTEMENT déclarées pour éviter l'erreur de hoisting
+// Variables globales
 let currentSlide = 0;
 let isScrolling = false;
+let touchStartX = 0;
 let touchStartY = 0;
+let touchEndX = 0;
 let touchEndY = 0;
-let autoPlayInterval = null;
-let isDeviceMobile = false; // Renommé pour éviter les conflits
-let isLandscape = false;
 let slides, dots, totalSlides, scrollIndicator;
+let lastScrollTime = 0;
+let scrollTimer = null;
+let navbar;
+let carouselContainer;
 
 // Configuration
-const AUTO_PLAY_DELAY = 8000;
+const SCROLL_COOLDOWN = 600;
 const MOBILE_BREAKPOINT = 991;
 
-// Fonction pour détecter l'appareil mobile (CORRECTION DU BUG PRINCIPAL)
-function detectMobileDevice() {
-    isDeviceMobile = window.innerWidth <= MOBILE_BREAKPOINT;
-    isLandscape = window.innerHeight < window.innerWidth;
-    return isDeviceMobile;
+// Détection mobile
+function isMobile() {
+    return window.innerWidth <= MOBILE_BREAKPOINT;
 }
 
-// Fonction optimisée pour aller à un slide spécifique (MOBILE FIRST)
+// === GESTION NAVBAR SCROLL ===
+function initNavbarScrollBehavior() {
+    navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+    
+    let isNavbarVisible = true;
+    let scrollTimeout;
+    
+    function hideNavbar() {
+        if (!navbar) return;
+        navbar.classList.add('hidden-scroll');
+        navbar.classList.remove('visible-scroll');
+        isNavbarVisible = false;
+    }
+    
+    function showNavbar() {
+        if (!navbar) return;
+        navbar.classList.remove('hidden-scroll');
+        navbar.classList.add('visible-scroll');
+        isNavbarVisible = true;
+    }
+    
+    // Cacher la navbar pendant le scroll
+    function onScrollStart() {
+        if (isMobile()) {
+            hideNavbar();
+        }
+        
+        // Réafficher après 1.5 secondes d'inactivité
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            showNavbar();
+        }, 1500);
+    }
+    
+    // Attacher aux événements de scroll
+    if (!isMobile()) {
+        window.addEventListener('wheel', onScrollStart, { passive: true });
+    }
+    window.addEventListener('touchstart', onScrollStart, { passive: true });
+    window.addEventListener('touchmove', onScrollStart, { passive: true });
+}
+
+// === NAVIGATION GUERLAIN ===
 function goToSlide(slideIndex, direction = 'next') {
     if (!slides || slides.length === 0) return;
     
@@ -474,122 +416,76 @@ function goToSlide(slideIndex, direction = 'next') {
     if (slideIndex >= totalSlides) slideIndex = totalSlides - 1;
     if (slideIndex === currentSlide) return;
     
-    // Détecter mobile à chaque appel pour éviter les bugs
-    detectMobileDevice();
-    
-    if (isDeviceMobile) {
-        // Version mobile ultra-optimisée - BOUTONS TOUJOURS ACCESSIBLES
-        slides.forEach((slide, index) => {
-            slide.classList.remove('active');
-            // CORRECTION : Utiliser opacity au lieu de display pour garder les boutons accessibles
-            slide.style.opacity = '0';
-            slide.style.visibility = 'hidden';
-            slide.style.pointerEvents = 'none'; // Empêche l'interaction générale
-            slide.style.zIndex = '1'; // Z-index bas pour slides inactives
-        });
+    if (isMobile()) {
+        // Mobile : défilement horizontal
+        const slideWidth = window.innerWidth;
+        const scrollPosition = slideIndex * slideWidth;
         
-        dots.forEach(dot => dot.classList.remove('active'));
-        
-        // Afficher le slide actif avec optimisations anti-blur
-        const targetSlide = slides[slideIndex];
-        if (targetSlide) {
-            targetSlide.classList.add('active');
-            targetSlide.style.display = 'flex'; // Garde le display flex pour la slide active
-            targetSlide.style.visibility = 'visible';
-            targetSlide.style.pointerEvents = 'auto'; // Permet l'interaction générale
-            targetSlide.style.zIndex = '10'; // Z-index élevé pour slide active
-            
-            // Animation fade simple et performante
-            requestAnimationFrame(() => {
-                targetSlide.style.opacity = '1';
-                // Force un reflow pour corriger le blur
-                targetSlide.offsetHeight;
+        if (carouselContainer) {
+            carouselContainer.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
             });
         }
         
-        if (dots[slideIndex]) {
-            dots[slideIndex].classList.add('active');
-        }
+        currentSlide = slideIndex;
         
-        // CORRECTION FINALE : Assure que tous les boutons restent accessibles
-        const allButtons = document.querySelectorAll('.discover-button, .order-button');
-        allButtons.forEach(button => {
-            button.style.pointerEvents = 'auto';
-            button.style.zIndex = '1000';
-            button.style.opacity = '1';
-            button.style.visibility = 'visible';
-        });
+        // Mettre à jour l'indicateur mobile
+        updateMobileScrollIndicator(slideIndex);
         
     } else {
-        // Version desktop avec animations
-        const currentSlideElement = slides[currentSlide];
-        const nextSlideElement = slides[slideIndex];
+        // Desktop : système vertical existant
+        slides.forEach((slide, index) => {
+            slide.classList.remove('active');
+            slide.style.opacity = '0';
+            slide.style.visibility = 'hidden';
+        });
         
-        if (currentSlideElement && nextSlideElement) {
-            // Animation de sortie
-            currentSlideElement.style.opacity = '0';
-            currentSlideElement.style.visibility = 'hidden';
-            
-            setTimeout(() => {
-                // Reset tous les slides
-                slides.forEach(slide => {
-                    slide.classList.remove('active');
-                    slide.style.opacity = '';
-                    slide.style.visibility = '';
-                });
-                dots.forEach(dot => dot.classList.remove('active'));
-                
-                // Activer le nouveau slide
-                nextSlideElement.classList.add('active');
-                nextSlideElement.style.opacity = '1';
-                nextSlideElement.style.visibility = 'visible';
-                
-                if (dots[slideIndex]) {
-                    dots[slideIndex].classList.add('active');
-                }
-            }, 200);
+        // Navigation dots (seulement desktop)
+        if (dots) {
+            dots.forEach(dot => dot.classList.remove('active'));
+            if (dots[slideIndex]) {
+                dots[slideIndex].classList.add('active');
+            }
+        }
+        
+        // Afficher le slide actif
+        const targetSlide = slides[slideIndex];
+        if (targetSlide) {
+            targetSlide.classList.add('active');
+            targetSlide.style.opacity = '1';
+            targetSlide.style.visibility = 'visible';
+        }
+        
+        currentSlide = slideIndex;
+        
+        // Gestion scroll indicator
+        if (scrollIndicator) {
+            if (slideIndex === totalSlides - 1) {
+                scrollIndicator.style.opacity = '0';
+            } else {
+                scrollIndicator.style.opacity = '1';
+            }
         }
     }
-    
-    currentSlide = slideIndex;
-    
-    // Gestion de l'indicateur de scroll
-    if (scrollIndicator) {
-        if (slideIndex === totalSlides - 1) {
-            scrollIndicator.style.opacity = '0';
-            scrollIndicator.style.pointerEvents = 'none';
-        } else {
-            scrollIndicator.style.opacity = '1';
-            scrollIndicator.style.pointerEvents = 'auto';
-        }
-    }
-    
-    // Analytics de suivi
-    trackSlideView(slideIndex);
-    
-    // Reset auto-play
-    resetAutoPlay();
 }
 
-// Gestion du scroll optimisée - SEULEMENT VERTICAL
+// === GESTION SCROLL DESKTOP ===
 function handleScroll(e) {
-    if (isScrolling) return;
+    if (isMobile() || isScrolling) return;
     
     e.preventDefault();
     e.stopPropagation();
+    
+    const currentTime = Date.now();
+    if (currentTime - lastScrollTime < SCROLL_COOLDOWN) return;
+    
     isScrolling = true;
+    lastScrollTime = currentTime;
     
-    // SEULEMENT scroll vertical (deltaY) - pas de navigation horizontale
     const delta = e.deltaY;
-    const threshold = isDeviceMobile ? 25 : 50;
     
-    // Ignorer le scroll horizontal (deltaX)
-    if (Math.abs(e.deltaX || 0) > Math.abs(delta)) {
-        isScrolling = false;
-        return;
-    }
-    
-    if (Math.abs(delta) > threshold) {
+    if (Math.abs(delta) > 30) {
         if (delta > 0) {
             // Scroll vers le bas - slide suivant
             if (currentSlide < totalSlides - 1) {
@@ -603,14 +499,125 @@ function handleScroll(e) {
         }
     }
     
-    // Débounce adaptatif
-    const debounceTime = isDeviceMobile ? 600 : 800;
     setTimeout(() => {
         isScrolling = false;
-    }, debounceTime);
+    }, SCROLL_COOLDOWN);
 }
 
-// Navigation au clavier - SEULEMENT VERTICAL
+// === GESTION TACTILE MOBILE HORIZONTALE ===
+function handleTouchStart(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+}
+
+function handleTouchEnd(e) {
+    if (isScrolling) return;
+    
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    
+    if (isMobile()) {
+        // Mobile : geste horizontal
+        const deltaX = touchStartX - touchEndX;
+        const deltaY = Math.abs(touchStartY - touchEndY);
+        
+        // Vérifier que c'est bien un swipe horizontal (et pas vertical)
+        if (Math.abs(deltaX) > 50 && deltaY < 100) {
+            if (deltaX > 0) {
+                // Swipe gauche - slide suivant
+                if (currentSlide < totalSlides - 1) {
+                    goToSlide(currentSlide + 1, 'next');
+                }
+            } else {
+                // Swipe droite - slide précédent
+                if (currentSlide > 0) {
+                    goToSlide(currentSlide - 1, 'prev');
+                }
+            }
+        }
+    } else {
+        // Desktop : geste vertical
+        const difference = touchStartY - touchEndY;
+        if (Math.abs(difference) > 50) {
+            handleScroll({ deltaY: difference });
+        }
+    }
+}
+
+// === INDICATEUR MOBILE ===
+function createMobileScrollIndicator() {
+    if (!isMobile()) return;
+    
+    const indicator = document.createElement('div');
+    indicator.className = 'scroll-indicator-mobile';
+    indicator.id = 'mobile-scroll-indicator';
+    document.body.appendChild(indicator);
+    
+    // Masquer après 3 secondes
+    setTimeout(() => {
+        indicator.classList.add('hidden');
+    }, 3000);
+    
+    return indicator;
+}
+
+function updateMobileScrollIndicator(slideIndex) {
+    if (!isMobile()) return;
+    
+    const indicator = document.getElementById('mobile-scroll-indicator');
+    if (indicator) {
+        indicator.textContent = `${slideIndex + 1} / ${totalSlides}`;
+        
+        // Afficher temporairement
+        indicator.classList.remove('hidden');
+        
+        // Masquer après 2 secondes
+        setTimeout(() => {
+            indicator.classList.add('hidden');
+        }, 2000);
+    }
+}
+
+// === CONFIGURATION MOBILE HORIZONTALE ===
+function setupMobileHorizontalCarousel() {
+    if (!isMobile() || !carouselContainer) return;
+    
+    // Configurer le conteneur pour le défilement horizontal
+    carouselContainer.style.display = 'flex';
+    carouselContainer.style.flexDirection = 'row';
+    carouselContainer.style.overflowX = 'auto';
+    carouselContainer.style.overflowY = 'hidden';
+    carouselContainer.style.scrollBehavior = 'smooth';
+    carouselContainer.style.webkitOverflowScrolling = 'touch';
+    
+    // Configurer chaque slide
+    slides.forEach((slide, index) => {
+        slide.style.flex = '0 0 100vw';
+        slide.style.width = '100vw';
+        slide.style.minWidth = '100vw';
+        slide.style.position = 'relative';
+        slide.style.opacity = '1';
+        slide.style.visibility = 'visible';
+        slide.classList.remove('active');
+    });
+    
+    // Ajouter l'indicateur mobile
+    createMobileScrollIndicator();
+    
+    // Écouter le scroll manuel
+    carouselContainer.addEventListener('scroll', function() {
+        const scrollLeft = this.scrollLeft;
+        const slideWidth = window.innerWidth;
+        const newSlideIndex = Math.round(scrollLeft / slideWidth);
+        
+        if (newSlideIndex !== currentSlide) {
+            currentSlide = newSlideIndex;
+            updateMobileScrollIndicator(currentSlide);
+        }
+    }, { passive: true });
+}
+
+// === NAVIGATION CLAVIER ===
 function handleKeyboard(e) {
     if (isScrolling) return;
     
@@ -628,312 +635,121 @@ function handleKeyboard(e) {
                 goToSlide(currentSlide + 1, 'next');
             }
             break;
-        case 'Home':
-            e.preventDefault();
-            goToSlide(0, 'next');
-            break;
-        case 'End':
-            e.preventDefault();
-            goToSlide(totalSlides - 1, 'next');
-            break;
     }
 }
 
-// Gestion tactile optimisée
-function handleTouchStart(e) {
-    touchStartY = e.changedTouches[0].screenY;
-    stopAutoPlay();
-}
-
-function handleTouchEnd(e) {
-    if (isScrolling) return;
-    
-    touchEndY = e.changedTouches[0].screenY;
-    const difference = touchStartY - touchEndY;
-    
-    // Seuil adaptatif selon la taille d'écran
-    let threshold = 30;
-    if (window.innerWidth <= 360) threshold = 20;
-    else if (window.innerWidth <= 480) threshold = 25;
-    else if (isDeviceMobile) threshold = 35;
-    
-    if (Math.abs(difference) > threshold) {
-        isScrolling = true;
-        
-        if (difference > 0) {
-            // Swipe vers le haut - slide suivant
-            if (currentSlide < totalSlides - 1) {
-                goToSlide(currentSlide + 1, 'next');
-            }
-        } else {
-            // Swipe vers le bas - slide précédent
-            if (currentSlide > 0) {
-                goToSlide(currentSlide - 1, 'prev');
-            }
-        }
-        
-        setTimeout(() => {
-            isScrolling = false;
-            resetAutoPlay();
-        }, 500);
-    } else {
-        setTimeout(() => resetAutoPlay(), 1000);
-    }
-}
-
-// Gestion de l'orientation
-function handleOrientationChange() {
-    setTimeout(() => {
-        const wasDeviceMobile = isDeviceMobile;
-        detectMobileDevice();
-        
-        // Si changement de mode (mobile/desktop)
-        if (wasDeviceMobile !== isDeviceMobile) {
-            initializeCarousel();
-        }
-        
-        // Forcer un reflow sur mobile pour corriger les problèmes d'affichage
-        if (isDeviceMobile && slides && slides[currentSlide]) {
-            const activeSlide = slides[currentSlide];
-            activeSlide.style.display = 'none';
-            activeSlide.offsetHeight; // Force reflow
-            activeSlide.style.display = 'flex';
-        }
-    }, 300);
-}
-
-// Event listeners optimisés
-function updateEventListeners() {
-    // Supprimer les anciens listeners
-    document.removeEventListener('wheel', handleScroll);
-    document.removeEventListener('DOMMouseScroll', handleScroll);
-    document.removeEventListener('touchstart', handleTouchStart);
-    document.removeEventListener('touchend', handleTouchEnd);
-    document.removeEventListener('keydown', handleKeyboard);
-    
-    // Ajouter les nouveaux listeners selon l'appareil
-    if (isDeviceMobile) {
-        // Mobile : privilégier le tactile
-        document.addEventListener('touchstart', handleTouchStart, { passive: true });
-        document.addEventListener('touchend', handleTouchEnd, { passive: true });
-        document.addEventListener('wheel', handleScroll, { passive: false });
-    } else {
-        // Desktop : scroll et clavier
-        document.addEventListener('wheel', handleScroll, { passive: false });
-        document.addEventListener('DOMMouseScroll', handleScroll, { passive: false });
-        document.addEventListener('keydown', handleKeyboard, { passive: false });
-    }
-}
-
-// Auto-play
-function startAutoPlay() {
-    if (currentSlide < totalSlides - 2) { // Exclure le footer
-        autoPlayInterval = setInterval(() => {
-            if (currentSlide < totalSlides - 2) {
-                goToSlide(currentSlide + 1, 'next');
-            } else {
-                stopAutoPlay();
-            }
-        }, AUTO_PLAY_DELAY);
-    }
-}
-
-function stopAutoPlay() {
-    if (autoPlayInterval) {
-        clearInterval(autoPlayInterval);
-        autoPlayInterval = null;
-    }
-}
-
-function resetAutoPlay() {
-    stopAutoPlay();
-    setTimeout(() => {
-        if (currentSlide < totalSlides - 2) {
-            startAutoPlay();
-        }
-    }, 3000);
-}
-
-// Initialisation du carousel CORRIGÉE
+// === INITIALISATION GUERLAIN ===
 function initializeCarousel() {
     // Récupérer les éléments DOM
     slides = document.querySelectorAll('.carousel-slide');
     dots = document.querySelectorAll('.nav-dot');
     totalSlides = slides.length;
     scrollIndicator = document.getElementById('scroll-indicator');
+    carouselContainer = document.getElementById('fullscreen-carousel');
     
     if (!slides || slides.length === 0) {
         console.warn('Aucun slide trouvé');
         return;
     }
     
-    // Détecter l'appareil
-    detectMobileDevice();
+    // Initialiser la navbar
+    initNavbarScrollBehavior();
     
-    // Configuration mobile spécifique pour éviter le blur
-    if (isDeviceMobile) {
-        document.body.style.webkitTouchCallout = 'none';
-        document.body.style.webkitUserSelect = 'none';
-        document.body.style.userSelect = 'none';
-        document.body.style.touchAction = 'pan-y';
+    if (isMobile()) {
+        // CONFIGURATION MOBILE : défilement horizontal
+        setupMobileHorizontalCarousel();
         
-        // Préparer tous les slides pour mobile
-        slides.forEach((slide, index) => {
-            slide.style.webkitTransform = 'translateZ(0)';
-            slide.style.transform = 'translateZ(0)';
-            slide.style.webkitBackfaceVisibility = 'hidden';
-            slide.style.backfaceVisibility = 'hidden';
-            
-            if (index === 0) {
-                slide.classList.add('active');
-                slide.style.display = 'flex';
-                slide.style.opacity = '1';
-                slide.style.visibility = 'visible';
-            } else {
-                slide.classList.remove('active');
-                slide.style.display = 'none';
-                slide.style.opacity = '0';
-                slide.style.visibility = 'hidden';
-            }
-        });
+        // Event listeners tactiles pour mobile
+        document.addEventListener('touchstart', handleTouchStart, { passive: true });
+        document.addEventListener('touchend', handleTouchEnd, { passive: true });
         
-        // Activer le premier dot
-        if (dots[0]) {
-            dots[0].classList.add('active');
+        // Masquer les dots de navigation sur mobile
+        if (dots) {
+            dots.forEach(dot => {
+                dot.style.display = 'none';
+            });
         }
-    }
-    
-    // Event listeners
-    updateEventListeners();
-    
-    // Event listeners pour orientation et redimensionnement
-    window.addEventListener('orientationchange', handleOrientationChange, { passive: true });
-    window.addEventListener('resize', () => {
-        clearTimeout(window.resizeTimeout);
-        window.resizeTimeout = setTimeout(handleOrientationChange, 200);
-    }, { passive: true });
-    
-    // Navigation dots
-    dots.forEach((dot, index) => {
-        // Clic/tap
-        dot.addEventListener('click', (e) => {
-            e.preventDefault();
-            goToSlide(index);
-        }, { passive: false });
         
-        // Support clavier
-        dot.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                goToSlide(index);
-            }
-        });
-    });
-    
-    // Scroll indicator
-    if (scrollIndicator) {
-        scrollIndicator.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (currentSlide < totalSlides - 1) {
-                goToSlide(currentSlide + 1, 'next');
-            }
-        });
+    } else {
+        // CONFIGURATION DESKTOP : navigation verticale
         
-        if (isDeviceMobile) {
-            scrollIndicator.addEventListener('touchend', function(e) {
+        // Event listeners pour navigation desktop
+        document.addEventListener('wheel', handleScroll, { passive: false });
+        document.addEventListener('DOMMouseScroll', handleScroll, { passive: false }); // Firefox
+        document.addEventListener('keydown', handleKeyboard, { passive: false });
+        
+        // Tactile desktop
+        document.addEventListener('touchstart', handleTouchStart, { passive: true });
+        document.addEventListener('touchend', handleTouchEnd, { passive: true });
+        
+        // Navigation dots (seulement desktop)
+        if (dots) {
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    goToSlide(index);
+                });
+                
+                dot.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        goToSlide(index);
+                    }
+                });
+            });
+        }
+        
+        // Scroll indicator
+        if (scrollIndicator) {
+            scrollIndicator.addEventListener('click', function(e) {
                 e.preventDefault();
                 if (currentSlide < totalSlides - 1) {
                     goToSlide(currentSlide + 1, 'next');
                 }
             });
         }
-    }
-    
-    // Initialiser le premier slide
-    goToSlide(0);
-    
-    // Préchargement intelligent des images
-    preloadImages();
-    
-    // Démarrer l'auto-play après un délai
-    setTimeout(() => {
-        startAutoPlay();
-    }, AUTO_PLAY_DELAY);
-    
-    // Newsletter form du footer
-    const newsletterForm = document.getElementById('homeNewsletterForm');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            
-            showAdvancedNotification('🎉 Bienvenue ! Vous recevrez bientôt votre code promo de -10% !', 'success');
-            this.reset();
-        });
-    }
-    
-    // Gestion visibilité page
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            stopAutoPlay();
-        } else {
-            setTimeout(() => resetAutoPlay(), 2000);
-        }
-    });
-    
-    // Pause auto-play sur interaction
-    ['wheel', 'touchstart', 'keydown', 'click'].forEach(event => {
-        document.addEventListener(event, () => {
-            stopAutoPlay();
-            setTimeout(() => resetAutoPlay(), 8000);
-        }, { once: false, passive: true });
-    });
-}
-
-// Fonction pour précharger les images
-function preloadImages() {
-    const images = document.querySelectorAll('.product-image[loading="lazy"]');
-    if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    const newImg = new Image();
-                    newImg.onload = () => {
-                        img.src = newImg.src;
-                        img.classList.add('loaded');
-                    };
-                    newImg.src = img.src;
-                    imageObserver.unobserve(img);
-                }
-            });
-        }, { rootMargin: '100px' });
         
-        images.forEach(img => imageObserver.observe(img));
+        // Initialiser le premier slide pour desktop
+        goToSlide(0);
     }
+    
+    // Gestion orientation
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            if (isMobile()) {
+                setupMobileHorizontalCarousel();
+            } else {
+                goToSlide(currentSlide);
+            }
+        }, 300);
+    });
+    
+    // Gestion redimensionnement
+    window.addEventListener('resize', function() {
+        const wasMobile = isMobile();
+        setTimeout(() => {
+            if (wasMobile !== isMobile()) {
+                // Changement mobile/desktop - réinitialiser
+                location.reload();
+            }
+        }, 100);
+    });
 }
 
-// Fonction pour ajouter au panier depuis le carrousel
+// === FONCTIONS UTILITAIRES ===
 function addToCartFromCarousel(button) {
     const productId = button.dataset.productId;
     const productName = button.dataset.productName;
     
-    // Vérification de sécurité
     if (!productId || !productName) {
         showAdvancedNotification('❌ Erreur: Données produit manquantes', 'error');
         return;
     }
     
-    // Animation du bouton
     const originalContent = button.innerHTML;
     button.disabled = true;
-    button.classList.add('loading');
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Ajout...</span>';
     
-    // Arrêter l'auto-play
-    stopAutoPlay();
-    
-    // Vérifier le token CSRF
     const csrfToken = document.querySelector('meta[name="csrf-token"]');
     if (!csrfToken) {
         showAdvancedNotification('❌ Erreur de sécurité', 'error');
@@ -961,21 +777,13 @@ function addToCartFromCarousel(button) {
     })
     .then(data => {
         if (data.success) {
-            // Mettre à jour le compteur du panier
             updateCartCountAnimated(data.cart_count);
             
-            // Animation de succès
             button.innerHTML = '<i class="fas fa-check"></i> <span>Ajouté !</span>';
-            button.classList.remove('loading');
             button.classList.add('success');
             
-            // Notification de succès
             showAdvancedNotification(`✨ ${productName} ajouté au panier !`, 'success');
             
-            // Analytics
-            trackCarouselAddToCart(productId, productName);
-            
-            // Restaurer le bouton après 3 secondes
             setTimeout(() => {
                 resetButton(button, originalContent);
             }, 3000);
@@ -992,12 +800,10 @@ function addToCartFromCarousel(button) {
     });
 }
 
-// Fonctions utilitaires
 function resetButton(button, originalContent) {
     button.innerHTML = originalContent;
     button.classList.remove('loading', 'success');
     button.disabled = false;
-    setTimeout(() => resetAutoPlay(), 1000);
 }
 
 function updateCartCountAnimated(count) {
@@ -1017,47 +823,173 @@ function updateCartCountAnimated(count) {
         }, 100);
     }
 }
-
 function showAdvancedNotification(message, type = 'success') {
-    // Vérifier si la fonction de notification globale existe
-    if (typeof window.showNotification === 'function') {
-        window.showNotification(message, type);
-    } else {
-        // Fallback : créer une notification simple
-        console.log(`${type.toUpperCase()}: ${message}`);
-        
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            background: ${type === 'success' ? '#28a745' : '#dc3545'};
-            color: white;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            z-index: 10000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-        `;
-        notification.textContent = message;
-        
-        document.body.appendChild(notification);
-        
-        // Supprimer après 4 secondes
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        }, 4000);
-    }
+    // Supprimer notifications existantes
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    
+    const colors = {
+        success: 'linear-gradient(135deg, #28a745, #20c997)',
+        error: 'linear-gradient(135deg, #dc3545, #e74c3c)',
+        warning: 'linear-gradient(135deg, #ffc107, #ff9800)',
+        info: 'linear-gradient(135deg, #17a2b8, #20c997)'
+    };
+    
+    const icons = {
+        success: 'check-circle',
+        error: 'exclamation-circle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        min-width: 350px;
+        max-width: 500px;
+        background: ${colors[type] || colors.info};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        transform: translateX(100%);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    `;
+    
+    notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fas fa-${icons[type] || icons.info}" style="font-size: 1.25rem; flex-shrink: 0;"></i>
+            <span style="flex: 1; line-height: 1.4;">${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" 
+                    style="background: none; border: none; color: white; cursor: pointer; padding: 0.25rem; border-radius: 50%; transition: background 0.2s;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 300);
+    }, type === 'error' ? 6000 : 4000);
 }
 
-// Analytics functions
+// === INITIALISATION AUTOMATIQUE GUERLAIN ===
+document.addEventListener('DOMContentLoaded', function() {
+    // Ajouter la classe spéciale au body pour la page d'accueil
+    document.body.classList.add('home-page');
+    
+    // Configuration navbar fixe
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        navbar.style.position = 'fixed';
+        navbar.style.top = '0';
+        navbar.style.width = '100%';
+        navbar.style.zIndex = '1000';
+        navbar.classList.add('visible-scroll');
+    }
+    
+    // Initialiser le carousel Guerlain
+    setTimeout(() => {
+        initializeCarousel();
+    }, 100);
+    
+    // Activer les animations fade-in sur desktop
+    if (!isMobile()) {
+        setTimeout(() => {
+            document.querySelectorAll('.fade-in').forEach((element, index) => {
+                setTimeout(() => {
+                    element.classList.add('show');
+                }, index * 100);
+            });
+        }, 500);
+    } else {
+        // Sur mobile, afficher directement sans animation pour performance
+        document.querySelectorAll('.fade-in').forEach(element => {
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+        });
+    }
+    
+    // Newsletter form du footer
+    const newsletterForm = document.getElementById('homeNewsletterForm');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            if (email) {
+                showAdvancedNotification('🎉 Merci ! Vous recevrez bientôt nos actualités exclusives !', 'success');
+                this.reset();
+            }
+        });
+    }
+    
+    // Préchargement optimisé des images
+    const images = document.querySelectorAll('.product-image');
+    images.forEach((img, index) => {
+        if (index === 0) return; // Première image déjà chargée
+        
+        const newImg = new Image();
+        newImg.onload = () => {
+            img.src = newImg.src;
+            img.classList.add('loaded');
+        };
+        newImg.src = img.src;
+    });
+    
+    // Support iOS Safari pour viewport
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        function adjustViewport() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            
+            // Ajustement pour barre d'URL mobile
+            document.body.style.height = window.innerHeight + 'px';
+            const carousel = document.getElementById('fullscreen-carousel');
+            if (carousel) {
+                carousel.style.height = window.innerHeight + 'px';
+            }
+        }
+        
+        adjustViewport();
+        window.addEventListener('resize', adjustViewport);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(adjustViewport, 300);
+        });
+    }
+    
+    // Gestion visibilité page pour optimisation
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            // Page cachée - pause des animations si nécessaire
+        } else {
+            // Page visible - reprendre les animations
+            if (!isMobile()) {
+                document.querySelectorAll('.fade-in:not(.show)').forEach(element => {
+                    element.classList.add('show');
+                });
+            }
+        }
+    });
+    
+    // Debug info pour développement
+    console.log('🌟 Héritaj Parfums - Style Guerlain initialisé');
+    console.log('📱 Mobile:', isMobile());
+    console.log('🖼️ Slides trouvés:', document.querySelectorAll('.carousel-slide').length);
+});
+
+// Analytics functions (optionnels)
 function trackSlideView(slideIndex) {
     if (typeof gtag !== 'undefined') {
         gtag('event', 'carousel_slide_view', {
@@ -1077,265 +1009,9 @@ function trackCarouselAddToCart(productId, productName) {
     }
 }
 
-// Initialisation automatique CORRIGÉE
-document.addEventListener('DOMContentLoaded', function() {
-    // Ajouter la classe spéciale au body pour la page d'accueil
-    document.body.classList.add('home-page');
-    
-    // CORRECTION MOBILE : Forcer l'affichage du carousel
-    if (window.innerWidth <= 991) {
-        // Force le style du carousel sur mobile
-        const carousel = document.querySelector('.fullscreen-carousel');
-        if (carousel) {
-            carousel.style.display = 'block';
-            carousel.style.visibility = 'visible';
-            carousel.style.height = '100vh';
-        }
-        
-        // Force l'affichage des slides - BOUTONS TOUJOURS ACCESSIBLES
-        const allSlides = document.querySelectorAll('.carousel-slide');
-        allSlides.forEach((slide, index) => {
-            // CORRECTION : Toutes les slides gardent leur structure DOM
-            slide.style.display = 'flex'; // Toutes les slides gardent display flex
-            if (index === 0) {
-                slide.style.opacity = '1';
-                slide.style.visibility = 'visible';
-                slide.style.pointerEvents = 'auto';
-                slide.style.zIndex = '10';
-                slide.classList.add('active');
-            } else {
-                slide.style.opacity = '0';
-                slide.style.visibility = 'hidden';
-                slide.style.pointerEvents = 'none';
-                slide.style.zIndex = '1';
-                slide.classList.remove('active');
-            }
-        });
-        
-        // Force l'affichage de la navigation
-        const nav = document.querySelector('.carousel-nav');
-        if (nav) {
-            nav.style.display = 'flex';
-            nav.style.visibility = 'visible';
-            nav.style.opacity = '1';
-            nav.style.zIndex = '100';
-        }
-        
-        // Active le premier dot
-        const dots = document.querySelectorAll('.nav-dot');
-        if (dots[0]) {
-            dots[0].classList.add('active');
-        }
-        
-        // CORRECTION CRITIQUE : Force l'accessibilité de tous les boutons "Découvrir"
-        const allDiscoverButtons = document.querySelectorAll('.discover-button, .order-button');
-        allDiscoverButtons.forEach(button => {
-            button.style.pointerEvents = 'auto';
-            button.style.zIndex = '1000';
-            button.style.position = 'relative';
-            button.style.opacity = '1';
-            button.style.visibility = 'visible';
-        });
-    }
-    
-    // Initialiser le carousel après le fix mobile
-    setTimeout(() => {
-        initializeCarousel();
-    }, 100);
-    
-    // Désactiver les animations fade-in sur mobile pour de meilleures performances
-    if (window.innerWidth <= 991) {
-        document.querySelectorAll('.fade-in').forEach(element => {
-            element.style.opacity = '1';
-            element.style.transform = 'none';
-        });
-    } else {
-        // Animations desktop
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '50px'
-        };
-        
-        const fadeInObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    fadeInObserver.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.fade-in').forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(30px)';
-            element.style.transition = 'all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            fadeInObserver.observe(element);
-        });
-    }
-});
+
+
 
 </script>
 @endpush
 
-<!-- Styles additionnels pour les nouvelles fonctionnalités -->
-<style>
-.product-info-extra {
-    margin-bottom: 1.5rem;
-}
-
-.product-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    justify-content: center;
-}
-
-.feature {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-}
-
-.customer-rating {
-    margin-top: 1.5rem;
-    text-align: center;
-}
-
-.customer-rating .stars {
-    color: #d4af37; /* Couleur dorée directe */
-    margin-bottom: 0.3rem;
-}
-
-.customer-rating .rating-text {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.promotion-details {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.promotion-info {
-    color: #d4af37; /* Couleur dorée directe */
-    font-style: italic;
-    background: rgba(212, 175, 55, 0.1);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
-}
-
-.product-special-badge {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: linear-gradient(135deg, #d4af37, #b8941f); /* Couleurs directes */
-    color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    z-index: 10;
-}
-
-.brand-stats {
-    display: flex;
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-    flex-wrap: wrap;
-}
-
-.stat {
-    text-align: center;
-}
-
-.stat-number {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #d4af37; /* Couleur dorée directe */
-    font-family: 'Cormorant Garamond', serif;
-}
-
-.stat-label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.footer-bottom {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer-legal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.legal-links {
-    display: flex;
-    gap: 1rem;
-}
-
-.legal-links a {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer-certifications {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.certification {
-    font-size: 0.8rem;
-    color: var(--guerlain-gold);
-    background: rgba(212, 175, 55, 0.1);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
-}
-
-.loading {
-    pointer-events: none;
-    opacity: 0.8;
-}
-
-.success {
-    background: linear-gradient(135deg, #28a745, #20c997) !important;
-}
-
-@media (max-width: 768px) {
-    .product-features {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .brand-stats {
-        justify-content: center;
-        gap: 1rem;
-    }
-    
-    .footer-legal {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .footer-certifications {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-</style>

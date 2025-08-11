@@ -214,15 +214,7 @@
 @endpush
 
 @section('content')
-<!-- Contact Hero -->
-<section class="contact-hero">
-    <div class="container">
-        <div class="fade-in">
-            <h1>Nous Contacter</h1>
-            <p class="lead">Notre équipe d'experts vous accompagne dans votre choix</p>
-        </div>
-    </div>
-</section>
+
 
 <!-- Contact Information -->
 <section class="contact-section">

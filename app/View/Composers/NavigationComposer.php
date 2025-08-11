@@ -35,6 +35,21 @@ class NavigationComposer
                                  ->orderBy('created_at', 'desc')
                                  ->first();
 
+        // Produit cosmétique en vedette spécifiquement
+        $featuredCosmetique = Product::where('is_active', true)
+                                   ->where('product_type', 'cosmetique')
+                                   ->where('is_featured', true)
+                                   ->orderBy('created_at', 'desc')
+                                   ->first();
+
+        // Si aucun cosmétique featured, prendre le premier cosmétique actif
+        if (!$featuredCosmetique) {
+            $featuredCosmetique = Product::where('is_active', true)
+                                       ->where('product_type', 'cosmetique')
+                                       ->orderBy('created_at', 'desc')
+                                       ->first();
+        }
+
         // Catégories pour les filtres
         $parfumCategories = [
             'niche' => 'Parfums de Niche',
@@ -52,6 +67,7 @@ class NavigationComposer
             'navbarParfums' => $parfums,
             'navbarCosmetiques' => $cosmetiques,
             'navbarFeaturedProduct' => $featuredProduct,
+            'navbarFeaturedCosmetique' => $featuredCosmetique,
             'parfumCategories' => $parfumCategories,
             'cosmetiqueCategories' => $cosmetiqueCategories,
         ]);

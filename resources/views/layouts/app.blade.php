@@ -362,7 +362,7 @@
                 @auth
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle text-primary" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-shield me-1"></i>{{ Auth::user()->name }}
+                            <i class="fa-whiteboard fa-semibold fa-user"></i>{{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
@@ -383,7 +383,7 @@
                         </ul>
                     </div>                @else
                     <a href="{{ route('admin.login') }}" class="nav-link text-guerlain-gold">
-                        <i class="fas fa-sign-in-alt me-1"></i>Admin
+                        <i class="fas fa-sign-in-alt me-1"></i>
                     </a>
                 @endauth
             </div>
@@ -392,62 +392,7 @@
 
     @yield('content')
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <h5 class="font-serif">Héritaj Parfums</h5>
-                    <p>Depuis 1925, nous créons <strong>Éternelle Rose</strong>, notre parfum signature qui capture l'essence de l'élégance française et l'art de la parfumerie traditionnelle.</p>
-                    <div class="social-links mt-4">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Le Parfum</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#product">Découvrir</a></li>
-                        <li><a href="#purchase">Commander</a></li>
-                        <li><a href="/about">Histoire</a></li>
-                        <li><a href="#testimonials">Avis Clients</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Services</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Emballage Cadeau</a></li>
-                        <li><a href="#">Livraison Express</a></li>
-                        <li><a href="#">Retours Gratuits</a></li>
-                        <li><a href="#">Support Client</a></li>
-                    </ul>
-                </div>                
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Newsletter</h5>
-                    <p>Restez informé de nos actualités exclusives</p>
-                    <form class="d-flex flex-column">
-                        <input type="email" class="form-control mb-2" placeholder="Votre email">
-                        <button type="submit" class="btn btn-outline-gold btn-sm">S'inscrire</button>
-                    </form>
-                </div>
-            </div>
-            
-            <hr style="border-color: #444;">
-            <div class="row">
-                <div class="col-md-6">
-                    <p>&copy; 2025 Héritaj Parfums. Tous droits réservés.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <a href="#" class="me-3">Politique de Confidentialité</a>
-                    <a href="#">Conditions d'Utilisation</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -503,6 +448,7 @@
                 console.warn('Erreur lors de la mise à jour du compteur:', error);
             });
         }
+
     </script>
     @stack('scripts')
 </body>

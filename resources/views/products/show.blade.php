@@ -71,8 +71,13 @@
                     
                     <h1 class="product-title">{{ $product->name }}</h1>
                     <div class="product-meta">
-                        <span class="product-type">{{ $product->type }}</span>
-                        <span class="product-size">{{ $product->size }}</span>
+                        <span class="product-type">{{ $product->type ?? $product->product_type }}</span>
+                        @if($product->size)
+                            <span class="product-size">{{ $product->size }}</span>
+                        @endif
+                        @if($product->concentration)
+                            <span class="product-concentration">{{ $product->concentration }}</span>
+                        @endif
                     </div>
                     
                     <div class="product-rating">
@@ -97,9 +102,18 @@
                             @if($product->promotion_description)
                                 <p class="promotion-description">{{ $product->promotion_description }}</p>
                             @endif
+                            @if($product->promotion_end_date)
+                                <p class="promotion-end">Offre valide jusqu'au {{ \Carbon\Carbon::parse($product->promotion_end_date)->format('d/m/Y') }}</p>
+                            @endif
                         </div>
                     @else
                         <div class="product-price">{{ $product->formatted_price }}</div>
+                        @if($product->original_price && $product->original_price > $product->price)
+                            <div class="price-reduction">
+                                <span class="original-price-crossed">{{ number_format($product->original_price, 2) }}€</span>
+                                <span class="savings-amount">Économisez {{ number_format($product->original_price - $product->price, 2) }}€</span>
+                            </div>
+                        @endif
                     @endif
                     
                     <!-- Stock Info -->
@@ -251,39 +265,99 @@
                             <table class="product-specs">
                                 <tr>
                                     <td>Marque</td>
-                                    <td>Héritaj Parfums</td>
+                                    <td>{{ $product->brand ?? 'Héritaj Parfums' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Catégorie</td>
-                                    <td>{{ $product->category_label }}</td>
+                                    <td>{{ $product->category_label ?? $product->category ?? 'Parfum' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Type</td>
-                                    <td>{{ $product->type }}</td>
+                                    <td>{{ $product->type ?? $product->product_type ?? 'Eau de Parfum' }}</td>
                                 </tr>
+                                @if($product->size)
                                 <tr>
                                     <td>Contenance</td>
                                     <td>{{ $product->size }}</td>
                                 </tr>
+                                @endif
+                                @if($product->concentration)
+                                <tr>
+                                    <td>Concentration</td>
+                                    <td>{{ $product->concentration }}</td>
+                                </tr>
+                                @elseif($product->product_type === 'parfum')
                                 <tr>
                                     <td>Concentration</td>
                                     <td>Eau de Parfum (15-20%)</td>
                                 </tr>
+                                @endif
+                                @if($product->gender)
+                                <tr>
+                                    <td>Genre</td>
+                                    <td>{{ ucfirst($product->gender) }}</td>
+                                </tr>
+                                @endif
+                                @if($product->family)
+                                <tr>
+                                    <td>Famille Olfactive</td>
+                                    <td>{{ $product->family }}</td>
+                                </tr>
+                                @endif
                                 <tr>
                                     <td>Origine</td>
-                                    <td>France</td>
+                                    <td>{{ $product->origin ?? 'France' }}</td>
                                 </tr>
+                                @if($product->year)
+                                <tr>
+                                    <td>Année de création</td>
+                                    <td>{{ $product->year }}</td>
+                                </tr>
+                                @endif
+                                @if($product->perfumer)
+                                <tr>
+                                    <td>Parfumeur</td>
+                                    <td>{{ $product->perfumer }}</td>
+                                </tr>
+                                @endif
                             </table>
                         </div>
                         <div class="col-md-6">
                             <div class="care-instructions">
                                 <h5>Conseils d'utilisation</h5>
-                                <ul>
-                                    <li>Vaporiser sur les points de pulsation</li>
-                                    <li>Éviter de frotter après application</li>
-                                    <li>Conserver à l'abri de la lumière</li>
-                                    <li>Température idéale : 15-20°C</li>
-                                </ul>
+                                @if($product->usage_instructions)
+                                    <div class="custom-instructions">
+                                        {!! nl2br(e($product->usage_instructions)) !!}
+                                    </div>
+                                @else
+                                    <ul>
+                                        @if($product->product_type === 'parfum')
+                                            <li>Vaporiser sur les points de pulsation</li>
+                                            <li>Éviter de frotter après application</li>
+                                            <li>Conserver à l'abri de la lumière</li>
+                                            <li>Température idéale : 15-20°C</li>
+                                        @else
+                                            <li>Appliquer selon les besoins</li>
+                                            <li>Conserver dans un endroit frais et sec</li>
+                                            <li>Éviter le contact avec les yeux</li>
+                                            <li>Usage externe uniquement</li>
+                                        @endif
+                                    </ul>
+                                @endif
+                                
+                                @if($product->ingredients)
+                                    <div class="ingredients-section mt-3">
+                                        <h6>Ingrédients principaux</h6>
+                                        <p class="ingredients-text">{{ $product->ingredients }}</p>
+                                    </div>
+                                @endif
+                                
+                                @if($product->allergens)
+                                    <div class="allergens-section mt-3">
+                                        <h6>Allergènes</h6>
+                                        <p class="allergens-text">{{ $product->allergens }}</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

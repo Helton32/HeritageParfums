@@ -16,6 +16,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Un parfum d\'exception qui capture l\'essence intemporelle de la rose française.',
                 'short_description' => 'L\'essence intemporelle de la rose française',
                 'price' => 89.00,
+                'product_type' => 'parfum',
                 'category' => 'femme',
                 'type' => 'Eau de Parfum',
                 'size' => '50ml',
@@ -39,6 +40,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Une composition envoûtante où l\'ambre révèle toute sa splendeur.',
                 'short_description' => 'L\'éclat mystérieux de l\'ambre oriental',
                 'price' => 95.00,
+                'product_type' => 'parfum',
                 'category' => 'homme',
                 'type' => 'Eau de Parfum',
                 'size' => '75ml',
@@ -54,6 +56,31 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_featured' => true,
                 'badge' => 'Exclusif'
+            ],
+            [
+                'name' => 'Sérum Éclat Précieux',
+                'slug' => 'serum-eclat-precieux',
+                'description' => 'Un sérum révolutionnaire aux actifs de luxe pour une peau éclatante et régénérée. Formulé avec de l\'or 24 carats et des extraits de rose de Damas.',
+                'short_description' => 'Sérum anti-âge aux actifs précieux',
+                'price' => 125.00,
+                'product_type' => 'cosmetique',
+                'category' => 'soins_visage',
+                'type' => 'Sérum',
+                'size' => '30ml',
+                'brand' => 'Héritaj Beauté',
+                'images' => json_encode([
+                    'https://images.unsplash.com/photo-1571875257727-256c39da42af?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    'https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+                ]),
+                'notes' => json_encode([
+                    'actifs' => ['Or 24 carats', 'Acide Hyaluronique', 'Extrait de Rose de Damas'],
+                    'benefices' => ['Anti-âge', 'Hydratation intense', 'Éclat immédiat'],
+                    'utilisation' => ['Matin et soir', 'Sur peau propre', 'Avant la crème']
+                ]),
+                'stock' => 15,
+                'is_active' => true,
+                'is_featured' => true,
+                'badge' => 'Innovation'
             ]
         ];
 
