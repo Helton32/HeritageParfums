@@ -196,7 +196,7 @@ body.home-page {
     text-transform: uppercase !important;
     color: var(--guerlain-gold) !important;
     margin-bottom: 1rem !important;
-    opacity: 0.9 !important;
+    opacity: 0 !important;
     line-height: 1.2 !important;
 }
 
@@ -234,7 +234,6 @@ body.home-page {
 
 .discover-button {
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05)) !important;
-    backdrop-filter: blur(15px) !important;
     -webkit-backdrop-filter: blur(15px) !important;
     border: 2px solid var(--guerlain-gold) !important;
     color: var(--guerlain-gold) !important;
@@ -437,11 +436,8 @@ body.home-page {
     flex-direction: column !important;
     gap: 1.2rem !important;
     z-index: 100 !important;
-    background: rgba(0, 0, 0, 0.3) !important;
     padding: 1.5rem 0.8rem !important;
     border-radius: 25px !important;
-    backdrop-filter: blur(15px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .nav-dot {
@@ -739,7 +735,7 @@ body.home-page {
     }
     
     .signature-text {
-        font-size: 0.9rem !important;
+        font-size: 1.5rem !important;
         margin-bottom: 1rem !important;
     }
     
@@ -792,7 +788,7 @@ body.home-page {
         min-width: 120px !important;
         padding: 0.6rem 1rem !important;
         font-size: 0.65rem !important;
-        opacity: 1 !important;
+        opacity: 0.1 !important;
         display: inline-block !important;
     }
     
@@ -826,41 +822,7 @@ body.home-page {
     display: none !important;
 }
 
-/* === CORRECTION FOOTER === */
-body.home-page footer,
-body.home-page .footer,
-body.home-page .footer-slide,
-body.home-page #footer {
-    display: block !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    z-index: -999 !important;
-    position: absolute !important;
-    top: -9999px !important;
-}
 
-
-/* === CORRECTIONS CHROME ET SAFARI === */
-@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
-    /* Chrome spécifique */
-    body.home-page {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-}
-
-@supports (-webkit-touch-callout: none) {
-    /* Safari spécifique */
-    .fullscreen-carousel {
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .carousel-slide {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-}
 
 /* === OPTIMISATIONS PERFORMANCE === */
 .product-image {
@@ -880,78 +842,7 @@ body.home-page #footer {
     will-change: auto; /* Changé de transform à auto pour éviter les animations */
 }
 
-/* === CORRECTION FINALE - ANTI-DISPARITION TEXTE === */
 
-/* RÈGLE GLOBALE POUR EMPÊCHER LA DISPARITION PENDANT LE REDIMENSIONNEMENT */
-@media screen and (max-width: 991px) {
-    /* Force la visibilité permanente du content-zone */
-    .content-zone,
-    body.home-page .content-zone,
-    .carousel-slide .content-zone {
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: block !important;
-        transform: none !important;
-        transition: none !important;
-        animation: none !important;
-        will-change: auto !important;
-        -webkit-transform: none !important;
-        -moz-transform: none !important;
-        -ms-transform: none !important;
-        -o-transform: none !important;
-    }
-    
-    /* Force la visibilité de tous les textes */
-    .content-zone *,
-    .content-zone .signature-text,
-    .content-zone .product-title,
-    .content-zone .product-subtitle,
-    .content-zone .price-container *,
-    .content-zone .buttons-container *,
-    body.home-page .content-zone * {
-        opacity: 1 !important;
-        visibility: visible !important;
-        transition: none !important;
-        animation: none !important;
-        transform: none !important;
-        will-change: auto !important;
-        -webkit-transform: none !important;
-        -moz-transform: none !important;
-        -ms-transform: none !important;
-        -o-transform: none !important;
-        display: block !important;
-    }
-    
-    .content-zone .discover-button,
-    .content-zone .buttons-container {
-        display: inline-block !important;
-    }
-    
-    .content-zone .price-container {
-        display: flex !important;
-    }
-    
-    /* Règles spécifiques par élément pour forcer l'affichage */
-    .signature-text {
-        color: var(--guerlain-gold) !important;
-        font-size: 0.75rem !important;
-    }
-    
-    .product-title {
-        color: var(--guerlain-white) !important;
-        font-size: 1.8rem !important;
-    }
-    
-    .product-subtitle {
-        color: rgba(255, 255, 255, 0.95) !important;
-        font-size: 0.85rem !important;
-    }
-    
-    .discover-button {
-        color: var(--guerlain-white) !important;
-        border: none!important;
-    }
-}
 
 /* Règle d'urgence pour tous les navigateurs */
 @media screen and (max-width: 991px) {
@@ -1145,7 +1036,7 @@ body.home-page #footer {
         font-size: 0.8rem !important;
         color: var(--guerlain-black) !important;
         z-index: 200 !important;
-        opacity: 0.8 !important;
+        opacity: 0.1 !important;
         transition: opacity 0.3s ease !important;
         pointer-events: none !important;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
@@ -1159,7 +1050,7 @@ body.home-page #footer {
     }
     
     .scroll-indicator-mobile::before {
-        content: '👈 Glissez pour parcourir' !important;
+        content: 'Swipe' !important;
     }
     
     /* NAVIGATION DOTS CACHÉS SUR MOBILE */
@@ -1354,184 +1245,9 @@ body.home-page #footer {
     gap: 0.3rem !important;
 }
 
-/* === CORRECTION PAGE NOIRE === */
-/* Suppression du problème de la page entièrement noire sur le dernier slide */
-.footer-slide {
-    background: linear-gradient(135deg, var(--guerlain-black), #1a1a1a) !important;
-    /* Assure un fond visible au lieu du noir complet */
-}
 
-.footer-slide .footer-content {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
 
-/* Force l'affichage du footer sur toutes les plateformes */
-.footer-slide,
-.footer-slide *,
-.footer-content,
-.footer-grid,
-.footer-bottom {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
-}
 
-.footer-grid {
-    display: grid !important;
-}
-
-.brand-stats,
-.social-links,
-.footer-bottom {
-    display: flex !important;
-}
-
-/* MOBILE : Footer slide spécifique */
-@media (max-width: 991px) {
-    .footer-slide {
-        flex: 0 0 100vw !important;
-        width: 100vw !important;
-        min-width: 100vw !important;
-        background: linear-gradient(135deg, var(--guerlain-black), #1a1a1a) !important;
-        /* S'assurer qu'il est visible en mode mobile horizontal */
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    
-    .footer-content {
-        padding: 2rem 1rem !important;
-        width: 100% !important;
-    }
-}
-
-/* === RESPONSIVE FOOTER === */
-@media (max-width: 768px) {
-    .footer-grid {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
-    }
-    
-    .brand-stats {
-        justify-content: center !important;
-        gap: 1rem !important;
-    }
-    
-    .stat-number {
-        font-size: 1.5rem !important;
-    }
-    
-    .footer-bottom {
-        flex-direction: column !important;
-        text-align: center !important;
-    }
-    
-    .legal-links {
-        justify-content: center !important;
-    }
-    
-    .footer-certifications {
-        justify-content: center !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .footer-content {
-        padding: 2rem 1rem !important;
-    }
-    
-    .footer-grid h5 {
-        font-size: 1.1rem !important;
-    }
-    
-    .brand-stats {
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 0.8rem !important;
-    }
-    
-    .social-links {
-        justify-content: center !important;
-    }
-}
-
-/* =================================================================
-   BOUTON DÉCOUVRIR MOBILE AMÉLIORÉ 
-   Style raffiné et élégant pour mobile et écrans réduits
-   ================================================================= */
-
-/* === BOUTON DÉCOUVRIR MOBILE AMÉLIORÉ === */
-@media (max-width: 991px) {
-    .discover-button {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
-        border: 2px solid rgba(255, 255, 255, 0.8) !important;
-        color: var(--guerlain-white) !important;
-        padding: 1rem 2rem !important;
-        font-size: 0.75rem !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.2em !important;
-        min-width: 180px !important;
-        min-height: 50px !important;
-        border-radius: 30px !important;
-        box-shadow: 
-            0 6px 20px rgba(0, 0, 0, 0.3),
-            inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-        position: relative !important;
-        overflow: hidden !important;
-        z-index: 300 !important;
-    }
-    
-    .discover-button::before {
-        background: linear-gradient(90deg, 
-            transparent 0%, 
-            rgba(255, 255, 255, 0.1) 50%, 
-            transparent 100%) !important;
-    }
-    
-    .discover-button::after {
-        background: linear-gradient(135deg, 
-            rgba(255, 255, 255, 0.3), 
-            rgba(255, 255, 255, 0.1)) !important;
-    }
-    
-    .discover-button:hover {
-        background: linear-gradient(135deg, 
-            rgba(255, 255, 255, 0.2), 
-            rgba(255, 255, 255, 0.1)) !important;
-        border-color: var(--guerlain-white) !important;
-        color: var(--guerlain-white) !important;
-        transform: translateY(-2px) scale(1.02) !important;
-        box-shadow: 
-            0 8px 25px rgba(0, 0, 0, 0.4),
-            0 0 0 2px rgba(255, 255, 255, 0.3),
-            inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
-    }
-    
-    /* Effet de pulsation mobile */
-    .discover-button:focus {
-        animation: mobile-luxury-pulse 1.5s infinite !important;
-    }
-    
-    @keyframes mobile-luxury-pulse {
-        0%, 100% { 
-            box-shadow: 
-                0 6px 20px rgba(0, 0, 0, 0.3),
-                0 0 0 0 rgba(255, 255, 255, 0.3);
-        }
-        50% { 
-            box-shadow: 
-                0 8px 25px rgba(0, 0, 0, 0.4),
-                0 0 0 6px rgba(255, 255, 255, 0.1);
-        }
-    }
-}
 
 @media (max-width: 768px) {
     .discover-button {

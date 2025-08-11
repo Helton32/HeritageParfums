@@ -566,7 +566,7 @@ function updateMobileScrollIndicator(slideIndex) {
     
     const indicator = document.getElementById('mobile-scroll-indicator');
     if (indicator) {
-        indicator.textContent = `${slideIndex + 1} / ${totalSlides}`;
+        indicator.textContent = ``;
         
         // Afficher temporairement
         indicator.classList.remove('hidden');
