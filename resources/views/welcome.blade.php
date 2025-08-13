@@ -153,6 +153,11 @@ function goToSlide(index) {
 function handleDesktopScroll(e) {
     if (isDeviceMobile) return;
     
+    // Vérifier si le scroll se fait dans un menu ou élément scrollable
+    const target = e.target;
+    const isInMenu = target.closest('.navbar, .mega-menu, .dropdown-menu, nav, header, .menu, .modal, .popup');
+    if (isInMenu) return; // Ne pas gérer le slide si dans un menu
+    
     e.preventDefault();
     
     const now = Date.now();
