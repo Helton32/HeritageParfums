@@ -655,6 +655,14 @@ function initiateStripeApplePay(productId, productName, productPrice, quantity) 
     const button = document.getElementById('applePayBtn');
     const originalContent = '<i class="fab fa-apple"></i><span>Acheter avec Apple Pay</span>';
     
+    // Log pour debug
+    console.log('Apple Pay Session Creation Request', {
+        productId: productId,
+        productName: productName,
+        productPrice: productPrice,
+        quantity: quantity
+    });
+    
     fetch('/payment/create-apple-pay-session', {
         method: 'POST',
         headers: {
@@ -667,8 +675,21 @@ function initiateStripeApplePay(productId, productName, productPrice, quantity) 
             payment_method: 'apple_pay_stripe'
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        if (!response.ok) {
+            // Log de l'erreur HTTP
+            console.error('HTTP Error:', response.status, response.statusText);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        return response.json();
+    })
     .then(data => {
+        console.log('Apple Pay Session Response:', data);
+        
         if (data.success) {
             showNotification('🍎 Redirection vers Apple Pay...', 'info');
             setTimeout(() => {
@@ -677,13 +698,41 @@ function initiateStripeApplePay(productId, productName, productPrice, quantity) 
         } else {
             button.innerHTML = originalContent;
             button.disabled = false;
-            showNotification('❌ ' + (data.message || 'Erreur lors de la création de la session'), 'error');
+            
+            // Afficher l'erreur spécifique retournée par le serveur
+            const errorMessage = data.message || 'Erreur lors de la création de la session';
+            showNotification('❌ ' + errorMessage, 'error');
+            
+            // Log des détails de debug si disponibles
+            if (data.debug_info) {
+                console.error('Debug Info:', data.debug_info);
+            }
         }
     })
     .catch(error => {
+        console.error('Apple Pay Request Error:', error);
+        
         button.innerHTML = originalContent;
         button.disabled = false;
-        showNotification('❌ Erreur de connexion', 'error');
+        
+        // Gestion des différents types d'erreurs
+        let errorMessage = 'Erreur de connexion';
+        
+        if (error.message.includes('Failed to fetch')) {
+            errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.';
+        } else if (error.message.includes('HTTP 500')) {
+            errorMessage = 'Erreur serveur. Veuillez réessayer dans quelques minutes.';
+        } else if (error.message.includes('HTTP 400')) {
+            errorMessage = 'Données invalides. Veuillez vérifier les informations du produit.';
+        } else if (error.message.includes('HTTP 401')) {
+            errorMessage = 'Erreur d\'authentification. Veuillez rafraîchir la page.';
+        } else if (error.message.includes('HTTP 429')) {
+            errorMessage = 'Trop de tentatives. Veuillez patienter avant de réessayer.';
+        } else if (error.message.includes('HTTP 503')) {
+            errorMessage = 'Service temporairement indisponible. Veuillez réessayer plus tard.';
+        }
+        
+        showNotification('❌ ' + errorMessage, 'error');
     });
 }
 

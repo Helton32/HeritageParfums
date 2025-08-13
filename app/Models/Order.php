@@ -17,6 +17,7 @@ class Order extends Model
         'stripe_session_id',
         'status',
         'payment_status',
+        'payment_method',
         'customer_email',
         'customer_name',
         'customer_phone',
@@ -45,6 +46,7 @@ class Order extends Model
         'total_amount',
         'currency',
         'notes',
+        'paid_at',
         'shipped_at',
         'delivered_at',
     ];
@@ -58,6 +60,7 @@ class Order extends Model
         'carrier_options' => 'array',
         'carrier_response' => 'array',
         'package_dimensions' => 'array',
+        'paid_at' => 'datetime',
         'shipped_at' => 'datetime',
         'delivered_at' => 'datetime',
     ];

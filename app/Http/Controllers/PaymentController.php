@@ -41,168 +41,334 @@ class PaymentController extends Controller
     }
 
     /**
-     * Create Stripe session with Apple Pay enabled
+     * Create Stripe session with Apple Pay - VERSION HOSTINGER SIMPLIFIÉE
      */
     public function createApplePaySession(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|integer|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'payment_method' => 'required|string'
+        // Log initial avec toutes les infos de debug
+        \Log::info('Apple Pay Session Request - Hostinger', [
+            'timestamp' => now()->toDateTimeString(),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'method' => $request->method(),
+            'url' => $request->fullUrl(),
+            'input_data' => $request->all(),
+            'headers' => [
+                'content_type' => $request->header('Content-Type'),
+                'csrf_token' => $request->header('X-CSRF-TOKEN') ? 'present' : 'missing',
+                'accept' => $request->header('Accept'),
+            ],
+            'server_info' => [
+                'php_version' => PHP_VERSION,
+                'app_env' => config('app.env'),
+                'app_debug' => config('app.debug'),
+                'app_url' => config('app.url'),
+            ]
         ]);
 
+        // Validation stricte avec messages détaillés
+        $validator = \Validator::make($request->all(), [
+            'product_id' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1|max:10',
+            'payment_method' => 'required|string|in:apple_pay_stripe'
+        ]);
+
+        if ($validator->fails()) {
+            \Log::error('Validation failed', ['errors' => $validator->errors()->toArray()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Données invalides: ' . $validator->errors()->first(),
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         try {
-            $product = Product::findOrFail($request->product_id);
-            $quantity = $request->quantity;
-            
-            // Vérifier le stock
-            if (!$product->isInStock() || $product->stock < $quantity) {
+            // Vérification de la configuration Stripe AVANT TOUT
+            $stripeSecretKey = config('stripe.secret_key');
+            if (empty($stripeSecretKey)) {
+                \Log::error('Stripe configuration missing', ['config_checked' => true]);
                 return response()->json([
                     'success' => false,
-                    'message' => 'Produit indisponible ou stock insuffisant'
+                    'message' => 'Configuration de paiement non disponible',
+                    'error_code' => 'STRIPE_CONFIG_MISSING'
+                ], 500);
+            }
+
+            // Re-initialiser Stripe si nécessaire
+            try {
+                Stripe::setApiKey($stripeSecretKey);
+                \Log::info('Stripe initialized successfully', ['key_type' => substr($stripeSecretKey, 0, 7)]);
+            } catch (\Exception $e) {
+                \Log::error('Stripe initialization failed', ['error' => $e->getMessage()]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossible d\'initialiser le service de paiement',
+                    'error_code' => 'STRIPE_INIT_FAILED'
+                ], 500);
+            }
+
+            // Récupération et vérification du produit
+            try {
+                $product = Product::findOrFail($request->product_id);
+                \Log::info('Product found', [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->getCurrentPrice(),
+                    'stock' => $product->stock,
+                    'active' => $product->is_active ?? true
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Product not found', ['product_id' => $request->product_id, 'error' => $e->getMessage()]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Produit non trouvé',
+                    'error_code' => 'PRODUCT_NOT_FOUND'
+                ], 404);
+            }
+
+            $quantity = $request->quantity;
+            
+            // Vérifications de stock détaillées
+            if (!method_exists($product, 'isInStock') || !$product->isInStock()) {
+                \Log::warning('Product out of stock', ['product_id' => $product->id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ce produit n\'est plus en stock',
+                    'error_code' => 'OUT_OF_STOCK'
+                ], 400);
+            }
+            
+            if ($product->stock < $quantity) {
+                \Log::warning('Insufficient stock', ['requested' => $quantity, 'available' => $product->stock]);
+                return response()->json([
+                    'success' => false,
+                    'message' => "Stock insuffisant. Seulement {$product->stock} disponible(s)",
+                    'error_code' => 'INSUFFICIENT_STOCK'
                 ], 400);
             }
 
-            $subtotal = $product->getCurrentPrice() * $quantity;
-            $taxAmount = $subtotal * 0.20; // TVA 20%
-            $shippingAmount = $subtotal >= 150 ? 0 : 9.90; // Livraison gratuite dès 150€
-            $total = $subtotal + $taxAmount + $shippingAmount;
+            // Calculs de prix avec vérifications
+            $unitPrice = $product->getCurrentPrice();
+            if (empty($unitPrice) || $unitPrice <= 0) {
+                \Log::error('Invalid product price', ['price' => $unitPrice]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Prix du produit invalide',
+                    'error_code' => 'INVALID_PRICE'
+                ], 400);
+            }
 
-            // Créer une commande temporaire AVEC TOUS LES CHAMPS REQUIS
-            $order = Order::create([
-                'order_number' => Order::generateOrderNumber(),
-                'status' => 'pending',
-                'payment_status' => 'pending',
-                'payment_method' => 'apple_pay_stripe',
-                'customer_email' => 'temp@example.com',
-                'customer_name' => 'Temp Customer',
-                'customer_phone' => null,
-                // AJOUT DES CHAMPS D'ADRESSE MANQUANTS
-                'billing_address_line_1' => 'Temp Address',
-                'billing_address_line_2' => null,
-                'billing_city' => 'Temp City',
-                'billing_postal_code' => '00000',
-                'billing_country' => 'FR',
-                'shipping_address_line_1' => 'Temp Address',
-                'shipping_address_line_2' => null,
-                'shipping_city' => 'Temp City',
-                'shipping_postal_code' => '00000',
-                'shipping_country' => 'FR',
-                'shipping_carrier' => 'colissimo',
-                'shipping_method' => $shippingAmount == 0 ? 'Gratuite' : 'Express',
+            $subtotal = round($unitPrice * $quantity, 2);
+            $taxAmount = round($subtotal * 0.20, 2);
+            $shippingAmount = $subtotal >= 150 ? 0 : 9.90;
+            $total = round($subtotal + $taxAmount + $shippingAmount, 2);
+
+            \Log::info('Price calculations completed', [
+                'unit_price' => $unitPrice,
+                'quantity' => $quantity,
                 'subtotal' => $subtotal,
                 'tax_amount' => $taxAmount,
                 'shipping_amount' => $shippingAmount,
-                'total_amount' => $total,
-                'currency' => 'EUR',
+                'total' => $total
             ]);
 
-            // Créer l'item de commande
-            $productPrice = $product->getCurrentPrice() ?? $product->price ?? 0;
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'product_name' => $product->name,
-                'product_type' => $product->type,
-                'product_size' => $product->size,
-                'product_price' => $productPrice,
-                'quantity' => $quantity,
-                'total_price' => $subtotal,
-            ]);
-
-            // Créer la session Stripe avec Apple Pay CORRECTEMENT CONFIGURÉ
-            $session = StripeSession::create([
-                // CONFIGURATION APPLE PAY FIXÉE
-                'payment_method_types' => ['card'], // Stripe gère Apple Pay automatiquement
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => $product->name,
-                            'description' => $product->type . ' - ' . $product->size,
-                            'images' => [$product->main_image] // Ajout de l'image
-                        ],
-                        'unit_amount' => intval($product->getCurrentPrice() * 100), // Prix unitaire correct
-                    ],
-                    'quantity' => $quantity, // Quantité correcte
-                ], [
-                    // LIGNE SÉPARÉE POUR LA LIVRAISON
-                    'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => 'Frais de livraison',
-                            'description' => $shippingAmount == 0 ? 'Livraison gratuite' : 'Livraison express'
-                        ],
-                        'unit_amount' => intval($shippingAmount * 100),
-                    ],
-                    'quantity' => 1,
-                ], [
-                    // LIGNE SÉPARÉE POUR LA TVA
-                    'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => 'TVA (20%)',
-                        ],
-                        'unit_amount' => intval($taxAmount * 100),
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('payment.cancel'),
-                'automatic_tax' => ['enabled' => false],
-                'billing_address_collection' => 'required',
-                'shipping_address_collection' => [
-                    'allowed_countries' => ['FR', 'BE', 'CH', 'LU', 'MC'],
-                ],
-                'metadata' => [
-                    'order_id' => $order->id,
-                    'order_number' => $order->order_number,
+            // Création de la commande avec try-catch séparé
+            $order = null;
+            try {
+                $order = Order::create([
+                    'order_number' => Order::generateOrderNumber(),
+                    'status' => 'pending',
+                    'payment_status' => 'pending',
                     'payment_method' => 'apple_pay_stripe',
-                    'source' => 'apple_pay_button',
+                    'customer_email' => 'temp@example.com',
+                    'customer_name' => 'Temp Customer',
+                    'customer_phone' => null,
+                    'billing_address_line_1' => 'Temp Address',
+                    'billing_address_line_2' => null,
+                    'billing_city' => 'Temp City',
+                    'billing_postal_code' => '00000',
+                    'billing_country' => 'FR',
+                    'shipping_address_line_1' => 'Temp Address',
+                    'shipping_address_line_2' => null,
+                    'shipping_city' => 'Temp City',
+                    'shipping_postal_code' => '00000',
+                    'shipping_country' => 'FR',
+                    'shipping_carrier' => 'colissimo',
+                    'shipping_method' => $shippingAmount == 0 ? 'Gratuite' : 'Express',
+                    'subtotal' => $subtotal,
+                    'tax_amount' => $taxAmount,
+                    'shipping_amount' => $shippingAmount,
+                    'total_amount' => $total,
+                    'currency' => 'EUR',
+                ]);
+
+                \Log::info('Order created', ['order_id' => $order->id, 'order_number' => $order->order_number]);
+
+            } catch (\Exception $e) {
+                \Log::error('Order creation failed', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur lors de la création de la commande',
+                    'error_code' => 'ORDER_CREATION_FAILED'
+                ], 500);
+            }
+
+            // Création de l'OrderItem
+            try {
+                OrderItem::create([
+                    'order_id' => $order->id,
                     'product_id' => $product->id,
-                    'quantity' => $quantity
-                ],
-                // CONFIGURATION AMÉLIORÉE POUR APPLE PAY
-                'payment_method_options' => [
-                    'card' => [
-                        'request_three_d_secure' => 'automatic',
+                    'product_name' => $product->name,
+                    'product_type' => $product->type ?? 'Parfum',
+                    'product_size' => $product->size ?? '50ml',
+                    'product_price' => $unitPrice,
+                    'quantity' => $quantity,
+                    'total_price' => $subtotal,
+                ]);
+
+                \Log::info('OrderItem created');
+
+            } catch (\Exception $e) {
+                \Log::error('OrderItem creation failed', ['error' => $e->getMessage()]);
+                if ($order) {
+                    $order->delete();
+                }
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur lors de l\'ajout des articles',
+                    'error_code' => 'ORDER_ITEM_CREATION_FAILED'
+                ], 500);
+            }
+
+            // Construction des URLs avec gestion des erreurs
+            $baseUrl = config('app.url');
+            if (empty($baseUrl) || $baseUrl === 'http://localhost') {
+                $baseUrl = $request->getSchemeAndHttpHost();
+                \Log::warning('APP_URL not configured, using detected URL', ['detected_url' => $baseUrl]);
+            }
+
+            $successUrl = rtrim($baseUrl, '/') . '/payment/success?session_id={CHECKOUT_SESSION_ID}';
+            $cancelUrl = rtrim($baseUrl, '/') . '/payment/cancel';
+
+            \Log::info('URLs prepared', ['base' => $baseUrl, 'success' => $successUrl, 'cancel' => $cancelUrl]);
+
+            // Création de la session Stripe - VERSION SIMPLIFIÉE
+            try {
+                $sessionConfig = [
+                    'payment_method_types' => ['card'],
+                    'line_items' => [[
+                        'price_data' => [
+                            'currency' => 'eur',
+                            'product_data' => [
+                                'name' => $product->name,
+                                'description' => sprintf('%s - %s', 
+                                    $product->type ?? 'Parfum', 
+                                    $product->size ?? '50ml'
+                                ),
+                            ],
+                            'unit_amount' => intval($unitPrice * 100),
+                        ],
+                        'quantity' => $quantity,
+                    ], [
+                        'price_data' => [
+                            'currency' => 'eur',
+                            'product_data' => [
+                                'name' => 'Frais de livraison',
+                            ],
+                            'unit_amount' => intval($shippingAmount * 100),
+                        ],
+                        'quantity' => 1,
+                    ], [
+                        'price_data' => [
+                            'currency' => 'eur',
+                            'product_data' => [
+                                'name' => 'TVA (20%)',
+                            ],
+                            'unit_amount' => intval($taxAmount * 100),
+                        ],
+                        'quantity' => 1,
+                    ]],
+                    'mode' => 'payment',
+                    'success_url' => $successUrl,
+                    'cancel_url' => $cancelUrl,
+                    'metadata' => [
+                        'order_id' => (string)$order->id,
+                        'order_number' => $order->order_number,
+                        'product_id' => (string)$product->id,
+                        'environment' => config('app.env', 'production'),
                     ],
-                ],
-                'customer_creation' => 'if_required',
-                'locale' => 'fr',
-                // AJOUT POUR APPLE PAY
-                'payment_intent_data' => [
-                    'capture_method' => 'automatic',
-                    'setup_future_usage' => 'off_session',
-                ],
-            ]);
+                    'locale' => 'fr',
+                ];
 
-            // Mettre à jour la commande avec la session Stripe
-            $order->update([
-                'stripe_session_id' => $session->id,
-                // Ajout du payment_intent_id si disponible
-                'stripe_payment_intent_id' => $session->payment_intent ?? null
-            ]);
+                \Log::info('Creating Stripe session', ['config_keys' => array_keys($sessionConfig)]);
 
-            return response()->json([
+                $session = StripeSession::create($sessionConfig);
+
+                \Log::info('Stripe session created successfully', [
+                    'session_id' => $session->id,
+                    'url' => $session->url,
+                    'status' => $session->status ?? 'unknown'
+                ]);
+
+            } catch (\Exception $e) {
+                \Log::error('Stripe session creation failed', [
+                    'error' => $e->getMessage(),
+                    'error_type' => get_class($e),
+                    'trace' => $e->getTraceAsString()
+                ]);
+
+                if ($order) {
+                    $order->delete();
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur lors de la création de la session de paiement',
+                    'error_code' => 'STRIPE_SESSION_FAILED',
+                    'stripe_error' => $e->getMessage()
+                ], 500);
+            }
+
+            // Mise à jour de la commande avec l'ID de session
+            try {
+                $order->update([
+                    'stripe_session_id' => $session->id,
+                    'stripe_payment_intent_id' => $session->payment_intent ?? null
+                ]);
+            } catch (\Exception $e) {
+                \Log::warning('Failed to update order with Stripe session ID', ['error' => $e->getMessage()]);
+            }
+
+            // Réponse finale
+            $response = [
                 'success' => true,
                 'checkout_url' => $session->url,
                 'session_id' => $session->id,
-                'order_number' => $order->order_number
-            ]);
+                'order_number' => $order->order_number,
+                'message' => 'Session Apple Pay créée avec succès'
+            ];
+
+            \Log::info('Apple Pay session creation completed successfully', $response);
+
+            return response()->json($response);
 
         } catch (\Exception $e) {
-            \Log::error('Stripe Apple Pay session creation error: ' . $e->getMessage(), [
-                'product_id' => $request->product_id ?? 'N/A',
-                'quantity' => $request->quantity ?? 'N/A',
-                'error_trace' => $e->getTraceAsString()
+            \Log::error('Unexpected error in Apple Pay session creation', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
             ]);
             
             return response()->json([
                 'success' => false,
-                'message' => 'Erreur lors de la création de la session de paiement',
-                'debug' => app()->environment(['local', 'development']) ? $e->getMessage() : null
+                'message' => 'Une erreur inattendue s\'est produite',
+                'error_code' => 'UNEXPECTED_ERROR',
+                'debug' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }
     }

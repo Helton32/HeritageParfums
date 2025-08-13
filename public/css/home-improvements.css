@@ -3,8 +3,9 @@
 /* =================================================================
    HÉRITAJ PARFUMS - STYLE GUERLAIN FULLSCREEN
    
-   Image 1 (Mobile) : Défilement vertical sans dots de navigation
-   Image 3 (Desktop) : Navbar visible + Content-zone à droite
+   MOBILE : Défilement VERTICAL avec agrandissement automatique
+   DESKTOP : Navigation par slides uniquement (AUCUN SCROLL)
+   TRANSITIONS AMÉLIORÉES ET FLUIDES
    ================================================================= */
 
 :root {
@@ -18,6 +19,11 @@
     --soft-gray: #bfbfbf;
     --luxury-font: 'Playfair Display', serif;
     --modern-font: 'Montserrat', sans-serif;
+    
+    /* COURBES DE BÉZIER LUXUEUSES */
+    --ease-luxury: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-slide: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* === RESET ET BASE === */
@@ -30,10 +36,10 @@
 /* === PAGE D'ACCUEIL - PLEIN ÉCRAN === */
 body.home-page {
     overflow-x: hidden !important;
-    overflow-y: auto !important;
+    overflow-y: hidden !important; /* AUCUN SCROLL sur desktop */
     margin: 0 !important;
     padding: 0 !important;
-    background: var(--guerlain-black) !important;
+    background: var(--guerlain-white) !important;
     color: var(--guerlain-white) !important;
     min-height: 100vh !important;
     width: 100vw !important;
@@ -50,13 +56,14 @@ body.home-page {
     height: calc(100dvh - 90px) !important;
     margin: 0 !important;
     padding: 0 !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    background: var(--guerlain-black) !important;
+    overflow: hidden !important; /* AUCUN SCROLL sur desktop */
+    background: var(--guerlain-white) !important;
     z-index: 1 !important;
+    /* TRANSITION FLUIDE ET ÉLÉGANTE POUR LE MODE PLEIN ÉCRAN */
+    transition: all 0.8s var(--ease-luxury) !important;
 }
 
-/* === SLIDES AMÉLIORÉS === */
+/* === SLIDES AMÉLIORÉS AVEC TRANSITIONS FLUIDES === */
 .carousel-slide {
     position: absolute !important;
     top: 0 !important;
@@ -68,35 +75,19 @@ body.home-page {
     padding: 0 !important;
     opacity: 0 !important;
     visibility: hidden !important;
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    /* TRANSITION SLIDE PLUS LENTE ET ÉLÉGANTE */
+    transition: all 1.4s var(--ease-slide) !important;
     z-index: 1 !important;
     display: block !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
+    overflow: hidden !important; /* Aucun scroll interne sur desktop */
+    transform: translateY(100%) !important;
 }
 
 .carousel-slide.active {
     opacity: 1 !important;
     visibility: visible !important;
     z-index: 2 !important;
-}
-
-/* Amélioration du scroll des slides */
-.carousel-slide::-webkit-scrollbar {
-    width: 6px;
-}
-
-.carousel-slide::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.1);
-}
-
-.carousel-slide::-webkit-scrollbar-thumb {
-    background: rgba(212, 175, 55, 0.7);
-    border-radius: 3px;
-}
-
-.carousel-slide::-webkit-scrollbar-thumb:hover {
-    background: var(--guerlain-gold);
+    transform: translateY(0) !important;
 }
 
 /* === WRAPPER CONTENU === */
@@ -111,7 +102,7 @@ body.home-page {
     display: block !important;
 }
 
-/* === IMAGE PRODUIT PLEIN ÉCRAN === */
+/* === IMAGE PRODUIT PLEIN ÉCRAN AVEC TRANSITIONS AMÉLIORÉES === */
 .product-image-zone {
     position: absolute !important;
     top: 0 !important;
@@ -122,6 +113,8 @@ body.home-page {
     overflow: hidden !important;
     margin: 0 !important;
     padding: 0 !important;
+    /* TRANSITION FLUIDE ET LUXUEUSE POUR L'AGRANDISSEMENT */
+    transition: all 0.9s var(--ease-luxury) !important;
 }
 
 .product-image {
@@ -136,6 +129,8 @@ body.home-page {
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
+    /* TRANSITION FLUIDE ET LUXUEUSE POUR L'AGRANDISSEMENT */
+    transition: all 0.9s var(--ease-luxury) !important;
 }
 
 /* Overlay gradient pour lisibilité */
@@ -146,15 +141,11 @@ body.home-page {
     left: 0 !important;
     width: 100vw !important;
     height: 100% !important;
-    background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.1) 0%,
-        rgba(0, 0, 0, 0.3) 30%,
-        rgba(0, 0, 0, 0.6) 70%,
-        rgba(0, 0, 0, 0.85) 100%
-    ) !important;
+  
     z-index: 2 !important;
     pointer-events: none !important;
+    /* TRANSITION FLUIDE ET LUXUEUSE POUR L'AGRANDISSEMENT */
+    transition: all 0.9s var(--ease-luxury) !important;
 }
 
 /* === CONTENT-ZONE === */
@@ -196,7 +187,7 @@ body.home-page {
     text-transform: uppercase !important;
     color: var(--guerlain-gold) !important;
     margin-bottom: 1rem !important;
-    opacity: 0 !important;
+    opacity: 1 !important;
     line-height: 1.2 !important;
 }
 
@@ -253,7 +244,7 @@ body.home-page {
     border-radius: 35px !important;
     position: relative !important;
     overflow: hidden !important;
-    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transition: all 0.5s var(--ease-smooth) !important;
     z-index: 150 !important;
     box-shadow: 
         0 8px 25px rgba(212, 175, 55, 0.3),
@@ -288,7 +279,7 @@ body.home-page {
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, var(--guerlain-gold), var(--guerlain-dark-gold));
-    transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transition: left 0.6s var(--ease-smooth) !important;
     z-index: -2;
 }
 
@@ -377,56 +368,7 @@ body.home-page {
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
 }
 
-
-/* === NAVBAR MOBILE - MASQUAGE AUTOMATIQUE === */
-@media (max-width: 991px) {
-    /* Navbar qui peut se cacher */
-    body.home-page .navbar {
-        transition: transform 0.3s ease, opacity 0.3s ease !important;
-        transform: translateY(0) !important;
-    }
-    
-    /* Navbar cachée en mode scroll */
-    body.home-page .navbar.scrolled-down {
-        transform: translateY(-100%) !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-    }
-    
-    /* Navbar visible en mode scroll haut */
-    body.home-page .navbar.scrolled-up {
-        transform: translateY(0) !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-    
-    /* Mode plein écran quand navbar cachée */
-    body.home-page.fullscreen-mode .fullscreen-carousel {
-        top: 0 !important;
-        height: 100vh !important;
-        height: 100dvh !important;
-    }
-    
-    body.home-page.fullscreen-mode .carousel-slide {
-        height: 100vh !important;
-        height: 100dvh !important;
-    }
-    
-    body.home-page.fullscreen-mode .product-image-zone,
-    body.home-page.fullscreen-mode .product-image {
-        height: 100vh !important;
-        height: 100dvh !important;
-    }
-    
-    body.home-page.fullscreen-mode .product-image-zone::after {
-        height: 100vh !important;
-        height: 100dvh !important;
-    }
-
-    
-}
-
-/* === NAVIGATION DOTS === */
+/* === NAVIGATION DOTS - STYLE CABOCHON LUXE === */
 .carousel-nav {
     position: fixed !important;
     left: 3rem !important;
@@ -434,125 +376,107 @@ body.home-page {
     transform: translateY(-50%) !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 1.2rem !important;
+    gap: 2rem !important; /* plus espacés pour le chic */
     z-index: 100 !important;
-    padding: 1.5rem 0.8rem !important;
-    border-radius: 25px !important;
-}
-
-.nav-dot {
-    width: 12px !important;
-    height: 12px !important;
-    border-radius: 50% !important;
-    border: 1px solid rgba(255, 255, 255, 0.5) !important;
     background: transparent !important;
+}
+
+/* Bouton cabochon */
+.nav-dot {
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle at 30% 30%, #f5deb3, #d4af37, #a67c00) !important; /* or satiné */
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.4), /* ombre extérieure douce */
+        inset 0 2px 3px rgba(255, 255, 255, 0.8), /* reflet haut */
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4) !important; /* ombre bas */
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
     cursor: pointer !important;
-    transition: all 0.3s ease !important;
+    transition: transform 0.3s ease, background 0.3s ease !important;
 }
 
+/* Actif - plus brillant et légèrement bombé */
 .nav-dot.active {
-    background: var(--guerlain-white) !important;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
+    background: radial-gradient(circle at 30% 30%, #fff5cc, #ffd700, #b8860b) !important;
     transform: scale(1.2) !important;
+    box-shadow:
+        0 3px 6px rgba(0, 0, 0, 0.5),
+        inset 0 3px 4px rgba(255, 255, 255, 0.9),
+        inset 0 -3px 4px rgba(0, 0, 0, 0.5) !important;
 }
 
+/* Hover - effet de bijou qui capte la lumière */
 .nav-dot:hover {
-    border-color: var(--guerlain-white) !important;
-    transform: scale(1.1) !important;
+    transform: scale(1.15) !important;
+    background: radial-gradient(circle at 20% 20%, #fff8e7, #f5deb3, #d4af37) !important;
 }
 
-/* === CORRECTIONS GLOBALES VISIBILITÉ === */
 
-/* FORCE LA VISIBILITÉ SUR TOUS LES ÉCRANS */
+/* === RESPONSIVE MOBILE - DÉFILEMENT VERTICAL AVEC AGRANDISSEMENT === */
 @media (max-width: 991px) {
-    /* Règle anti-disparition pendant le redimensionnement */
-    body.home-page .content-zone {
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: block !important;
-        transform: none !important;
-        transition: none !important;
-        animation: none !important;
+    /* ACTIVATION SCROLL SUR MOBILE UNIQUEMENT */
+    body.home-page {
+        overflow-y: auto !important; /* Scroll autorisé sur mobile */
     }
     
-    /* Force tous les enfants à rester visibles */
-    body.home-page .content-zone * {
-        opacity: 1 !important;
-        visibility: visible !important;
-        transition: none !important;
-        animation: none !important;
-        transform: none !important;
-    }
-    
-    /* Spécifiquement pour les éléments de texte */
-    body.home-page .signature-text,
-    body.home-page .product-title,
-    body.home-page .product-subtitle {
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: block !important;
-        color: var(--guerlain-white) !important;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 1) !important;
-    }
-    
-    body.home-page .signature-text {
-        color: var(--guerlain-gold) !important;
-    }
-}
-
-/* RÈGLE UNIVERSELLE ANTI-DISPARITION */
-@media screen and (max-width: 991px) {
-    .content-zone,
-    .content-zone * {
-        will-change: auto !important;
-        backface-visibility: visible !important;
-        -webkit-backface-visibility: visible !important;
-    }
-}
-
-/* === RESPONSIVE MOBILE === */
-@media (max-width: 991px) {
-    /* Mobile : navbar plus petite - AJUSTÉ */
-    .fullscreen-carousel {
-        top: 80px !important;
-        height: calc(100vh - 80px) !important;
-        height: calc(100dvh - 80px) !important;
-    }
-    
-    .carousel-slide {
-        height: calc(100vh - 80px) !important;
-        height: calc(100dvh - 80px) !important;
-    }
-}
-
-/* Ajustements pour différentes tailles de navbar mobile */
-@media (max-width: 768px) {
-    .fullscreen-carousel {
-        top: 75px !important;
-        height: calc(100vh - 75px) !important;
-        height: calc(100dvh - 75px) !important;
-    }
-    
-    .carousel-slide {
-        height: calc(100vh - 75px) !important;
-        height: calc(100dvh - 75px) !important;
-    }
-}
-
-@media (max-width: 480px) {
+    /* Mobile : navbar plus petite - AVEC TRANSITION AMÉLIORÉE */
     .fullscreen-carousel {
         top: 70px !important;
         height: calc(100vh - 70px) !important;
         height: calc(100dvh - 70px) !important;
+        /* DÉFILEMENT VERTICAL ACTIVÉ SUR MOBILE */
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        scroll-behavior: smooth !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: y mandatory !important;
+        /* TRANSITION FLUIDE ET ÉLÉGANTE */
+        transition: all 0.8s var(--ease-luxury) !important;
     }
     
+    /* AGRANDISSEMENT EN MODE PLEIN ÉCRAN MOBILE - PLUS FLUIDE */
+    body.home-page.fullscreen-mode .fullscreen-carousel {
+        top: 0 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+    }
+    
+    /* CONFIGURATION VERTICALE DES SLIDES AVEC TRANSITION AMÉLIORÉE */
     .carousel-slide {
+        position: relative !important; /* Changé de absolute à relative */
+        display: block !important;
+        width: 100vw !important;
         height: calc(100vh - 70px) !important;
         height: calc(100dvh - 70px) !important;
+        /* TOUS VISIBLES EN MODE VERTICAL */
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        /* TRANSITION PLUS FLUIDE POUR MOBILE */
+        transition: all 0.8s var(--ease-luxury) !important;
+        /* SCROLL SNAP POUR NAVIGATION FLUIDE */
+        scroll-snap-align: start !important;
+        scroll-snap-stop: always !important;
+        /* SCROLL INTERNE DU SLIDE */
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
-}
-
-@media (max-width: 991px) {
+    
+    /* AGRANDISSEMENT DES SLIDES EN MODE PLEIN ÉCRAN - PLUS FLUIDE */
+    body.home-page.fullscreen-mode .carousel-slide {
+        height: 100vh !important;
+        height: 100dvh !important;
+    }
+    
+    /* AGRANDISSEMENT DES IMAGES EN MODE PLEIN ÉCRAN - PLUS FLUIDE */
+    body.home-page.fullscreen-mode .product-image-zone,
+    body.home-page.fullscreen-mode .product-image,
+    body.home-page.fullscreen-mode .product-image-zone::after {
+        height: 100vh !important;
+        height: 100dvh !important;
+    }
+    
     /* Navigation dots CACHÉS sur mobile */
     .carousel-nav {
         display: none !important;
@@ -561,32 +485,41 @@ body.home-page {
         pointer-events: none !important;
     }
     
-    /* Content-zone mobile EN HAUT À GAUCHE - TOUJOURS VISIBLE */
-    .content-zone {
-        position: absolute !important;
-        top: 1rem !important;
-        left: 1rem !important;
-        right: auto !important;
-        bottom: auto !important;
-        width: auto !important;
-        max-width: 300px !important;
-        text-align: left !important;
-        transform: none !important;
-        z-index: 200 !important;
-        /* Style visible sur mobile - FORCE L'AFFICHAGE */
-        padding: 1.5rem !important;
-        border-radius: 8px !important;
-        border: none;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        /* SUPPRIME TOUTES LES ANIMATIONS */
-        transition: none !important;
-        animation: none !important;
-        will-change: auto !important;
-    }
+    /* Content-zone mobile VISIBLE et LISIBLE */
+   .content-zone {
+    position: absolute !important;
+    top: 1rem !important;
+    left: 1rem !important;
+    z-index: 200 !important;
+
+    /* Dimensions adaptatives */
+    max-width: min(300px, 90vw) !important;
+    padding: 1.5rem !important;
+    border-radius: 12px !important;
+
+    /* Typographie élégante */
+    font-family: "Playfair Display", serif !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+
+    /* Fond noir translucide + effet luxe */
+    background: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(6px) !important;
+    color: #f5f5f5 !important;
+
+    /* Toujours visible */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    /* Supprime toutes animations */
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+}
+
     
-    /* FORCE L'AFFICHAGE DE TOUS LES ÉLÉMENTS ENFANTS - AUCUNE ANIMATION */
+    /* FORCE L'AFFICHAGE DE TOUS LES ÉLÉMENTS ENFANTS */
     .content-zone *,
     .content-zone .signature-text,
     .content-zone .product-title,
@@ -617,7 +550,6 @@ body.home-page {
     .content-zone .price-container {
         display: flex !important;
     }
-    
     
     /* Prix visible sur mobile */
     .price-container {
@@ -684,7 +616,7 @@ body.home-page {
         text-transform: uppercase !important;
     }
     
-    . {
+    .discover-button {
         min-width: 140px !important;
         padding: 0.8rem 1.5rem !important;
         font-size: 0.7rem !important;
@@ -702,6 +634,19 @@ body.home-page {
 
 /* === RESPONSIVE DESKTOP === */
 @media (min-width: 992px) {
+    /* AUCUN SCROLL SUR DESKTOP */
+    body.home-page {
+        overflow: hidden !important; /* Bloque complètement le scroll */
+    }
+    
+    .fullscreen-carousel {
+        overflow: hidden !important; /* Aucun scroll dans le carousel */
+    }
+    
+    .carousel-slide {
+        overflow: hidden !important; /* Aucun scroll dans les slides */
+    }
+    
     /* Content-zone À DROITE sur desktop */
     .content-zone {
         top: 50% !important;
@@ -712,6 +657,8 @@ body.home-page {
         text-align: left !important;
         max-width: 500px !important;
         border: none;
+        background: none !important;
+        backdrop-filter: none !important;
         padding: 3rem 2.5rem !important;
     }
     
@@ -735,7 +682,7 @@ body.home-page {
     }
     
     .signature-text {
-        font-size: 1.5rem !important;
+        font-size: 1rem !important;
         margin-bottom: 1rem !important;
     }
     
@@ -755,7 +702,7 @@ body.home-page {
         max-width: 260px !important;
         padding: 1rem !important;
         border: none !important;
-        box-shadow: none!important;
+        box-shadow: none !important;
     }
     
     .signature-text {
@@ -788,7 +735,7 @@ body.home-page {
         min-width: 120px !important;
         padding: 0.6rem 1rem !important;
         font-size: 0.65rem !important;
-        opacity: 0.1 !important;
+        opacity: 1 !important;
         display: inline-block !important;
     }
     
@@ -811,257 +758,6 @@ body.home-page {
     }
 }
 
-/* === ÉLÉMENTS CACHÉS EN MODE GUERLAIN === */
-.promotion-details,
-.product-info-extra,
-.customer-rating,
-.promotion-badge,
-.savings-badge,
-.product-special-badge,
-.scroll-indicator {
-    display: none !important;
-}
-
-
-
-/* === OPTIMISATIONS PERFORMANCE === */
-.product-image {
-    will-change: transform;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.carousel-slide {
-    will-change: opacity, visibility;
-    contain: layout style paint;
-}
-
-.content-zone {
-    will-change: auto; /* Changé de transform à auto pour éviter les animations */
-}
-
-
-
-/* Règle d'urgence pour tous les navigateurs */
-@media screen and (max-width: 991px) {
-    .content-zone {
-        -webkit-backface-visibility: visible !important;
-        backface-visibility: visible !important;
-        -webkit-perspective: none !important;
-        perspective: none !important;
-        -webkit-transform-style: flat !important;
-        transform-style: flat !important;
-    }
-}
-
-/* =================================================================
-   AMÉLIORATIONS WELCOME.BLADE.PHP
-   Carousel mobile défilable + Espacement navbar + Footer intégré
-   ================================================================= */
-
-/* === ESPACEMENT NAVBAR === */
-/* Ajout d'espace visuel entre le titre "Heritaj Parfums" et les liens de navigation */
-.navbar-brand {
-    margin: 0 4rem !important; /* Espacement horizontal augmenté */
-    padding: 0.8rem 0 !important; /* Espacement vertical */
-}
-
-/* Espacement mobile adapté */
-@media (max-width: 991px) {
-    .navbar-brand {
-        margin: 0.5rem 0 !important;
-        padding: 1rem 0 !important;
-    }
-}
-
-/* === CAROUSEL PRODUIT MOBILE DÉFILABLE === */
-/* Correction complète du défilement horizontal pour voir tous les produits */
-@media (max-width: 991px) {
-    
-    /* CONTAINER PRINCIPAL - Mode défilement horizontal */
-    .fullscreen-carousel {
-        position: fixed !important;
-        top: 80px !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: calc(100vh - 80px) !important;
-        height: calc(100dvh - 80px) !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: var(--guerlain-black) !important;
-        z-index: 1 !important;
-        
-        /* DÉFILEMENT HORIZONTAL ACTIVÉ */
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        scroll-behavior: smooth !important;
-        -webkit-overflow-scrolling: touch !important;
-        
-        /* MASQUER LA BARRE DE DÉFILEMENT */
-        scrollbar-width: none !important; /* Firefox */
-        -ms-overflow-style: none !important; /* IE/Edge */
-        
-        /* OPTIMISATION TACTILE */
-        touch-action: pan-x !important;
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-    }
-    
-    /* MASQUER WEBKIT SCROLLBAR */
-    .fullscreen-carousel::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-    }
-    
-    /* CONTENEUR HORIZONTAL POUR TOUS LES SLIDES */
-    .fullscreen-carousel::before {
-        content: '';
-        display: flex !important;
-        width: fit-content !important;
-        height: 100% !important;
-    }
-    
-    /* CONFIGURATION SLIDES HORIZONTAUX */
-    .carousel-slide {
-        position: relative !important;
-        display: inline-block !important;
-        float: left !important;
-        width: 100vw !important;
-        height: calc(100vh - 80px) !important;
-        height: calc(100dvh - 80px) !important;
-        vertical-align: top !important;
-        flex-shrink: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        
-        /* TOUS VISIBLES EN MODE HORIZONTAL */
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
-        transition: none !important;
-        
-        /* SCROLL INTERNE DU SLIDE */
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-    
-    /* PREMIÈRE TENTATIVE : Utiliser flexbox pour conteneur */
-    .fullscreen-carousel {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: stretch !important;
-    }
-    
-    .carousel-slide {
-        flex: 0 0 100vw !important; /* Ne se rétrécit pas, largeur fixe */
-        width: 100vw !important;
-        min-width: 100vw !important;
-        max-width: 100vw !important;
-    }
-    
-    /* WRAPPER CONTENU CHAQUE SLIDE */
-    .carousel-content-wrapper {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: block !important;
-    }
-    
-    /* IMAGES PRODUIT EN ARRIÈRE-PLAN */
-    .product-image-zone {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100% !important;
-        z-index: 1 !important;
-        overflow: hidden !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    
-    .product-image {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        object-position: center !important;
-        z-index: 1 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-    }
-    
-    /* OVERLAY GRADIENT */
-    .product-image-zone::after {
-        content: '' !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100% !important;
-        background: linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0.1) 0%,
-            rgba(0, 0, 0, 0.3) 30%,
-            rgba(0, 0, 0, 0.6) 70%,
-            rgba(0, 0, 0, 0.85) 100%
-        ) !important;
-        z-index: 2 !important;
-        pointer-events: none !important;
-    }
-    
-    /* INDICATEUR DE DÉFILEMENT DISCRET */
-    .scroll-indicator-mobile {
-        position: fixed !important;
-        bottom: 2rem !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        background: rgba(255, 255, 255, 0.9) !important;
-        backdrop-filter: blur(15px) !important;
-        -webkit-backdrop-filter: blur(15px) !important;
-        padding: 0.6rem 1.2rem !important;
-        border-radius: 25px !important;
-        font-size: 0.8rem !important;
-        color: var(--guerlain-black) !important;
-        z-index: 200 !important;
-        opacity: 0.1 !important;
-        transition: opacity 0.3s ease !important;
-        pointer-events: none !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
-        font-family: var(--modern-font) !important;
-        font-weight: 500 !important;
-        letter-spacing: 0.5px !important;
-    }
-    
-    .scroll-indicator-mobile.hidden {
-        opacity: 0 !important;
-    }
-    
-    .scroll-indicator-mobile::before {
-        content: 'Swipe' !important;
-    }
-    
-    /* NAVIGATION DOTS CACHÉS SUR MOBILE */
-    .carousel-nav {
-        display: none !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-    }
-}
-
 /* === FOOTER INTÉGRÉ COMME DERNIER SLIDE === */
 /* Styles pour le footer en tant que slide final */
 .footer-slide {
@@ -1073,7 +769,7 @@ body.home-page {
     align-items: center !important;
     justify-content: center !important;
     min-height: 100% !important;
-    /* IMPORTANT : Le footer doit être visible */
+    /* IMPORTANT : Le footer doit être visible comme slide uniquement */
     opacity: 1 !important;
     visibility: visible !important;
 }
@@ -1197,7 +893,7 @@ body.home-page {
     padding-top: 2rem !important;
     display: flex !important;
     justify-content: space-between !important;
-    align-items: center !important;
+    align-items: flex-start !important;
     flex-wrap: wrap !important;
     gap: 1rem !important;
 }
@@ -1206,6 +902,7 @@ body.home-page {
     display: flex !important;
     flex-direction: column !important;
     gap: 0.5rem !important;
+    flex: 1 !important;
 }
 
 .footer-legal p {
@@ -1235,6 +932,8 @@ body.home-page {
     display: flex !important;
     gap: 1rem !important;
     flex-wrap: wrap !important;
+    flex: 1 !important;
+    justify-content: flex-end !important;
 }
 
 .certification {
@@ -1245,11 +944,67 @@ body.home-page {
     gap: 0.3rem !important;
 }
 
-
-
-
-
+/* === FOOTER RESPONSIVE MOBILE === */
 @media (max-width: 768px) {
+    .footer-content {
+        padding: 2rem 1rem !important;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .footer-grid h5 {
+        font-size: 1.1rem !important;
+    }
+    
+    .footer-grid p {
+        font-size: 0.9rem !important;
+    }
+    
+    .brand-stats {
+        justify-content: center !important;
+        gap: 2rem !important;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem !important;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem !important;
+    }
+    
+    .social-links {
+        justify-content: center !important;
+    }
+    
+    .footer-bottom {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .footer-legal {
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .legal-links {
+        justify-content: center !important;
+    }
+    
+    .footer-certifications {
+        justify-content: center !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    
+    .certification {
+        justify-content: center !important;
+    }
+    
     .discover-button {
         min-width: 160px !important;
         padding: 0.9rem 1.8rem !important;
@@ -1259,6 +1014,24 @@ body.home-page {
 }
 
 @media (max-width: 480px) {
+    .footer-content {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .footer-grid {
+        gap: 1.5rem !important;
+    }
+    
+    .brand-stats {
+        gap: 1rem !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    
+    .stat {
+        width: 100% !important;
+    }
+    
     .discover-button {
         min-width: 140px !important;
         padding: 0.8rem 1.5rem !important;
@@ -1266,51 +1039,144 @@ body.home-page {
         min-height: 44px !important;
         letter-spacing: 0.15em !important;
     }
+    
+    .legal-links {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .footer-certifications {
+        gap: 0.5rem !important;
+    }
 }
+/* === FOOTER MOBILE COMPACT - NO SCROLL === */
+@media (max-width: 768px) {
+    .footer-slide {
+        height: auto !important;
+        min-height: auto !important;
+        padding: 1.5rem 0 !important;
+        align-items: flex-start !important;
+        overflow: hidden !important;
+    }
 
+    .footer-content {
+        padding: 0 1rem !important;
+        max-width: 100% !important;
+        height: auto !important;
+    }
 
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
 
+    .footer-grid h5 {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.5rem !important;
+    }
 
-/* =================================================================
-   FINALISATION DES CORRECTIONS
-   Assurer que tout fonctionne parfaitement
-   ================================================================= */
+    .footer-grid p {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.4 !important;
+    }
 
-/* Force l'affichage correct sur tous les navigateurs */
-@supports (-webkit-touch-callout: none) {
-    /* Safari spécifique */
-    @media (max-width: 991px) {
-        .fullscreen-carousel {
-            -webkit-overflow-scrolling: touch !important;
-            overscroll-behavior-x: contain !important;
-        }
-        
-        .carousel-slide {
-            -webkit-transform: translate3d(0, 0, 0) !important;
-            transform: translate3d(0, 0, 0) !important;
-            will-change: transform !important;
-        }
+    /* Statistiques en ligne compacte */
+    .brand-stats {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.5rem !important;
+        margin: 0.5rem 0 !important;
+    }
+
+    .stat {
+        padding: 0.3rem !important;
+    }
+
+    .stat-number {
+        font-size: 1rem !important;
+    }
+
+    .stat-label {
+        font-size: 0.6rem !important;
+    }
+
+    /* Liens sociaux miniatures */
+    .social-links {
+        justify-content: center !important;
+        margin: 0.5rem 0 !important;
+        gap: 0.5rem !important;
+    }
+
+    .social-links a {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* Newsletter ultra compacte */
+    .newsletter-form {
+        margin: 0.5rem 0 !important;
+    }
+
+    .newsletter-form .form-control {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.75rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .newsletter-form .discover-button {
+        padding: 0.6rem !important;
+        font-size: 0.65rem !important;
+        min-height: 36px !important;
+    }
+
+    /* Footer bottom en colonne serrée */
+    .footer-bottom {
+        flex-direction: column !important;
+        gap: 0.8rem !important;
+        padding-top: 0.8rem !important;
+        margin-top: 0.5rem !important;
+    }
+
+    .footer-legal p,
+    .legal-links a,
+    .certification {
+        font-size: 0.6rem !important;
+    }
+
+    .legal-links {
+        gap: 0.5rem !important;
+        justify-content: center !important;
+    }
+
+    /* Suppression des espacements inutiles */
+    * {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
     }
 }
 
-/* Chrome et navigateurs webkit */
-@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
-    @media (max-width: 991px) {
-        .fullscreen-carousel {
-            scroll-snap-type: x mandatory !important;
-        }
-        
-        .carousel-slide {
-            scroll-snap-align: start !important;
-        }
+/* Ajustements extrêmes pour très petits écrans */
+@media (max-width: 480px) {
+    .footer-slide {
+        padding: 1rem 0 !important;
     }
-}
 
-/* Firefox spécifique */
-@-moz-document url-prefix() {
-    @media (max-width: 991px) {
-        .fullscreen-carousel {
-            scroll-behavior: smooth !important;
-        }
+    .footer-content {
+        padding: 0 0.8rem !important;
+    }
+
+    .footer-grid {
+        gap: 0.8rem !important;
+    }
+
+    .brand-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .newsletter-form .form-control {
+        padding: 0.4rem 0.8rem !important;
     }
 }
