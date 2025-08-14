@@ -1,3 +1,15 @@
+{{--
+  ═══════════════════════════════════════════════════════════════════════════════════
+  🌟 HERITAGE PARFUMS - WELCOME PAGE | CAROUSEL FULLSCREEN EXPERIENCE
+  ═══════════════════════════════════════════════════════════════════════════════════
+  
+  ⚡ Developed with Passion by: HALICK DEVOPS FULL STACK
+  🎯 Laravel Blade | Responsive Design | Luxury Frontend Architecture
+  💼 Full-Stack Development | Modern Web Solutions | Performance First
+  
+  ═══════════════════════════════════════════════════════════════════════════════════
+--}}
+
 @extends('layouts.app')
 
 @section('title', 'Héritaj Parfums - Parfums d\'Exception')
@@ -178,8 +190,8 @@ function handleTouchStart(e) {
     
     // Vérifier si le touch commence dans un menu ou élément scrollable
     const target = e.target;
-    const isInMenu = target.closest('.navbar, .mega-menu, .dropdown-menu, nav, header, .menu');
-    if (isInMenu) return; // Ne pas gérer le slide si dans un menu
+    const isInMenu = target.closest('.navbar, .mega-menu, .dropdown-menu, nav, header, .menu, .dropdown-toggle, .navbar-toggler, .btn, button, a[data-toggle], [data-bs-toggle]');
+    if (isInMenu) return; // Ne pas gérer le slide si dans un menu ou bouton
     
     touchStartY = e.touches[0].clientY;
     touchStartTime = Date.now();
@@ -190,7 +202,7 @@ function handleTouchMove(e) {
     
     // Vérifier si le touch est dans un menu
     const target = e.target;
-    const isInMenu = target.closest('.navbar, .mega-menu, .dropdown-menu, nav, header, .menu');
+    const isInMenu = target.closest('.navbar, .mega-menu, .dropdown-menu, nav, header, .menu, .dropdown-toggle, .navbar-toggler, .btn, button, a[data-toggle], [data-bs-toggle]');
     if (isInMenu) return; // Ne pas masquer la navbar si dans un menu
     
     if (!isScrolling) {
@@ -204,7 +216,7 @@ function handleTouchEnd(e) {
     
     // Vérifier si le touch était dans un menu
     const target = e.target;
-    const isInMenu = target.closest('.navbar, .mega-menu, .dropdown-menu, nav, header, .menu');
+    const isInMenu = target.closest('.navbar, .mega-menu, .dropdown-menu, nav, header, .menu, .dropdown-toggle, .navbar-toggler, .btn, button, a[data-toggle], [data-bs-toggle]');
     if (isInMenu) return; // Ne pas changer de slide si dans un menu
     
     const touchEndY = e.changedTouches[0].clientY;

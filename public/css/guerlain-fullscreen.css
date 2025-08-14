@@ -96,6 +96,21 @@ header.hiding {
     transition: transform 1s ease;
 }
 
+/* === CORRECTION ZOOM IMAGES DESKTOP === */
+@media (min-width: 1024px) {
+    .product-image {
+        object-fit: cover; /* Garde l'image entière visible */
+        object-position: center center; /* Centre parfaitement l'image */
+        transform: scale(1); /* Réduit légèrement pour éviter le débordement */
+        transition: transform 1s ease, object-fit 0.3s ease;
+    }
+    
+    /* Effet de survol subtil pour desktop */
+    .fullscreen-slide:hover .product-image {
+        transform: scale(0.95);
+    }
+}
+
 .promotion-badge,
 .product-special-badge,
 .savings-badge {
